@@ -63,7 +63,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public  void setup() {
-        frameRate(30);
+        frameRate(144);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -99,10 +99,13 @@ public class Toucolor extends PApplet {
                 break;
             case "playing":
                 currentLevel.renderLevel((int) speler.playerX);
+                //background(255);
                 speler.keyUse();
                 EnemiesBehaviour(speler.playerX, speler.playerY);
                 enemyWandelen.display(goedkoop_sletje.posX, goedkoop_sletje.posY, 'n', 0);
                 playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
+                currentLevel.getCoords((int) speler.playerX, (int) speler.playerY);
+                currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY);
                 break;
         }
 

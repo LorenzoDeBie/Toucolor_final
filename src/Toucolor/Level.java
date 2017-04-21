@@ -5,6 +5,7 @@
  */
 package Toucolor;
 
+import com.sun.scenario.effect.impl.prism.ps.PPSZeroSamplerPeer;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -168,6 +169,43 @@ public class Level {
      */
     private void renderBlock(int x, int y, PImage img) {
         applet.image(img, x, y, 80, 80);
+    }
+
+    //returns array of the 9 blocks around the player, used in collision
+    float[][] getCoords(int playerX, int playerY){
+            float[][] coords = new float[9][2];
+
+            int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
+            int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
+
+            for(int u = 0; u < coords.length; u += (coords.length /3)) {
+                for (int i = 0; i < (coords.length / 3); i++) {
+                    coords[i + u][0] = startblockX + (i * Toucolor.BLOCKSIZE);
+                    coords[i + u][1] = startblockY + ((u/3) * Toucolor.BLOCKSIZE);
+                }
+            }
+
+            return coords;
+    }
+
+    boolean[][] getColAndDeath(int playerX, int playerY) {
+        boolean[][] bools = new boolean[9][2];
+
+        int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
+        int startblockY = (320 / Toucolor.BLOCKSIZE) - 1;
+
+        for(int u = 0; u < 3; u++) {
+            for (int i = 0; i < (bools.length / 3); i++) {
+                Block currentBlock = tileBlocks[levelMap[startblockX + i][startblockY + u]];
+
+                bools[i + (u * 3)][0] = currentBlock.isCollision();
+                bools[i + (u * 3)][1] = currentBlock.killsPlayer();
+
+                PApplet.print("x = " + Integer.toString(playerX) + " y = " + Integer.toString(playerY) + "\t");
+                PApplet.print(currentBlock.getName() + " Collision: " + currentBlock.isCollision() + " killsplayer: " + currentBlock.killsPlayer() + "\n" );
+            }
+        }
+        return  bools;
     }
 
     /**
