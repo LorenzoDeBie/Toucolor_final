@@ -45,7 +45,7 @@ public class Toucolor extends PApplet {
 
 
 
-    Enemy goedkoop_sletje = new Enemy(3,1,0.01f,400,640);
+    Enemy goedkoop_sletje = new Enemy(1,1,0.01f,400,640);
     Enemy[] Enemies = {goedkoop_sletje};
     Animation playerWandelen, enemyWandelen;
     private Player speler = new Player();

@@ -200,6 +200,11 @@ public class Player {
         return collide;
     }
 
+    public void playerDie(){
+
+
+    }
+
 
 }
 
