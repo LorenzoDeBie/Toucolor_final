@@ -11,13 +11,15 @@ public class Player {
     private int blockSize = 80;
     private int sizeY = 720;
 
-    static float[][] fullCoords = {{100,640}}; //Hier moeten alle coords komen die gecheckt moeten worden
-
+    private float[][] fullCoords = {{100,640}}; //Hier moeten alle coords komen die gecheckt moeten worden
+    static boolean [][] propterties = {{true,false}};
 
 
     //Voor collision
     private float xblock;
     private float yblock;
+    private boolean isDeadly;
+    private boolean canCollide;
     //Startpos speler
     float playerX = 900;
     float playerY = 100;
@@ -124,17 +126,25 @@ public class Player {
 
     public boolean collision(int status){
         collide = false;
-        for (float[] hoevcoord:fullCoords) {
-            xblock = hoevcoord[0];
-            yblock = hoevcoord[1];
+        for (int i = 0; i< fullCoords.length; i++) {
+            xblock = fullCoords[i][0];
+            yblock = fullCoords[i][1];
+            canCollide = propterties[i][0];
+            isDeadly = propterties[i][1];
             switch (status) {
                 case 1: //links en rechts
-                    float cst = playerX + (moveSpeed * cProfile) * colvar;
-                    if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize)) {
-                        playerX = xblock - blockSize * colvar;
-                        collide = true;
-                    } else if (!upIsPressed) {
-                        isInAir = true;
+                    if(canCollide) {
+                        float cst = playerX + (moveSpeed * cProfile) * colvar;
+                        if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize)) {
+                            playerX = xblock - blockSize * colvar;
+                            if (isDeadly) {
+                                PApplet.print("DEUD");
+                            } else {
+                                collide = true;
+                            }
+                        } else if (!upIsPressed) {
+                            isInAir = true;
+                        }
                     }
                     break;
 
@@ -148,12 +158,16 @@ public class Player {
                         upIsPressed = false;
                         hoek = 0;
                         playerY = 1;
-                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YJ - yblock) < blockSize)) {
+                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YJ - yblock) < blockSize) && canCollide) {
                         playerY = yblock + blockSize;
                         hoek = 0;
                         upIsPressed = false;
                         isInAir = true;
-                        collide = true;
+                        if(isDeadly){
+                            PApplet.print("DEUD");
+                        }else {
+                            collide = true;
+                        }
                     }
                     break;
 
@@ -163,9 +177,13 @@ public class Player {
                         isInAir = false;
                         hoek = 0;
                         playerY = sizeY - blockSize;
-                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize)) {
-                        playerY  = yblock - blockSize;
-                        collide = true;
+                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize) && canCollide) {
+                        playerY = yblock - blockSize;
+                        if(isDeadly){
+                            PApplet.print("DEUD");
+                        }else {
+                            collide = true;
+                        }
                     }
                     break;
 
