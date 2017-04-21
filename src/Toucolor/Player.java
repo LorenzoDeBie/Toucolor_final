@@ -11,8 +11,8 @@ public class Player {
     private int blockSize = 80;
     private int sizeY = 720;
 
-    private float[][] fullCoords = {{100,640}}; //Hier moeten alle coords komen die gecheckt moeten worden
-    static boolean [][] propterties = {{true,false}};
+    private float[][] fullCoords; //Hier moeten alle coords komen die gecheckt moeten worden
+    private boolean [][] propterties;
 
 
     //Voor collision
@@ -47,6 +47,11 @@ public class Player {
     public char lastMove = 'n';
 
     float PI = PApplet.PI;
+
+    public void refreshValues(float[][] coords, boolean[][] props) {
+        this.fullCoords = coords;
+        this.propterties = props;
+    }
 
 
 

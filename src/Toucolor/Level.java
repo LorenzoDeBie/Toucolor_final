@@ -192,11 +192,13 @@ public class Level {
         boolean[][] bools = new boolean[9][2];
 
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
-        int startblockY = (320 / Toucolor.BLOCKSIZE) - 1;
+        int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
 
         for(int u = 0; u < 3; u++) {
             for (int i = 0; i < (bools.length / 3); i++) {
-                Block currentBlock = tileBlocks[levelMap[startblockX + i][startblockY + u]];
+                int blockX = (startblockX + i);
+                int blockY = (startblockY + u) > 8 ? 8 : (startblockY + u);
+                Block currentBlock = tileBlocks[levelMap[blockX][blockY]];
 
                 bools[i + (u * 3)][0] = currentBlock.isCollision();
                 bools[i + (u * 3)][1] = currentBlock.killsPlayer();

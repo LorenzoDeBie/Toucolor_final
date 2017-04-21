@@ -100,6 +100,8 @@ public class Toucolor extends PApplet {
             case "playing":
                 currentLevel.renderLevel((int) speler.playerX);
                 //background(255);
+                speler.refreshValues(currentLevel.getCoords((int)speler.playerX, (int)speler.playerY),
+                        currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
                 speler.keyUse();
                 EnemiesBehaviour(speler.playerX, speler.playerY);
                 enemyWandelen.display(goedkoop_sletje.posX, goedkoop_sletje.posY, 'n', 0);
