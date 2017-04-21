@@ -173,23 +173,32 @@ public class Level {
 
     //returns array of the 9 blocks around the player, used in collision
     float[][] getCoords(int playerX, int playerY){
-            float[][] coords = new float[9][2];
+            float[][] coords = new float[8][2];
 
             int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
             int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
 
-            for(int u = 0; u < coords.length; u += (coords.length /3)) {
-                for (int i = 0; i < (coords.length / 3); i++) {
-                    coords[i + u][0] = startblockX + (i * Toucolor.BLOCKSIZE);
-                    coords[i + u][1] = startblockY + ((u/3) * Toucolor.BLOCKSIZE);
-                }
+            for(int i = 0; i < 3; i++) {
+                coords[i][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
+                coords[i][1] = startblockY * Toucolor.BLOCKSIZE;
+            }
+
+            coords[3][0] = startblockX * Toucolor.BLOCKSIZE;
+            coords[3][1] = (startblockY + 1) * Toucolor.BLOCKSIZE;
+
+            coords[5][0] = (startblockX + 2) * Toucolor.BLOCKSIZE;
+            coords[5][1] = (startblockY + 1) * Toucolor.BLOCKSIZE;
+
+            for(int i = 0; i < 3; i++) {
+                coords[i][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
+                coords[i][1] = (startblockY + 2) * Toucolor.BLOCKSIZE;
             }
 
             return coords;
     }
 
     boolean[][] getColAndDeath(int playerX, int playerY) {
-        boolean[][] bools = new boolean[9][2];
+        boolean[][] bools = new boolean[8][2];
 
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
