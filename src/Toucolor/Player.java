@@ -178,11 +178,12 @@ public class Player {
 
                 case 4: //val
                     float YV = playerY + PApplet.sin(hoek) * valSpeed;
-                    if ((playerY + PApplet.sin(hoek) * valSpeed) > sizeY - blockSize) {
-                        isInAir = false;
-                        hoek = 0;
-                        playerY = sizeY - blockSize;
-                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize) && canCollide) {
+                    //if ((playerY + PApplet.sin(hoek) * valSpeed) > sizeY - blockSize) {
+                       // isInAir = false;
+                       // hoek = 0;
+                     //   playerY = sizeY - blockSize;
+                   // } else
+                        if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize) && canCollide) {
                         playerY = yblock - blockSize;
                         if(isDeadly){
                             PApplet.print("DEUD");

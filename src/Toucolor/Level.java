@@ -190,9 +190,11 @@ public class Level {
             coords[5][1] = (startblockY + 1) * Toucolor.BLOCKSIZE;
 
             for(int i = 0; i < 3; i++) {
-                coords[i][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
-                coords[i][1] = (startblockY + 2) * Toucolor.BLOCKSIZE;
+                coords[i+5][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
+                coords[i+5][1] = (startblockY + 2) * Toucolor.BLOCKSIZE;
             }
+
+            PApplet.println(coords[7][0]+"\t"+coords[7][1]);
 
             return coords;
     }
@@ -212,8 +214,8 @@ public class Level {
                 bools[i + (u * 3)][0] = currentBlock.isCollision();
                 bools[i + (u * 3)][1] = currentBlock.killsPlayer();
 
-                PApplet.print("x = " + Integer.toString(playerX) + " y = " + Integer.toString(playerY) + "\t");
-                PApplet.print(currentBlock.getName() + " Collision: " + currentBlock.isCollision() + " killsplayer: " + currentBlock.killsPlayer() + "\n" );
+                //PApplet.print("x = " + Integer.toString(playerX) + " y = " + Integer.toString(playerY) + "\t");
+                //PApplet.print(currentBlock.getName() + " Collision: " + currentBlock.isCollision() + " killsplayer: " + currentBlock.killsPlayer() + "\n" );
             }
         }
         return  bools;
