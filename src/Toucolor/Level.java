@@ -186,15 +186,13 @@ public class Level {
             coords[3][0] = startblockX * Toucolor.BLOCKSIZE;
             coords[3][1] = (startblockY + 1) * Toucolor.BLOCKSIZE;
 
-            coords[5][0] = (startblockX + 2) * Toucolor.BLOCKSIZE;
-            coords[5][1] = (startblockY + 1) * Toucolor.BLOCKSIZE;
+            coords[4][0] = (startblockX + 2) * Toucolor.BLOCKSIZE;
+            coords[4][1] = (startblockY + 1) * Toucolor.BLOCKSIZE;
 
             for(int i = 0; i < 3; i++) {
-                coords[i+5][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
-                coords[i+5][1] = (startblockY + 2) * Toucolor.BLOCKSIZE;
+                coords[i + 5][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
+                coords[i + 5][1] = (startblockY + 2) * Toucolor.BLOCKSIZE;
             }
-
-            PApplet.println(coords[7][0]+"\t"+coords[7][1]);
 
             return coords;
     }
@@ -205,19 +203,32 @@ public class Level {
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
 
-        for(int u = 0; u < 3; u++) {
-            for (int i = 0; i < (bools.length / 3); i++) {
-                int blockX = (startblockX + i);
-                int blockY = (startblockY + u) > 8 ? 8 : (startblockY + u);
-                Block currentBlock = tileBlocks[levelMap[blockX][blockY]];
+        for(int i = 0; i < 3; i++) {
+            int blockX = (startblockX + i);
+            int blockY = (startblockY) > 8 ? 8 : (startblockY);
+            Block currentBlock = tileBlocks[levelMap[blockX][blockY]];
 
-                bools[i + (u * 3)][0] = currentBlock.isCollision();
-                bools[i + (u * 3)][1] = currentBlock.killsPlayer();
-
-                //PApplet.print("x = " + Integer.toString(playerX) + " y = " + Integer.toString(playerY) + "\t");
-                //PApplet.print(currentBlock.getName() + " Collision: " + currentBlock.isCollision() + " killsplayer: " + currentBlock.killsPlayer() + "\n" );
-            }
+            bools[i][0] = currentBlock.isCollision();
+            bools[i][1] = currentBlock.killsPlayer();
         }
+
+        int rowY = (startblockY + 2) > 8 ? 8 : (startblockY + 2);
+        bools[3][0] = tileBlocks[levelMap[startblockX][rowY]].isCollision();
+        bools[3][1] = tileBlocks[levelMap[startblockX][rowY]].killsPlayer();
+
+        rowY = (startblockY + 2) > 8 ? 8 : (startblockY + 2);
+        bools[3][0] = tileBlocks[levelMap[startblockX + 2][rowY]].isCollision();
+        bools[3][1] = tileBlocks[levelMap[startblockX + 2][rowY]].killsPlayer();
+
+        for(int i = 0; i < 3; i++) {
+            int blockX = (startblockX + i);
+            int blockY = (startblockY) > 8 ? 8 : (startblockY);
+            Block currentBlock = tileBlocks[levelMap[blockX][blockY]];
+
+            bools[i + 5][0] = currentBlock.isCollision();
+            bools[i + 5][1] = currentBlock.killsPlayer();
+        }
+
         return  bools;
     }
 
