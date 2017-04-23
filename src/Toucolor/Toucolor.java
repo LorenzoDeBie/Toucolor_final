@@ -6,9 +6,10 @@
 package Toucolor;
 
 import processing.core.PApplet;
+import processing.core.PImage;
+
 import java.awt.event.KeyEvent;
 import java.io.File;
-import processing.core.PImage;
 /**
  *
  * @author loren
@@ -104,10 +105,11 @@ public class Toucolor extends PApplet {
                         currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
                 speler.keyUse();
                 EnemiesBehaviour(speler.playerX, speler.playerY);
-                enemyWandelen.display(goedkoop_sletje.posX, goedkoop_sletje.posY, 'n', 0);
-                playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
                 currentLevel.getCoords((int) speler.playerX, (int) speler.playerY);
                 currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY);
+                enemyWandelen.display(goedkoop_sletje.posX, goedkoop_sletje.posY, 'n', 0);
+                playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
+                PApplet.println(speler.moveState);
                 break;
         }
 

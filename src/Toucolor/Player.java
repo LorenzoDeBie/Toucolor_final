@@ -2,6 +2,8 @@ package Toucolor;
 
 import processing.core.*;
 
+import static javafx.application.Platform.exit;
+
 /**
  * Created by Vince on 4/1/2017.
  */
@@ -110,6 +112,7 @@ public class Player {
             playerX = playerX + (moveSpeed * cProfile);
             imgCounter++;
             lastMove = 'r';
+
         }
     }
 
@@ -124,7 +127,6 @@ public class Player {
                 isInAir = true;
                 hoek = 0;
                 upIsPressed = false;
-                val();
             }
         }
     }
@@ -136,11 +138,12 @@ public class Player {
             yblock = fullCoords[i][1];
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
+
             switch (status) {
+                case 0: break;
                 case 1: //links en rechts
-                    if(canCollide) {
                         float cst = playerX + (moveSpeed * cProfile) * colvar;
-                        if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize)) {
+                        if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize) && canCollide) {
                             playerX = xblock - blockSize * colvar;
                             if (isDeadly) {
                                 PApplet.print("DEUD");
@@ -150,7 +153,6 @@ public class Player {
                         } else if (!upIsPressed) {
                             isInAir = true;
                         }
-                    }
                     break;
 
                 case 2://duck
@@ -178,11 +180,8 @@ public class Player {
 
                 case 4: //val
                     float YV = playerY + PApplet.sin(hoek) * valSpeed;
-                    //if ((playerY + PApplet.sin(hoek) * valSpeed) > sizeY - blockSize) {
-                       // isInAir = false;
-                       // hoek = 0;
-                     //   playerY = sizeY - blockSize;
-                   // } else
+                    if ((playerY + PApplet.sin(hoek) * valSpeed) > sizeY - 40) {
+                    } else
                         if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize) && canCollide) {
                         playerY = yblock - blockSize;
                         if(isDeadly){
@@ -200,6 +199,7 @@ public class Player {
 
         return collide;
     }
+
 
     public void playerDie(){
 
