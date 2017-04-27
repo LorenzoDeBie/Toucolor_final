@@ -53,12 +53,13 @@ public class Player {
 
     float lastUpdX = playerX;
     float lastUpdY = playerY;
+    float floopX, floopY;
     float updateL, updateR, updateU, updateD, fullUpdateX, fullUpdateY;
     boolean mR = false;
     boolean mL = false;
     boolean mD = false;
     boolean mU = false;
-
+    boolean doesCollide = false;
 
     public void refreshValues(float[][] coords, boolean[][] props) {
         this.fullCoords = coords;
@@ -161,22 +162,67 @@ public class Player {
                 status = 1;
             }
         } else {
-            if(updateL + updateR == 0 && updateD + updateU > 0){
+            if(updateL + updateR == 0 && updateD + updateU < 0){
                 status = 4;
             } else if(updateL + updateR == 0 && updateD + updateU < 0){
                 status = 3;
+                //}else if(updateL + updateR != 0){
+                //  status = 5;
             }else{
-                status = 5;
+                status= 4;
             }
         }
+
+        floopX = fullUpdateX;
+        floopY = fullUpdateY;
 
         for (int i = 0; i< fullCoords.length; i++) {
             xblock = fullCoords[i][0];
             yblock = fullCoords[i][1];
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
+            if (canCollide && xblock < fullUpdateX && fullUpdateX < xblock + blockSize && yblock < fullUpdateY && fullUpdateY < yblock + blockSize) {
+                doesCollide = true;
+                break;
+            }
+        }
+        if(doesCollide){
+            doesCollide = false;
+            for (int i = 0; i< fullCoords.length; i++) {
+                xblock = fullCoords[i][0];
+                yblock = fullCoords[i][1];
+                canCollide = propterties[i][0];
+                isDeadly = propterties[i][1];
+                if (canCollide && xblock < fullUpdateX && fullUpdateX < xblock + blockSize && yblock < playerY && playerY < yblock + blockSize) {
+                    doesCollide = true;
+                }else{
+                    fullUpdateY = playerY;
+                }
+            }
+        }
+        if(doesCollide){
+            doesCollide = false;
+            for (int i = 0; i< fullCoords.length; i++) {
+                xblock = fullCoords[i][0];
+                yblock = fullCoords[i][1];
+                canCollide = propterties[i][0];
+                isDeadly = propterties[i][1];
+                if (canCollide && xblock < playerX && playerX < xblock + blockSize && yblock < fullUpdateY && fullUpdateY < yblock + blockSize) {
+                    doesCollide = true;
+                }else{
+                    fullUpdateX = playerX;
+                }
+            }
+        }
+        if(doesCollide) {
+            fullUpdateX = playerX;
+            fullUpdateY = playerY;
+        }
 
-            switch (status) {
+
+
+
+            /*switch (status) {
                 case 0:
                     break;
                 case 1: //links en rechts
@@ -192,8 +238,9 @@ public class Player {
                     break;
 
                 case 3: //jump
-                    if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(fullUpdateY - yblock) < blockSize) && canCollide) {
-                        hoek = 0;
+                    if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(fullUpdateY - yblock) < blockSize) && canCollide && yblock-fullUpdateY < 0) {
+                        fullUpdateY = yblock + blockSize;
+                    hoek = 0;
                         upIsPressed = false;
                         //isInAir = true;
                         if (isDeadly) {
@@ -206,24 +253,39 @@ public class Player {
 
                 case 4: //val
                     if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(fullUpdateY - yblock) < blockSize) && canCollide && yblock-fullUpdateY > 0) {
-                        fullUpdateY = yblock - blockSize;
+                        fullUpdateY = playerY;
                         isInAir = false;
                         if (isDeadly) {
                             PApplet.print("DEUD");
                         }
                     }
-                    break;
-                case 5:
+                    break; */
 
-                    break;
+             /*   case 5:
+                    if((PApplet.abs(fullUpdateX - xblock) < blockSize)&& canCollide){
+                        if(PApplet.abs(fullUpdateY-yblock) < blockSize && canCollide){
+                            //allebei collide
+                            isInAir = false;
+                            fullUpdateX = playerX;
+                            fullUpdateY = playerY;
+                        }else if(PApplet.abs(fullUpdateY-yblock) > blockSize && canCollide){
+                            //mag enkel over de y bewegen
+                            fullUpdateX = playerX;
+                        }
+                    }else{
+                        if(PApplet.abs(fullUpdateY-yblock) < blockSize && canCollide){
+                            //mag enkel over x bewegen
+                            isInAir = false;
+                            fullUpdateY = playerY;
+                        } else if(PApplet.abs(fullUpdateY-yblock) > blockSize && canCollide){
+                            //mag alle bewegingen uitvoeren
+                        }
+                    }
+                    break;*/
+        // default: //niets doen
+        //   break;
+        // }
 
-
-                default: //niets doen
-                    break;
-            }
-        }
-
-        PApplet.println(status);
 
 
         playerX = fullUpdateX;
