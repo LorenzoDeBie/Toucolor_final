@@ -118,20 +118,20 @@ public class Level {
         level = applet.createGraphics(levelWidth, levelHeight);
         level.beginDraw();
         //we draw the level here
-            //render backgorund
-            level.imageMode(PConstants.CORNER);
-            level.background(255);
+        //render backgorund
+        level.imageMode(PConstants.CORNER);
+        level.background(255);
 
-            //now draw all the blocks
-            level.rectMode(PConstants.CORNER);
-            for (int i = 0; i < columnCount; i++) {
-                for (int u = 0; u < 9; u++) {
-                    Block currentBlock = tileBlocks[levelMap[i][u]];
-                    if(currentBlock.drawBlock()) {
-                        level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
-                    }
+        //now draw all the blocks
+        level.rectMode(PConstants.CORNER);
+        for (int i = 0; i < columnCount; i++) {
+            for (int u = 0; u < 9; u++) {
+                Block currentBlock = tileBlocks[levelMap[i][u]];
+                if(currentBlock.drawBlock()) {
+                    level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
                 }
             }
+        }
 
         level.endDraw();
 
@@ -172,11 +172,11 @@ public class Level {
     }
 
     //returns array of the 9 blocks around the player, used in collision
-    float[][] getCoords(int playerX, int playerY){
-            float[][] coords = new float[8][2];
+    float[][] getCoords(float playerX, float playerY){
+        float[][] coords = new float[8][2];
 
-            int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
-            int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
+        int startblockX = (PApplet.floor(playerX / Toucolor.BLOCKSIZE)) - 1;
+        int startblockY = (PApplet.floor(playerY / Toucolor.BLOCKSIZE)) - 1;
 
         coords[0][0] = startblockX * BLOCKWIDTH;
         coords[1][0] = (startblockX+1) * BLOCKWIDTH;
@@ -196,7 +196,6 @@ public class Level {
         coords[6][1] = (startblockY+2) * BLOCKWIDTH;
         coords[7][1] = (startblockY+2) * BLOCKWIDTH;
 
-
             /*
             for(int i = 0; i < 3; i++) {
                 coords[i][0] = (startblockX + i) * Toucolor.BLOCKSIZE;
@@ -215,7 +214,7 @@ public class Level {
             }
             */
 
-            return coords;
+        return coords;
     }
 
     boolean[][] getColAndDeath(int playerX, int playerY) {
@@ -223,6 +222,12 @@ public class Level {
 
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
+
+        //PApplet.println(startblockX+" "+startblockY);
+
+        if(startblockY + 2 >= 9){
+            startblockY = 6;
+        }
 
         bools[0][0] = tileBlocks[levelMap[startblockX][startblockY]].isCollision();
         bools[1][0] = tileBlocks[levelMap[startblockX+1][startblockY]].isCollision();
