@@ -18,13 +18,13 @@ public class Score{
     private PApplet applet;
 
 
-    Score( Time tijd){
+    void Score( Time tijd){
         // after game points + getting time
         if (gameEnded == true){
             int min = tijd.getMin();
             int sec = tijd.getSec();
-            points = points + min * multiplierM;
-            points = points + sec * multiplierS;
+            points = points + (min * multiplierM);
+            points = points + (sec * multiplierS);
 
         }
         //ingame points
