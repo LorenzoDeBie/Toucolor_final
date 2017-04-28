@@ -228,6 +228,9 @@ public class Level {
         if(startblockY + 2 >= 9){
             startblockY = 6;
         }
+        if(startblockY < 0){
+            startblockY = 0;
+        }
 
         bools[0][0] = tileBlocks[levelMap[startblockX][startblockY]].isCollision();
         bools[1][0] = tileBlocks[levelMap[startblockX+1][startblockY]].isCollision();

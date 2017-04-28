@@ -27,39 +27,31 @@ public class Player {
     float playerY = 200;
 
     //Alle stuff voor keyuse, snelheid enz
-    int moveSpeed = 5;
-    float iceSpeed = 0;
-    boolean isInAir = true;
-    float hoek = 0;
-    boolean upIsPressed = false;
-    float jumpSpeed = 10;
+    private int moveSpeed = 5;
+    private float iceSpeed = 0;
+    public boolean isInAir = true;
+    private float hoek = 0;
+    public boolean upIsPressed = false;
+    float jumpSpeed = 9;
     float valSpeed = 8;
-    boolean rightPressed;
-    boolean leftPressed;
-    boolean downPressed;
+    public boolean rightPressed;
+    public boolean leftPressed;
+    public boolean downPressed;
     int cProfile = 1;
 
     //Voor collision
-    private boolean collideX, collideY;
-    private int colvar = 1;
-    private int jumpvar = 1;
     private boolean jumping = false;
-    int status;
 
     public int imgCounter = 0;
     public char lastMove = 'n';
 
     float PI = PApplet.PI;
 
-    float lastUpdX = playerX;
-    float lastUpdY = playerY;
-    float floopX, floopY;
     float updateL, updateR, updateU, updateD, fullUpdateX, fullUpdateY;
     boolean mR = false;
     boolean mL = false;
     boolean mD = false;
     boolean mU = false;
-    boolean doesCollide = false;
 
     public void refreshValues(float[][] coords, boolean[][] props) {
         this.fullCoords = coords;
@@ -112,7 +104,7 @@ public class Player {
             if (hoek < PI / 2) {
                 updateD = PApplet.sin(hoek) * valSpeed;
                 hoek += 0.03;
-                isInAir = true;
+                //isInAir = true;
             } else {
                 updateD = valSpeed;
                 isInAir = true;
@@ -137,366 +129,55 @@ public class Player {
         updateU = u;
         updateD = d;
 
-
         fullUpdateX = playerX + (updateL + updateR);
         fullUpdateY = playerY + (updateD + updateU);
-
-        if ((fullUpdateX - lastUpdX) < 0) {
-            colvar = -1;
-        } else {
-            colvar = 1;
-        }
-        if ((fullUpdateY - lastUpdY) < 0) {
-            jumpvar = -1;
-        } else {
-            jumpvar = 1;
-        }
-
-        collideX = false;
-        collideY = false;
-
-        if (updateD + updateU == 0) {
-            if (updateL + updateR == 0) {
-                status = 0;
-            } else {
-                status = 1;
-            }
-        } else {
-            if(updateL + updateR == 0 && updateD + updateU < 0){
-                status = 4;
-            } else if(updateL + updateR == 0 && updateD + updateU < 0){
-                status = 3;
-                //}else if(updateL + updateR != 0){
-                //  status = 5;
-            }else{
-                status= 4;
-            }
-        }
-
-        floopX = fullUpdateX;
-        floopY = fullUpdateY;
 
         for (int i = 0; i< fullCoords.length; i++) {
             xblock = fullCoords[i][0];
             yblock = fullCoords[i][1];
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
-            if (canCollide && xblock < fullUpdateX && fullUpdateX < xblock + blockSize && yblock < fullUpdateY && fullUpdateY < yblock + blockSize) {
-                doesCollide = true;
-                break;
-            }
-        }
-        if(doesCollide){
-            doesCollide = false;
-            for (int i = 0; i< fullCoords.length; i++) {
-                xblock = fullCoords[i][0];
-                yblock = fullCoords[i][1];
-                canCollide = propterties[i][0];
-                isDeadly = propterties[i][1];
-                if (canCollide && xblock < fullUpdateX && fullUpdateX < xblock + blockSize && yblock < playerY && playerY < yblock + blockSize) {
-                    doesCollide = true;
-                }else{
-                    fullUpdateY = playerY;
-                }
-            }
-        }
-        if(doesCollide){
-            doesCollide = false;
-            for (int i = 0; i< fullCoords.length; i++) {
-                xblock = fullCoords[i][0];
-                yblock = fullCoords[i][1];
-                canCollide = propterties[i][0];
-                isDeadly = propterties[i][1];
-                if (canCollide && xblock < playerX && playerX < xblock + blockSize && yblock < fullUpdateY && fullUpdateY < yblock + blockSize) {
-                    doesCollide = true;
-                }else{
+
+            if(canCollide){
+                if(PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(playerY - yblock) < blockSize){
+                    //enkel de x-beweging zal colliden
                     fullUpdateX = playerX;
                 }
-            }
-        }
-        if(doesCollide) {
-            fullUpdateX = playerX;
-            fullUpdateY = playerY;
-        }
-
-
-
-
-            /*switch (status) {
-                case 0:
-                    break;
-                case 1: //links en rechts
-                    if ((PApplet.abs(fullUpdateX - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize) && canCollide) {
-                        fullUpdateX = xblock - blockSize * colvar;
-                        if(!upIsPressed){
-                            isInAir = true;
-                        }
-                        if (isDeadly) {
-                            PApplet.print("DEUD");
-                        }
-                    }
-                    break;
-
-                case 3: //jump
-                    if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(fullUpdateY - yblock) < blockSize) && canCollide && yblock-fullUpdateY < 0) {
-                        fullUpdateY = yblock + blockSize;
-                    hoek = 0;
-                        upIsPressed = false;
-                        //isInAir = true;
-                        if (isDeadly) {
-                            PApplet.print("DEUD");
-                        } else {
-
-                        }
-                    }
-                    break;
-
-                case 4: //val
-                    if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(fullUpdateY - yblock) < blockSize) && canCollide && yblock-fullUpdateY > 0) {
-                        fullUpdateY = playerY;
+                if(PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(playerX - xblock)< blockSize){
+                    //enkel y-beweging zal colliden
+                    if(fullUpdateY - yblock < 0){
                         isInAir = false;
-                        if (isDeadly) {
-                            PApplet.print("DEUD");
-                        }
+                        fullUpdateY = yblock - blockSize;
+                    }else if(fullUpdateY - yblock > 0){
+                        hoek = PApplet.PI / 2;
+                        fullUpdateY = yblock + blockSize;
                     }
-                    break; */
+                }
+            }
 
-             /*   case 5:
-                    if((PApplet.abs(fullUpdateX - xblock) < blockSize)&& canCollide){
-                        if(PApplet.abs(fullUpdateY-yblock) < blockSize && canCollide){
-                            //allebei collide
-                            isInAir = false;
-                            fullUpdateX = playerX;
-                            fullUpdateY = playerY;
-                        }else if(PApplet.abs(fullUpdateY-yblock) > blockSize && canCollide){
-                            //mag enkel over de y bewegen
-                            fullUpdateX = playerX;
-                        }
-                    }else{
-                        if(PApplet.abs(fullUpdateY-yblock) < blockSize && canCollide){
-                            //mag enkel over x bewegen
-                            isInAir = false;
-                            fullUpdateY = playerY;
-                        } else if(PApplet.abs(fullUpdateY-yblock) > blockSize && canCollide){
-                            //mag alle bewegingen uitvoeren
-                        }
-                    }
-                    break;*/
-        // default: //niets doen
-        //   break;
-        // }
-
-
+        }
 
         playerX = fullUpdateX;
         playerY = fullUpdateY;
 
-        lastUpdY = playerY;
+        if(playerY > 730){
+            playerY = 300;
+            playerX = playerX - 3*blockSize;
+        }
 
         updateR = 0;
         updateL = 0;
         updateU = 0;
         updateD = 0;
-        status = 0;
+
+        if(hoek == 0){
+            PApplet.println(hoek);
+        }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-            /*if(updateL + updateR == 0){
-            if(updateD + updateU == 0){
-                fullUpdateY = playerY;
-                fullUpdateX = playerX;
-            }else {
-                PApplet.println(fullCoords[6][1]+" "+propterties[6][0]);
-                PApplet.println(PApplet.abs(fullUpdateY-fullCoords[6][1]));
-                if((updateD + updateU) > 0){
-                    if(propterties[6][0] && (PApplet.abs(fullUpdateY-fullCoords[6][1])<blockSize)){
-                        isInAir = false;
-                        fullUpdateY = ((playerY /blockSize)-1)*blockSize;
-                    }
-                }else{
-                    if(propterties[1][0] && (PApplet.abs(fullUpdateY-fullCoords[1][1])<blockSize)){
-                        jumping = false;
-                        fullUpdateY = fullCoords[6][1] - blockSize;
-                    }
-                }
-            }
-        } else {
-            if(updateL + updateR > 0){
-                if(propterties[4][0] && (PApplet.abs(fullUpdateX-fullCoords[4][0])<blockSize)){
-                    fullUpdateX = playerX - 1;
-                }
-                else if(propterties[6][0] && (PApplet.abs(fullUpdateY - fullCoords[6][1])< blockSize) ){
-
-                }
-            }
-        }*/
-
-   /* for (int i = 0; i < fullCoords.length; i++) {
-        canCollide = propterties[i][0];
-        xblock = fullCoords[i][0];
-        yblock = fullCoords[i][1];
-        isDeadly = propterties[i][1];
-
-        PApplet.println("Speler x: " + playerX + "\tSpeler y: " + playerY+" "+canCollide);
-        PApplet.println("[" + i + "] Block x: " + xblock + "\tBlock y: " + yblock);
-        PApplet.println(" ");}
-
-        */
-
-            /*if(canCollide && (PApplet.abs(playerX - xblock)<blockSize) && (PApplet.abs(playerY-yblock)<blockSize)){
-                PApplet.println("Houston, we have a problem");
-            }
-            else{
-                if(canCollide && (PApplet.abs(fullUpdateX-xblock)<blockSize) && (PApplet.abs(playerY-yblock)< blockSize)){
-                    //collision horizontaal met nieuwe update
-                    if(canCollide && (PApplet.abs(fullUpdateY-yblock)<blockSize) && (PApplet.abs(playerX-xblock)<blockSize)){
-                        //collision horizontaal en verticaal met nieuwe coords
-                        fullUpdateX = playerX;
-                        fullUpdateY = playerY;
-                        break;
-                    } else {
-                        fullUpdateX = playerX;
-                        break;
-                    }
-                }
-                else if(canCollide && (PApplet.abs(fullUpdateY-yblock)<blockSize) && (PApplet.abs(playerX-xblock)< blockSize)){
-                    //collision verticaal met nieuwe update
-                    if((PApplet.abs(fullUpdateX-xblock)<blockSize) && (PApplet.abs(playerY-yblock)<blockSize)){
-                        //collision horizontaal en verticaal met nieuwe coords
-                        fullUpdateX = playerX;
-                        fullUpdateY = playerY;
-                        break;
-                    }
-                    else{
-                        fullUpdateY = playerY;
-                        break;
-                    }
-                }
-            }*/
-
-
-
-
-
-
-
-    /*public void val() {
-        if (hoek < PI / 2) {
-            updateD = playerY + PApplet.sin(hoek) * valSpeed;
-            hoek += 0.03;
-        } else {
-            updateD = playerY + valSpeed;
-        }
-        isInAir = false;
-        hoek = 0;
-    }*/
-
-   /* public void moveLeft(){
-        updateL = playerX - (moveSpeed * cProfile);
-        imgCounter++;
-        lastMove = 'l';
+    public void duck(){
 
     }
-
-    public void moveRight(){
-        updateR = playerX + (moveSpeed * cProfile);
-        imgCounter++;
-        lastMove = 'r';
-    }*/
-
-    public void duck(){}
-
-   /* public void jump(){
-        if (hoek < PI / 2) {
-            updateU = playerY - PApplet.cos(hoek) * jumpSpeed;
-            hoek += 0.07;
-        } else {
-            isInAir = true;
-            hoek = 0;
-            upIsPressed = false;
-        }
-    }*/
-
-   /* public boolean collision(int status){
-        collide = false;
-        for (int i = 0; i< fullCoords.length; i++) {
-            xblock = fullCoords[i][0];
-            yblock = fullCoords[i][1];
-            canCollide = propterties[i][0];
-            isDeadly = propterties[i][1];
-
-            switch (status) {
-                case 0: break;
-                case 1: //links en rechts
-                    float cst = playerX + (moveSpeed * cProfile) * colvar;
-                    if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize) && canCollide) {
-                        playerX = xblock - blockSize * colvar;
-                        if (isDeadly) {
-                            PApplet.print("DEUD");
-                        } else {
-                            collide = true;
-                        }
-                    } else if (!upIsPressed) {
-                        isInAir = true;
-                    }
-                    break;
-
-                case 2://duck
-                    break;
-
-                case 3: //jump
-                    float YJ = playerY - PApplet.cos(hoek) * jumpSpeed;
-                    if ((playerY - PApplet.cos(hoek) * jumpSpeed) < 1) {
-                        isInAir = true;
-                        upIsPressed = false;
-                        hoek = 0;
-                        playerY = 1;
-                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YJ - yblock) < blockSize) && canCollide) {
-                        playerY = yblock + blockSize;
-                        hoek = 0;
-                        upIsPressed = false;
-                        isInAir = true;
-                        if(isDeadly){
-                            PApplet.print("DEUD");
-                        }else {
-                            collide = true;
-                        }
-                    }
-                    break;
-
-                case 4: //val
-                    float YV = playerY + PApplet.sin(hoek) * valSpeed;
-                    if ((playerY + PApplet.sin(hoek) * valSpeed) > sizeY - 40) {
-                    } else
-                    if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize) && canCollide) {
-                        playerY = yblock - blockSize;
-                        if(isDeadly){
-                            PApplet.print("DEUD");
-                        }else {
-                            collide = true;
-                        }
-                    }
-                    break;
-
-                default: //niets doen
-                    break;
-            }
-        }
-
-        return collide;
-    } */
-
 
     public void playerDie(){
 
