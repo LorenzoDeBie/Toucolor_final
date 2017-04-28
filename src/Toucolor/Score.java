@@ -40,4 +40,9 @@ public class Score{
     public int getpoints() {
         return points;
     }
+
+    public void renderScore(){
+        //ppaplet nodig ofzoiets
+
+    }
 }
