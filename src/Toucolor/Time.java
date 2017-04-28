@@ -9,7 +9,7 @@ import processing.core.PApplet;
 public class Time{
     //variables
     float Tijd;
-    float Vermindering = 0.0069444444444444f;
+    float vermindering;
     int Min;
     float kommaSec;
     int Sec;
@@ -17,17 +17,20 @@ public class Time{
     private boolean gameEnded;
     private boolean gameOver;
 
+
+
     //Set time
-    Time(float Tijd,  PApplet applet) {
+    Time(float Tijd,  PApplet applet, float verm) {
         this.Tijd = Tijd;
         this.applet = applet;
+        this.vermindering = 1/verm;
     }
 
 
     //update time
     void Update(){
         if (gameEnded == false){
-            Tijd = Tijd - Vermindering;
+            Tijd = Tijd - vermindering;
             Min = (int)Tijd;
             kommaSec = (Tijd-Min)*60;
             Sec = (int)kommaSec;
