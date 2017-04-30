@@ -41,7 +41,7 @@ public class Toucolor extends PApplet {
     //levelmanager functions
     private Level currentLevel;
     public Startscreen menu;
-    private String status;
+    public String status;
     private int levelToLoad;
 
 
@@ -84,6 +84,13 @@ public class Toucolor extends PApplet {
      */
     @Override
     public void draw() {
+        if(speler.playerDie()){
+            PApplet.println("hier kom ik");
+            speler.playerX = 200;
+            speler.playerY = 300;
+            speler.playerIsDead = false;
+
+        }
         switch (status) {
             case "initializing":
                 //show first loading screen
@@ -237,6 +244,7 @@ public class Toucolor extends PApplet {
             speler.downPressed = false;
         }
     }
+
 
     /**
      * creates new level object and initializes it.

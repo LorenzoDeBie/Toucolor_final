@@ -38,6 +38,7 @@ public class Player {
     public boolean leftPressed;
     public boolean downPressed;
     int cProfile = 1;
+    public boolean playerIsDead = false;
 
     //Voor collision
     private boolean jumping = false;
@@ -151,6 +152,7 @@ public class Player {
                     //enkel y-beweging zal colliden
                     if(fullUpdateY - yblock < 0){
                         if(isDeadly){
+                            playerIsDead = true;
                             playerDie();
                         }else{
                             isInAir = false;
@@ -158,6 +160,7 @@ public class Player {
                         }
                     }else if(fullUpdateY - yblock > 0){
                         if(isDeadly){
+                            playerIsDead = true;
                             playerDie();
                         }else {
                             hoek = PApplet.PI / 2;
@@ -173,8 +176,8 @@ public class Player {
         playerY = fullUpdateY;
 
         if(playerY > 730){
-            playerY = 300;
-            playerX = playerX - 3*blockSize;
+            playerIsDead = true;
+            playerDie();
         }
 
         updateR = 0;
@@ -191,9 +194,12 @@ public class Player {
 
     }
 
-    public void playerDie(){
-        PApplet.println("JA DIE IS DOOOD");
-
+    public boolean playerDie(){
+        if(playerIsDead) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
