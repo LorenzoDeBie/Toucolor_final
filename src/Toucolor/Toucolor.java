@@ -46,8 +46,8 @@ public class Toucolor extends PApplet {
 
 
 
-   // Enemy goedkoop_sletje = new Enemy(1,1,0.01f,400,640);
-    Enemy[] Enemies ;
+    Enemy lel= new Enemy(3,1,0.01f,200,500);
+    Enemy[] Enemies = {lel};
     Animation playerWandelen, enemyWandelen;
     private Player speler = new Player();
 
@@ -104,10 +104,10 @@ public class Toucolor extends PApplet {
                 speler.refreshValues(currentLevel.getCoords((int)speler.playerX, (int)speler.playerY),
                         currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
                 speler.keyUse();
-               // EnemiesBehaviour(speler.playerX, speler.playerY);
+                EnemiesBehaviour(speler.playerX, speler.playerY);
                 currentLevel.getCoords((int) speler.playerX, (int) speler.playerY);
                 currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY);
-               // enemyWandelen.display(goedkoop_sletje.posX, goedkoop_sletje.posY, 'n', 0);
+                enemyWandelen.display(lel.posX, lel.posY, 'n', 0);
                 playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
                 break;
         }

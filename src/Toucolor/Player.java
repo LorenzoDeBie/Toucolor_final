@@ -140,17 +140,29 @@ public class Player {
 
             if(canCollide){
                 if(PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(playerY - yblock) < blockSize){
-                    //enkel de x-beweging zal colliden
-                    fullUpdateX = playerX;
+                    if(isDeadly){
+                        playerDie();
+                    }else {
+                        //enkel de x-beweging zal colliden
+                        fullUpdateX = playerX;
+                    }
                 }
                 if(PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(playerX - xblock)< blockSize){
                     //enkel y-beweging zal colliden
                     if(fullUpdateY - yblock < 0){
-                        isInAir = false;
-                        fullUpdateY = yblock - blockSize;
+                        if(isDeadly){
+                            playerDie();
+                        }else{
+                            isInAir = false;
+                            fullUpdateY = yblock - blockSize;
+                        }
                     }else if(fullUpdateY - yblock > 0){
-                        hoek = PApplet.PI / 2;
-                        fullUpdateY = yblock + blockSize;
+                        if(isDeadly){
+                            playerDie();
+                        }else {
+                            hoek = PApplet.PI / 2;
+                            fullUpdateY = yblock + blockSize;
+                        }
                     }
                 }
             }
@@ -180,7 +192,7 @@ public class Player {
     }
 
     public void playerDie(){
-
+        PApplet.println("JA DIE IS DOOOD");
 
     }
 
