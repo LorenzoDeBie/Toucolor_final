@@ -44,6 +44,7 @@ public class Toucolor extends PApplet {
     public String status;
     private int levelToLoad;
 
+    private int x = 0;
 
 
     Enemy lel= new Enemy(3,1,0.01f,200,500);
@@ -85,11 +86,8 @@ public class Toucolor extends PApplet {
     @Override
     public void draw() {
         if(speler.playerDie()){
-            PApplet.println("hier kom ik");
-            speler.playerX = 200;
-            speler.playerY = 300;
-            speler.playerIsDead = false;
-
+            speler.dying = true;
+            playerDying();
         }
         switch (status) {
             case "initializing":
@@ -110,7 +108,9 @@ public class Toucolor extends PApplet {
                 //background(255);
                 speler.refreshValues(currentLevel.getCoords((int)speler.playerX, (int)speler.playerY),
                         currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
-                speler.keyUse();
+                if(!speler.dying) {
+                    speler.keyUse();
+                }
                 EnemiesBehaviour(speler.playerX, speler.playerY);
                 currentLevel.getCoords((int) speler.playerX, (int) speler.playerY);
                 currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY);
@@ -260,6 +260,19 @@ public class Toucolor extends PApplet {
 
     }
 
+    public void playerDying(){
+        if(x < 100){
+            speler.playerY -= 3;
+            x++;
+        }else{
+            speler.playerX = 300;
+            speler.playerY = 300;
+            speler.dying = false;
+            speler.playerIsDead = false;
+            x = 0;
+        }
+
+    }
     /**
      * creates menu screen
      * loads in all the files for the levels, blocks and other info

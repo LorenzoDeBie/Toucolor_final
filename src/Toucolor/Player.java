@@ -46,6 +46,8 @@ public class Player {
     public int imgCounter = 0;
     public char lastMove = 'n';
 
+    public boolean dying = false;
+
     float PI = PApplet.PI;
 
     float updateL, updateR, updateU, updateD, fullUpdateX, fullUpdateY;
