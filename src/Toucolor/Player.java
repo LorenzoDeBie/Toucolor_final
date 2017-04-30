@@ -116,7 +116,7 @@ public class Player {
         if (mU == true) {
             if (hoek < PI / 2) {
                 updateU = -PApplet.cos(hoek) * jumpSpeed;
-                hoek += 0.005;
+                hoek += 0.0005;
             } else {
                 jumping = false;
                 upIsPressed = false;
