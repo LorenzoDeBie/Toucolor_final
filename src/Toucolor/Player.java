@@ -27,12 +27,12 @@ public class Player {
     float playerY = 200;
 
     //Alle stuff voor keyuse, snelheid enz
-    private int moveSpeed = 5;
+    private int moveSpeed = 6;
     private float iceSpeed = 0;
     public boolean isInAir = true;
     private float hoek = 0;
     public boolean upIsPressed = false;
-    float jumpSpeed = 9;
+    float jumpSpeed = 10;
     float valSpeed = 8;
     public boolean rightPressed;
     public boolean leftPressed;
@@ -114,7 +114,7 @@ public class Player {
         if (mU == true) {
             if (hoek < PI / 2) {
                 updateU = -PApplet.cos(hoek) * jumpSpeed;
-                hoek += 0.01;
+                hoek += 0.005;
             } else {
                 jumping = false;
                 upIsPressed = false;
@@ -141,36 +141,34 @@ public class Player {
 
             if(canCollide){
                 if(PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(playerY - yblock) < blockSize){
+                    //enkel de x-beweging zal colliden
+                    fullUpdateX = playerX;
                     if(isDeadly){
+                        playerIsDead = true;
                         playerDie();
-                    }else {
-                        //enkel de x-beweging zal colliden
-                        fullUpdateX = playerX;
                     }
                 }
                 if(PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(playerX - xblock)< blockSize){
                     //enkel y-beweging zal colliden
                     if(fullUpdateY - yblock < 0){
+                        isInAir = false;
+                        fullUpdateY = yblock - blockSize;
                         if(isDeadly){
                             playerIsDead = true;
                             playerDie();
-                        }else{
-                            isInAir = false;
-                            fullUpdateY = yblock - blockSize;
                         }
                     }else if(fullUpdateY - yblock > 0){
+                        hoek = PApplet.PI / 2;
+                        fullUpdateY = yblock + blockSize;
                         if(isDeadly){
                             playerIsDead = true;
                             playerDie();
-                        }else {
-                            hoek = PApplet.PI / 2;
-                            fullUpdateY = yblock + blockSize;
                         }
                     }
                 }
             }
-
         }
+
 
         playerX = fullUpdateX;
         playerY = fullUpdateY;
