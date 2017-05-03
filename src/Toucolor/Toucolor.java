@@ -110,6 +110,7 @@ public class Toucolor extends PApplet {
                     speler.playerIsDead = false;
                 }else{
                     speler.keyUse();
+
                 }
 
                 EnemiesBehaviour(speler.playerX, speler.playerY);

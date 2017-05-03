@@ -164,6 +164,7 @@ public class Player {
                         playerIsDead = true;
                         playerDie();
                     }
+
                 }else if(fullUpdateY - yblock > 0){
                     verticaleCollision = true;
                     isInAir = false;
