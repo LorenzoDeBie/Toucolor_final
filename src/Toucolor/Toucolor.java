@@ -85,10 +85,6 @@ public class Toucolor extends PApplet {
      */
     @Override
     public void draw() {
-        if(speler.playerDie()){
-            speler.dying = true;
-            playerDying();
-        }
         switch (status) {
             case "initializing":
                 //show first loading screen
@@ -108,9 +104,14 @@ public class Toucolor extends PApplet {
                 //background(255);
                 speler.refreshValues(currentLevel.getCoords((int)speler.playerX, (int)speler.playerY),
                         currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
-                if(!speler.dying) {
+                if(speler.playerIsDead){
+                    speler.playerX = 300;
+                    speler.playerY = 500;
+                    speler.playerIsDead = false;
+                }else{
                     speler.keyUse();
                 }
+
                 EnemiesBehaviour(speler.playerX, speler.playerY);
                 currentLevel.getCoords((int) speler.playerX, (int) speler.playerY);
                 currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY);

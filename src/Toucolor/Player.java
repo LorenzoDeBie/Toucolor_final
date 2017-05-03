@@ -40,6 +40,8 @@ public class Player {
     int cProfile = 1;
     public boolean playerIsDead = false;
 
+    private boolean horizontaleCollision = false, verticaleCollision = false;
+
     //Voor collision
     private boolean jumping = false;
 
@@ -136,40 +138,50 @@ public class Player {
         fullUpdateY = playerY + (updateD + updateU);
 
         for (int i = 0; i< fullCoords.length; i++) {
+            //PApplet.println(i);
             xblock = fullCoords[i][0];
             yblock = fullCoords[i][1];
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
 
-            if(canCollide){
-                if(PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(playerY - yblock) < blockSize){
-                    //enkel de x-beweging zal colliden
-                    fullUpdateX = playerX;
+            //if(canCollide){
+            if(canCollide && PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(playerY - yblock) < blockSize){
+                //enkel de x-beweging zal colliden
+                horizontaleCollision = true;
+                fullUpdateX = playerX;
+                if(isDeadly){
+                    playerIsDead = true;
+                    playerDie();
+                }
+            }
+            if(canCollide && PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(playerX - xblock)< blockSize){
+                //enkel y-beweging zal colliden
+                if(fullUpdateY - yblock < 0){
+                    verticaleCollision = true;
+                    fullUpdateY = yblock - blockSize;
+                    isInAir = false;
+                    if(isDeadly){
+                        playerIsDead = true;
+                        playerDie();
+                    }
+                }else if(fullUpdateY - yblock > 0){
+                    verticaleCollision = true;
+                    isInAir = false;
+                    if(jumping){
+                        fullUpdateY = yblock + blockSize;
+                    }
                     if(isDeadly){
                         playerIsDead = true;
                         playerDie();
                     }
                 }
-                if(PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(playerX - xblock)< blockSize){
-                    //enkel y-beweging zal colliden
-                    if(fullUpdateY - yblock < 0){
-                        isInAir = false;
-                        fullUpdateY = yblock - blockSize;
-                        if(isDeadly){
-                            playerIsDead = true;
-                            playerDie();
-                        }
-                    }else if(fullUpdateY - yblock > 0){
-                        hoek = PApplet.PI / 2;
-                        fullUpdateY = yblock + blockSize;
-                        if(isDeadly){
-                            playerIsDead = true;
-                            playerDie();
-                        }
-                    }
-                }
             }
+
         }
+        PApplet.println(playerX, playerY);
+
+        verticaleCollision = false;
+        horizontaleCollision = false;
 
 
         playerX = fullUpdateX;
