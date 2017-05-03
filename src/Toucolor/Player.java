@@ -58,13 +58,21 @@ public class Player {
     boolean mD = false;
     boolean mU = false;
 
-    public void refreshValues(float[][] coords, boolean[][] props) {
+    //end animation vars
+    private Toucolor applet;
+    private boolean customHorizontaleCollision;
+
+    Player(Toucolor applet) {
+        this.applet = applet;
+    }
+
+    void refreshValues(float[][] coords, boolean[][] props) {
         this.fullCoords = coords;
         this.propterties = props;
     }
 
 
-    public void keyUse() {
+    void keyUse() {
         if (rightPressed) {
             imgCounter++;
             mR = true;
@@ -127,8 +135,11 @@ public class Player {
         collision(updateR, updateL, updateU, updateD);
     }
 
+    public boolean isHorizontaleCollision() {
+        return this.customHorizontaleCollision;
+    }
 
-    public void collision(float r, float l, float u, float d) {
+    private void collision(float r, float l, float u, float d) {
         updateR = r;
         updateL = l;
         updateU = u;
@@ -179,7 +190,9 @@ public class Player {
             }
 
         }
-        PApplet.println(playerX, playerY);
+        //PApplet.println(playerX, playerY);
+
+        customHorizontaleCollision = horizontaleCollision;
 
         verticaleCollision = false;
         horizontaleCollision = false;
@@ -188,6 +201,7 @@ public class Player {
         playerX = fullUpdateX;
         playerY = fullUpdateY;
 
+        //is dit test code?
         if(playerY > 730){
             playerIsDead = true;
             playerDie();
@@ -203,17 +217,19 @@ public class Player {
         }
     }
 
-    public void duck(){
+    private void duck(){
 
     }
 
-    public boolean playerDie(){
+    private boolean playerDie(){
         if(playerIsDead) {
             return true;
         } else {
             return false;
         }
     }
+
+
 
 
 }

@@ -25,4 +25,8 @@ class LoadScreen {
         applet.fill(255);
         applet.text(loadText, applet.width/2, applet.height/2);
     }
+
+    void setText(String text) {
+        this.loadText = text;
+    }
 }

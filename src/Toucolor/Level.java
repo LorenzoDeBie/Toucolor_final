@@ -38,14 +38,25 @@ public class Level {
     private int[][] levelMap; //an array which holds the map
     private PImage background;
     private PGraphics level;
+    private int length;
+    private int number;
+
+    //alles voor einde van level
+    private boolean levelEnding;
+    private static int pixelsBeforeEnd = 400; //moet nog een echte waarde krijgen.
+
+    //alles voor als player doodgaat
+    private boolean playerDying; //misschien niet nodig
 
     //not sure if this is used somewhere
-    Level(PApplet applet, String levelFileName) {
+    Level(PApplet applet, int number) {
         this.applet = applet;
-        this.levelFileName = levelFileName;
+        this.levelFileName = "level" + number + ".csv";
         loadTiles();
         loadlevel();
         background = applet.loadImage("Background.jpg");
+        this.levelEnding = false;
+        this.number = number;
     }
 
     /**
@@ -100,6 +111,9 @@ public class Level {
         int rowCount = myTable.getRowCount();
         int columnCount = myTable.getColumnCount();
 
+        //this var is used when determining if the level is ending
+        this.length = columnCount * this.BLOCKWIDTH;
+
         //create the array for the Level
         levelMap = new int[columnCount][rowCount];
 
@@ -133,6 +147,8 @@ public class Level {
             }
         }
 
+        //TODO: draw the end of the level here
+
         level.endDraw();
 
 
@@ -141,23 +157,16 @@ public class Level {
 
     /**
      * renders the Level on screen based on the players location
-     * todo: decide how to render Level --> see descriptoin
      *
      * @param playerX x-coordinate of player
      */
     void renderLevel(int playerX) {
+        if(tileBlocks[levelMap[(playerX / BLOCKWIDTH) + 1][2]].getName().equals("Test")) {
+            this.levelEnding = true;
+        }
         int drawX = -((((playerX - 600) < 0) ? 0 : (playerX - 600)));
         applet.imageMode(PConstants.CORNER);
         applet.image(level, drawX, 0);
-
-
-        //kijker
-//        applet.rectMode(PConstants.CORNER);
-//        applet.stroke(0,0,0);
-//        applet.fill(0,0,0);
-//        applet.rect(0, 0, applet.width /13, applet.height);
-//        applet.rect(applet.width - applet.width /13, 0, applet.width /13, applet.height);
-
     }
 
     /**
@@ -280,6 +289,14 @@ public class Level {
         */
 
         return  bools;
+    }
+
+    boolean isLevelEnding() {
+        return this.levelEnding;
+    }
+
+    int numberOfcurrentLevel() {
+        return this.number;
     }
 
     /**

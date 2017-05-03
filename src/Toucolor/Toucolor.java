@@ -44,19 +44,20 @@ public class Toucolor extends PApplet {
     public String status;
     private int levelToLoad;
 
-    private int x = 0;
-
-
     Enemy lel= new Enemy(3,1,0.01f,200,500);
     Enemy[] Enemies = {lel};
     Animation playerWandelen, enemyWandelen;
-    private Player speler = new Player();
+    private Player speler;
 
     //initializing variables
     private LoadScreen loadScreen;
     private String[] levelFiles;
     private int numberOfLevels;
     private String[] menuTexts = {"Play", "Score"};
+
+    //endAnimation vars
+    private boolean imageHasSwitched;
+    private int lastOpacity;
 
 
     /**
@@ -65,7 +66,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public  void setup() {
-        frameRate(144);
+        frameRate(60);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -100,27 +101,102 @@ public class Toucolor extends PApplet {
                 loadScreen.renderLoadScreen();
                 break;
             case "playing":
+                //renders the level (blocks and stuff)
                 currentLevel.renderLevel((int) speler.playerX);
-                //background(255);
-                speler.refreshValues(currentLevel.getCoords((int)speler.playerX, (int)speler.playerY),
+                //refreshes all the values for the blocks around the player
+                speler.refreshValues(currentLevel.getCoords((int) speler.playerX, (int) speler.playerY),
                         currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
+                //dot this if player is dead
+                //TODO: will be changed to fade to black and stuff
                 if(speler.playerIsDead){
-                    speler.playerX = 300;
-                    speler.playerY = 500;
+//                    speler.playerX = 300;
+//                    speler.playerY = 500;
                     speler.playerIsDead = false;
-                }else{
-                    speler.keyUse();
-
                 }
-
-                EnemiesBehaviour(speler.playerX, speler.playerY);
-                currentLevel.getCoords((int) speler.playerX, (int) speler.playerY);
-                currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY);
-                enemyWandelen.display(lel.posX, lel.posY, 'n', 0);
-                playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
+                else if (currentLevel.isLevelEnding()) {
+                    //if the level is ending, do stuff
+                    doEndAnimation();
+                }
+                else{
+                    //if not dead do keypress
+                    doPlayer();
+                    EnemiesBehaviour(speler.playerX, speler.playerY);
+                    enemyWandelen.display(lel.posX, lel.posY, 'n', 0);
+                }
                 break;
         }
+    }
 
+    //handles player movement + rendering
+    private void doPlayer() {
+        speler.keyUse();
+        playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
+    }
+
+    //does the animation on the end of a level
+    private void doEndAnimation() {
+        /**
+         * the player keeps going right untill it collides with a block
+         * the map will be made so that on the end of the level there will only be one block which collides
+         * as soon as he collides we switch images
+         * and then the screen slowly fades to black
+         */
+        //do movement
+        speler.rightPressed = true;
+        doPlayer();
+        //check for collision
+        if (speler.isHorizontaleCollision()) {
+            //if collides check if images have changed
+            if(!imageHasSwitched) {
+                //switch images here
+                imageHasSwitched = true;
+            }
+            //slowly fade to black
+            if(lastOpacity == 255) {
+                //set the loading screen and change status
+                loadScreen.setText("Loading next level, please wait.");
+                this.levelToLoad = currentLevel.numberOfcurrentLevel() + 1;
+                thread("startLevel");
+                this.status = "loadScreen";
+                return;
+            }
+            fill(0, this.lastOpacity);
+            rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
+            lastOpacity++;
+
+        }
+
+    }
+
+    /**
+     * creates menu screen
+     * loads in all the files for the levels, blocks and other info
+     * creates player
+     *
+     */
+    public void initWorld() {
+        //check if the files for the levels exist
+        numberOfLevels = 0;
+        boolean fileExists = true;
+        //load necessary files
+        for (int i = 0; fileExists; i++) {
+            File f = new File(sketchPath() + "/data/level" + (i+1) + ".csv");
+            if(f.exists() && !f.isDirectory()) {
+                numberOfLevels++;
+            } else { fileExists = false;}
+        }
+
+        levelFiles = new String[numberOfLevels];
+        for(int i = 0; i < numberOfLevels; i++) {
+            levelFiles[i] = "level" + (i+1) + ".csv";
+        }
+        print("Number of levels: " + numberOfLevels +"\n");
+
+
+        //creating menu screen
+        menu = new Startscreen( menuTexts, this);
+
+        this.status = "startscreen";
     }
 
 
@@ -176,6 +252,7 @@ public class Toucolor extends PApplet {
         }
 
     }
+
     @Override
     public void keyPressed() {
         //TODO: een defitge logica schrijven voor dit
@@ -217,17 +294,26 @@ public class Toucolor extends PApplet {
 
                         break;
                     case "playing":
-                        if (keyCode == RIGHT) {
-                            speler.rightPressed = true;
-                        }
-                        if (keyCode == LEFT) {
-                            speler.leftPressed = true;
-                        }
-                        if (keyCode == UP && !speler.isInAir) {
-                            speler.upIsPressed = true;
-                        }
-                        if(keyCode == DOWN){
-                            speler.downPressed = true;
+                        //only check for input when level is not ending
+                        if(!currentLevel.isLevelEnding()) {
+                            if (keyCode == RIGHT) {
+                                speler.rightPressed = true;
+                            }
+                            if (keyCode == LEFT) {
+                                speler.leftPressed = true;
+                            }
+                            if (keyCode == UP && !speler.isInAir) {
+                                speler.upIsPressed = true;
+                            }
+                            if(keyCode == DOWN){
+                                speler.downPressed = true;
+                            }
+                            //this is to respawn --> ONLY FOR TESTING
+                            if(keyCode == KeyEvent.VK_R)
+                            {
+                                speler.playerX = 300;
+                                speler.playerY = 500;
+                            }
                         }
                         break;
                 }
@@ -255,56 +341,24 @@ public class Toucolor extends PApplet {
      */
     public void startLevel() {
         //this.currentLevel = new Level(this, levelFiles[this.levelToLoad -1 ]);
-        this.currentLevel = new Level(this, "DemoLevel_NoEnemies.csv");
+        //this.currentLevel = new Level(this, "DemoLevel_NoEnemies.csv");
+        this.currentLevel = new Level(this, this.levelToLoad);
         playerWandelen = new Animation("Toucolooor", 4);
         enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
+        speler = new Player(this);
+        this.imageHasSwitched = false;
+        this.lastOpacity = 0;
         this.status = "playing";
 
     }
 
-    public void playerDying(){
-        if(x < 100){
-            speler.playerY -= 3;
-            x++;
-        }else{
-            speler.playerX = 300;
-            speler.playerY = 300;
-            speler.dying = false;
-            speler.playerIsDead = false;
-            x = 0;
-        }
-
+    public void setStatus(String status) {
+        this.status = status;
     }
-    /**
-     * creates menu screen
-     * loads in all the files for the levels, blocks and other info
-     * creates player
-     *
-     */
-    public void initWorld() {
-        //check if the files for the levels exist
-        numberOfLevels = 0;
-        boolean fileExists = true;
-        //load necessary files
-        for (int i = 0; fileExists; i++) {
-            File f = new File(sketchPath() + "/data/level" + (i+1) + ".csv");
-            if(f.exists() && !f.isDirectory()) {
-                numberOfLevels++;
-            } else { fileExists = false;}
-        }
-
-        levelFiles = new String[numberOfLevels];
-        for(int i = 0; i < numberOfLevels; i++) {
-            levelFiles[i] = "level" + (i+1) + ".csv";
-        }
-        print("Number of levels: " + numberOfLevels +"\n");
 
 
-        //creating menu screen
-        menu = new Startscreen( menuTexts, this);
 
-        this.status = "startscreen";
-    }
+
 
 }
 
