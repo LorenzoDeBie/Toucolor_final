@@ -184,6 +184,7 @@ public class Level {
     float[][] getCoords(float playerX, float playerY){
         float[][] coords = new float[8][2];
 
+
         int startblockX = (PApplet.floor(playerX / Toucolor.BLOCKSIZE)) - 1;
         int startblockY = (PApplet.floor(playerY / Toucolor.BLOCKSIZE)) - 1;
 
@@ -229,17 +230,22 @@ public class Level {
     boolean[][] getColAndDeath(int playerX, int playerY) {
         boolean[][] bools = new boolean[8][2];
 
+        if(playerX < BLOCKWIDTH){
+            playerX = BLOCKWIDTH;
+        }
+
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
 
         //PApplet.println(startblockX+" "+startblockY);
-
-        if(startblockY + 2 >= 9){
+        if(startblockY+2 > 8){
             startblockY = 6;
         }
-        if(startblockY < 0){
-            startblockY = 0;
+        if(startblockX < 0){
+            startblockX = 0;
         }
+
+
 
         bools[0][0] = tileBlocks[levelMap[startblockX][startblockY]].isCollision();
         bools[1][0] = tileBlocks[levelMap[startblockX+1][startblockY]].isCollision();
