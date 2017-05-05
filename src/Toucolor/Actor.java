@@ -15,7 +15,7 @@ public class Actor {
     boolean mD = false;
     boolean mU = false;
 
-    float actorX = 160, actorY=300, xblock, yblock;
+    float actorX = 156, actorY=300, xblock, yblock;
     boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping;
     int blockSize = Toucolor.BLOCKSIZE;
 
