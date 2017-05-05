@@ -13,6 +13,8 @@ public class Enemy extends Actor {
     private int moveP;
     private float PI = PApplet.PI;
     float valSpeed = 8;
+    private int moveVar = 1;
+
 
 
     Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY){
@@ -82,11 +84,13 @@ public class Enemy extends Actor {
                     isInAir = true;
                 }
             }
-            updateR = bereik;
+           updateR = bereik;
         }
         collision(updateR,updateL,updateU,updateD,true,false);
 
     }
+
+
 
 
 

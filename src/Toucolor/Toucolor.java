@@ -46,8 +46,12 @@ public class Toucolor extends PApplet {
 
     Animation playerWandelen, enemyWandelen;
 
-    private Enemy poep = new Enemy(4,1,0.5f,100,200);
+    private Enemy poep = new Enemy(4,1,0.5f,100,500);
+    private Enemy lel = new Enemy(1,2,0.001f,200,200);
+    private Enemy swag = new Enemy(3,2,0.09f,300,400);
     private Player speler;
+
+    private Enemy[] enemies;// =  {poep,lel,swag};
 
     //initializing variables
     private LoadScreen loadScreen;
@@ -134,14 +138,23 @@ public class Toucolor extends PApplet {
 
     private void doEnemies(){
         //Update movement van alle enemies
-        poep.Move();
-        enemyWandelen.display(poep.actorX, poep.actorY, 'r', 0);
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                swag.Move();
+                enemyWandelen.display(swag.actorX, swag.actorY, 'r', 0);
+            }
+        }
     }
 
     private void checkDood(){
-        if(PApplet.abs(poep.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(poep.actorY - speler.actorY) < BLOCKSIZE){
-            PApplet.println("TIS DEUD");
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
+                    PApplet.println("TIS DEUD");
+                }
+            }
         }
+
     }
 
     //does the animation on the end of a level
@@ -359,8 +372,13 @@ public class Toucolor extends PApplet {
         speler.refreshValues(currentLevel.getCoords((int) speler.actorX, (int) speler.actorY),
                 currentLevel.getColAndDeath((int) speler.actorX, (int) speler.actorY));
         //forach isspawn
-        poep.refreshValues(currentLevel.getCoords((int) poep.actorX, (int) poep.actorY),
-                currentLevel.getColAndDeath((int) poep.actorX, (int) poep.actorY));
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                swag.refreshValues(currentLevel.getCoords((int) swag.actorX, (int) swag.actorY),
+                        currentLevel.getColAndDeath((int) swag.actorX, (int) swag.actorY));
+            }
+        }
+
     }
 
     public void setStatus(String status) {

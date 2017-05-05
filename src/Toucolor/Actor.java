@@ -34,6 +34,7 @@ public class Actor {
         isInAir = inDeLucht;
         jumping = springt;
 
+        horizontaleCollision = false;
 
         fullUpdateX = actorX + (updateL + updateR);
         fullUpdateY = actorY + (updateD + updateU);
@@ -80,14 +81,9 @@ public class Actor {
                     }
                 }
             }
-
         }
 
         customHorizontaleCollision = horizontaleCollision;
-
-        verticaleCollision = false;
-        horizontaleCollision = false;
-
 
         actorX = fullUpdateX;
         actorY = fullUpdateY;
@@ -114,6 +110,10 @@ public class Actor {
 
     protected boolean getIsInAir(){
         return isInAir;
+    }
+
+    protected boolean getHorizontaleCollision(){
+        return  horizontaleCollision;
     }
 
 
