@@ -110,7 +110,7 @@ public class Toucolor extends PApplet {
 //                    speler.actorY = 500;
                     speler.playerIsDead = false;
                 }
-                else if (currentLevel.isLevelEnding()) {
+                if (currentLevel.isLevelEnding()) {
                     //if the level is ending, do stuff
                     doEndAnimation();
                 }
@@ -308,14 +308,18 @@ public class Toucolor extends PApplet {
     }
 
     public void keyReleased() {
-        if(keyCode == RIGHT){
-            speler.rightPressed = false;
-        }
-        if(keyCode == LEFT){
-            speler.leftPressed = false;
-        }
-        if(keyCode == DOWN){
-            speler.downPressed = false;
+        switch (status) {
+            case "playing":
+                if (keyCode == RIGHT) {
+                    speler.rightPressed = false;
+                }
+                if (keyCode == LEFT) {
+                    speler.leftPressed = false;
+                }
+                if (keyCode == DOWN) {
+                    speler.downPressed = false;
+                }
+                break;
         }
     }
 
