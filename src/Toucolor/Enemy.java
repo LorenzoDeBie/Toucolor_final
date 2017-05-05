@@ -85,6 +85,7 @@ public class Enemy extends Actor {
             updateR = bereik;
         }
         collision(updateR,updateL,updateU,updateD,true,false);
+
     }
 
 

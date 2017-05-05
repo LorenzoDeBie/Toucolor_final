@@ -9,6 +9,7 @@ import static javafx.application.Platform.exit;
  */
 public class Player extends Actor {
     //Alle stuff voor keyuse, snelheid enz
+
     private int moveSpeed = 6;
     private float iceSpeed = 0;
     public boolean isInAir = true;

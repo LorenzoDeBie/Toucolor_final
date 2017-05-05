@@ -66,6 +66,7 @@ public class Actor {
                     isInAir = false;
                     if(isDeadly){
                         touchedDeadly = true;
+
                     }
 
                 }else if(fullUpdateY - yblock > 0){
