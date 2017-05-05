@@ -8,46 +8,38 @@ import processing.core.PApplet;
 
 public class Time{
     //variables
-    float Tijd;
+    float tijd;
     float vermindering;
-    int Min;
-    float kommaSec;
-    int Sec;
+    int sec;
     private PApplet applet;
-    private boolean gameEnded;
     private boolean gameOver;
 
 
 
     //Set time
-    Time(float Tijd,  PApplet applet, float verm) {
-        this.Tijd = Tijd;
+    Time(float tijd,  PApplet applet, float verm) {
+        this.tijd = tijd;
         this.applet = applet;
         this.vermindering = 1/verm;
     }
 
 
     //update time
-    void Update(){
-        if (gameEnded == false){
-            Tijd = Tijd - vermindering;
-            Min = (int)Tijd;
-            kommaSec = (Tijd-Min)*60;
-            Sec = (int)kommaSec;
-        }
+    void Update() {
+        tijd = tijd - vermindering;
+        sec = (int) tijd;
         //times up scrub
-        if(Min == 0 && Sec == 0){
+        if (sec == 0) {
             gameOver = true;
         }
-
     }
 
+    public void renderScore(PApplet applet){
+        applet.text("Time: "+tijd, 960, 100);
+    }
 
     //getters and setters
-    public int getMin() {
-        return Min;
-    }
     public int getSec() {
-        return Sec;
+        return sec;
     }
 }

@@ -9,7 +9,7 @@ id,filename,collision,name,brokkelt,death,ice,water
 7,Ice1.png,TRUE,Ijs,FALSE,FALSE,TRUE,FALSE
 8,Spikes.png,TRUE,Spikes,FALSE,TRUE,FALSE,FALSE
 9,shit.png,TRUE,Net,FALSE,TRUE,FALSE,FALSE
-10,shit.png,TRUE,Schildpad,FALSE,TRUE,FALSE,FALSE
+10,shit.png,TRUE,Schildpad,FALSE,FALSE,FALSE,FALSE
 11,Timberman.png,TRUE,Timberman,FALSE,TRUE,FALSE,FALSE
 12,shit.png,TRUE,Tiki Masker,FALSE,TRUE,FALSE,FALSE
 13,shit.png,TRUE,Vleesetende Plant,FALSE,TRUE,FALSE,FALSE

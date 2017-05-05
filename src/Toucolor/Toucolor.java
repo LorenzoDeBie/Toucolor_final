@@ -66,7 +66,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public  void setup() {
-        frameRate(75);
+        frameRate(144);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");

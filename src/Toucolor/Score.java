@@ -9,8 +9,7 @@ import processing.core.PApplet;
 public class Score{
     //variables
     int points = 0;
-    int multiplierM = 2;
-    int multiplierS = 1;
+    int multiplierS = 10;
     boolean touchingMango;
     int addScore = 1000;
     private boolean gameEnded;
@@ -18,22 +17,17 @@ public class Score{
     private PApplet applet;
 
 
-    void Score( Time tijd){
+    void Score( Time tijd) {
         // after game points + getting time
-        if (gameEnded == true){
-            int min = tijd.getMin();
-            int sec = tijd.getSec();
-            points = points + (min * multiplierM);
-            points = points + (sec * multiplierS);
-
-        }
-        //ingame points
-        else {
-            if (touchingMango == true){
-                points = points + addScore;
-            }
-        }
+        int sec = tijd.getSec();
+        points = points + (sec * multiplierS);
     }
+    void addScore(){
+        // ingame score
+
+        points = points + addScore;
+    }
+
 
 
     //getters and setters
@@ -41,8 +35,7 @@ public class Score{
         return points;
     }
 
-    public void renderScore(){
-        //ppaplet nodig ofzoiets
-
+    public void renderScore(PApplet applet){
+        applet.text("Score: "+points, 1160, 100);
     }
 }
