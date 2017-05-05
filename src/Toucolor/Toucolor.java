@@ -45,6 +45,8 @@ public class Toucolor extends PApplet {
     private int levelToLoad;
 
     Animation playerWandelen, enemyWandelen;
+
+    private Enemy poep = new Enemy(4,1,0.5f,100,200);
     private Player speler;
 
     //initializing variables
@@ -103,6 +105,7 @@ public class Toucolor extends PApplet {
                 currentLevel.renderLevel((int) speler.actorX);
                 //refreshes all the values for the blocks around the player
                 refreshAllValues();
+                doEnemies();
                 //dot this if player is dead
                 //TODO: will be changed to fade to black and stuff
                 if(speler.playerIsDead){
@@ -118,6 +121,7 @@ public class Toucolor extends PApplet {
                     //if not dead do keypress
                     doPlayer();
                 }
+                checkDood();
                 break;
         }
     }
@@ -126,6 +130,18 @@ public class Toucolor extends PApplet {
     private void doPlayer() {
         speler.keyUse();
         playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
+    }
+
+    private void doEnemies(){
+        //Update movement van alle enemies
+        poep.Move();
+        enemyWandelen.display(poep.actorX, poep.actorY, 'r', 0);
+    }
+
+    private void checkDood(){
+        if(PApplet.abs(poep.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(poep.actorY - speler.actorY) < BLOCKSIZE){
+            PApplet.println("TIS DEUD");
+        }
     }
 
     //does the animation on the end of a level
@@ -330,7 +346,8 @@ public class Toucolor extends PApplet {
         //this.currentLevel = new Level(this, "DemoLevel_NoEnemies.csv");
         this.currentLevel = new Level(this, this.levelToLoad);
         playerWandelen = new Animation("Toucolooor", 4);
-        enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
+        enemyWandelen = new Animation("Timberman",1);
+        //enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
         speler = new Player();
         this.imageHasSwitched = false;
         this.lastOpacity = 0;
@@ -342,8 +359,8 @@ public class Toucolor extends PApplet {
         speler.refreshValues(currentLevel.getCoords((int) speler.actorX, (int) speler.actorY),
                 currentLevel.getColAndDeath((int) speler.actorX, (int) speler.actorY));
         //forach isspawn
-
-
+        poep.refreshValues(currentLevel.getCoords((int) poep.actorX, (int) poep.actorY),
+                currentLevel.getColAndDeath((int) poep.actorX, (int) poep.actorY));
     }
 
     public void setStatus(String status) {

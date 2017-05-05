@@ -82,7 +82,6 @@ public class Player extends Actor {
             }
         }
         if (mU == true) {
-
             if (hoek < PI / 2) {
                 updateU = -PApplet.cos(hoek) * jumpSpeed;
                 hoek += 0.0005;

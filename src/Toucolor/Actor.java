@@ -15,7 +15,7 @@ public class Actor {
     boolean mD = false;
     boolean mU = false;
 
-    float actorX = 100, actorY=300, xblock, yblock;
+    float actorX = 160, actorY=300, xblock, yblock;
     boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping;
     int blockSize = Toucolor.BLOCKSIZE;
 
@@ -33,6 +33,7 @@ public class Actor {
         updateD = d;
         isInAir = inDeLucht;
         jumping = springt;
+
 
         fullUpdateX = actorX + (updateL + updateR);
         fullUpdateY = actorY + (updateD + updateU);
@@ -53,9 +54,6 @@ public class Actor {
                 //enkel de x-beweging zal colliden
                 horizontaleCollision = true;
                 fullUpdateX = actorX;
-
-                PApplet.println(PApplet.abs(fullUpdateX - xblock));
-
                 if(isDeadly){
                     touchedDeadly = true;
                 }
