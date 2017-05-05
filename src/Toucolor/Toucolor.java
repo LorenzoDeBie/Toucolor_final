@@ -66,7 +66,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public  void setup() {
-        frameRate(60);
+        frameRate(75);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -152,7 +152,7 @@ public class Toucolor extends PApplet {
                 imageHasSwitched = true;
             }
             //slowly fade to black
-            if(lastOpacity == 255) {
+            if(lastOpacity > 255) {
                 //set the loading screen and change status
                 loadScreen.setText("Loading next level, please wait.");
                 this.levelToLoad = currentLevel.numberOfcurrentLevel() + 1;
@@ -162,7 +162,7 @@ public class Toucolor extends PApplet {
             }
             fill(0, this.lastOpacity);
             rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
-            lastOpacity++;
+            lastOpacity+=2;
 
         }
 
