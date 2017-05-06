@@ -17,7 +17,7 @@ import processing.data.*;
  *
  * @author loren
  */
-public class Level {
+class Level {
 
     /**
      * changeable variables:

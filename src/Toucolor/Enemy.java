@@ -5,7 +5,7 @@ import processing.core.*;
 /**
  * Created by Vince on 4/3/2017.
  */
-public class Enemy extends Actor {
+class Enemy extends Actor {
     //Standaard vars voor een enemie
     private int bereik = 1;
     private float hoek = 0;

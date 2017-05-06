@@ -5,7 +5,7 @@ import processing.core.PApplet;
 /**
  * Created by Vince on 5/5/2017.
  */
-public class Actor {
+class Actor {
     private float[][] fullCoords;
     private boolean[][] propterties;
 

@@ -5,7 +5,7 @@ import ddf.minim.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class Sounds {
+class Sounds {
     private String status;
     private Toucolor applet;
 
