@@ -2,8 +2,6 @@ package Toucolor;
 
 import processing.core.*;
 
-import static javafx.application.Platform.exit;
-
 /**
  * Created by Vince on 4/1/2017.
  */
