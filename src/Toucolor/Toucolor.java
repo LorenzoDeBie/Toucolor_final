@@ -63,6 +63,9 @@ public class Toucolor extends PApplet {
     private boolean imageHasSwitched;
     private int lastOpacity;
 
+    //sound manager
+    Sounds soundManager;
+
 
     /**
      * initializes the world
@@ -117,7 +120,7 @@ public class Toucolor extends PApplet {
 //                    speler.actorY = 500;
                     speler.playerIsDead = false;
                 }
-                else if (currentLevel.isLevelEnding()) {
+                if (currentLevel.isLevelEnding()) {
                     //if the level is ending, do stuff
                     doEndAnimation();
                 }
@@ -214,11 +217,12 @@ public class Toucolor extends PApplet {
         for(int i = 0; i < numberOfLevels; i++) {
             levelFiles[i] = "level" + (i+1) + ".csv";
         }
-        print("Number of levels: " + numberOfLevels +"\n");
-
 
         //creating menu screen
         menu = new Startscreen( menuTexts, this);
+
+        //create a sound manager
+        soundManager = new Sounds(status, this);
 
         this.status = "startscreen";
     }
@@ -274,10 +278,13 @@ public class Toucolor extends PApplet {
         switch (keyCode) {
             case KeyEvent.VK_ENTER:
                 //enter wordt ingedrukt
+                //sound of selection
+                soundManager.play("select2");
                 switch (status) {
                     case "startscreen":
                         //startscherm is geladen
                         if(menu.getTextOfSelected().equals(menuTexts[0])) {
+
                             //PLAY HAS BEEN SELECTED
                             menu = new Startscreen(this.numberOfLevels, this);
                             this.status = "levelSelectScreen";
@@ -300,9 +307,13 @@ public class Toucolor extends PApplet {
                 //andere toets
                 switch (status) {
                     case "startscreen":
+                        //sound of selection
+                        soundManager.play("select1");
                         menu.keyPressed(keyCode);
                         break;
                     case "levelSelectScreen":
+                        //sound of selection
+                        soundManager.play("select1");
                         menu.keyPressed(keyCode);
                         break;
                     case "loadScreen":
@@ -318,6 +329,7 @@ public class Toucolor extends PApplet {
                                 speler.leftPressed = true;
                             }
                             if (keyCode == UP) {
+                                soundManager.play("jump");
                                 speler.upIsPressed = true;
                             }
                             if(keyCode == DOWN){
@@ -337,14 +349,18 @@ public class Toucolor extends PApplet {
     }
 
     public void keyReleased() {
-        if(keyCode == RIGHT){
-            speler.rightPressed = false;
-        }
-        if(keyCode == LEFT){
-            speler.leftPressed = false;
-        }
-        if(keyCode == DOWN){
-            speler.downPressed = false;
+        switch (status) {
+            case "playing":
+                if (keyCode == RIGHT) {
+                    speler.rightPressed = false;
+                }
+                if (keyCode == LEFT) {
+                    speler.leftPressed = false;
+                }
+                if (keyCode == DOWN) {
+                    speler.downPressed = false;
+                }
+                break;
         }
     }
 
@@ -383,6 +399,10 @@ public class Toucolor extends PApplet {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void playSound(String event) {
+        soundManager.play(event);
     }
 
 

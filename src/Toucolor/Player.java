@@ -2,12 +2,10 @@ package Toucolor;
 
 import processing.core.*;
 
-import static javafx.application.Platform.exit;
-
 /**
  * Created by Vince on 4/1/2017.
  */
-public class Player extends Actor {
+ class Player extends Actor {
     //Alle stuff voor keyuse, snelheid enz
 
     private int moveSpeed = 6;
@@ -30,9 +28,6 @@ public class Player extends Actor {
     public char lastMove = 'n';
 
     float PI = PApplet.PI;
-
-    //end animation vars
-    private boolean customHorizontaleCollision;
 
     void keyUse() {
         if (rightPressed) {
