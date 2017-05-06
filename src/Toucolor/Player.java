@@ -5,185 +5,104 @@ import processing.core.*;
 /**
  * Created by Vince on 4/1/2017.
  */
-public class Player {
-
-    //Wereld variabelen die gebruikt worden
-    private int blockSize = 80;
-    private int sizeY = 720;
-
-    static float[][] fullCoords = {{100,640}}; //Hier moeten alle coords komen die gecheckt moeten worden
-
-
-
-    //Voor collision
-    private float xblock;
-    private float yblock;
-    //Startpos speler
-    float playerX = 900;
-    float playerY = 100;
-
+ class Player extends Actor {
     //Alle stuff voor keyuse, snelheid enz
-    int moveSpeed = 5;
-    float iceSpeed = 0;
-    boolean isInAir = true;
-    float hoek = 0;
-    boolean upIsPressed = false;
+
+    private int moveSpeed = 6;
+    private float iceSpeed = 0;
+    public boolean isInAir = true;
+    private float hoek = 0;
+    public boolean upIsPressed = false;
     float jumpSpeed = 10;
     float valSpeed = 8;
-    boolean rightPressed;
-    boolean leftPressed;
-    boolean downPressed;
-    int moveState = 0;
+    public boolean rightPressed;
+    public boolean leftPressed;
+    public boolean downPressed;
     int cProfile = 1;
+    public boolean playerIsDead = false;
 
     //Voor collision
-    private boolean collide;
-    private int colvar;
-
+    private boolean jumping = false;
 
     public int imgCounter = 0;
     public char lastMove = 'n';
 
     float PI = PApplet.PI;
 
-
-
-    public void keyUse() {
-        if(rightPressed) {
-            moveState = 1;
+    void keyUse() {
+        if (rightPressed) {
             imgCounter++;
-            colvar = 1;
-            moveRight();
+            mR = true;
+        } else {
+            mR = false;
         }
-        if(leftPressed) {
-            moveState = 1;
+        if (leftPressed) {
             imgCounter++;
-            colvar = -1;
-            moveLeft();
+            mL = true;
+        } else {
+            mL = false;
         }
-        if(downPressed){
-            moveState = 2;
-            duck();
-        }
-        if (upIsPressed) {
-            moveState = 3;
-            jump();
-        }
-        if (isInAir) {
-            moveState = 4;
-            val();
-        }
-    }
-
-    public void val() {
-        if(!collision(moveState)) {
-            if (hoek < PI / 2) {
-                playerY = playerY + PApplet.sin(hoek) * valSpeed;
-                hoek += 0.03;
+        if (getIsInAir()) {
+            mD = true;
+        } else {
+            if (jumping) {
+                mU = true;
             } else {
-                playerY = playerY + valSpeed;
+                if (upIsPressed) {
+                    jumping = true;
+                    hoek = 0;
+                    mU = true;
+                }
             }
         }
-        else{
-            isInAir = false;
-            hoek = 0;
-        }
+        updateMove();
     }
 
-    public void moveLeft(){
-        if(!collision(moveState)){
-            playerX = playerX - (moveSpeed * cProfile);
-            imgCounter++;
-            lastMove = 'l';
-        }
-    }
-
-    public void moveRight(){
-        if(!collision(moveState)){
-            playerX = playerX + (moveSpeed * cProfile);
-            imgCounter++;
+    private void updateMove() {
+        if (mR == true) {
+            updateR = (moveSpeed * cProfile);
             lastMove = 'r';
         }
-    }
-
-    public void duck(){}
-
-    public void jump(){
-        if(!collision(moveState)) {
+        if (mL == true) {
+            updateL = -(moveSpeed * cProfile);
+            lastMove = 'l';
+        }
+        if (mD == true) {
             if (hoek < PI / 2) {
-                playerY = playerY - PApplet.cos(hoek) * jumpSpeed;
-                hoek += 0.07;
+                updateD = PApplet.sin(hoek) * valSpeed;
+                hoek += 0.03;
+                //isInAir = true;
             } else {
+                updateD = valSpeed;
                 isInAir = true;
-                hoek = 0;
+            }
+        }
+        if (mU == true) {
+            if (hoek < PI / 2) {
+                updateU = -PApplet.cos(hoek) * jumpSpeed;
+                hoek += 0.0005;
+            } else {
+                jumping = false;
                 upIsPressed = false;
-                val();
             }
+        }
+        collision(updateR, updateL, updateU, updateD, isInAir, jumping);
+    }
+
+    public boolean isHorizontaleCollision() {
+        return this.customHorizontaleCollision;
+    }
+
+
+    private boolean playerDie(){
+        if(playerIsDead) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public boolean collision(int status){
-        collide = false;
-        for (float[] hoevcoord:fullCoords) {
-            xblock = hoevcoord[0];
-            yblock = hoevcoord[1];
-            switch (status) {
-                case 1: //links en rechts
-                    float cst = playerX + (moveSpeed * cProfile) * colvar;
-                    if (cst > 1200) {
-                        playerX = 1200;
-                        collide = true;
-                    }
-                    else if(cst < 1){
-                        collide = true;
-                        playerX = 1;
-                    }
-                    else if ((PApplet.abs(cst - xblock) < blockSize) && (PApplet.abs(playerY - yblock) < blockSize)) {
-                        playerX = xblock - blockSize * colvar;
-                        collide = true;
-                    } else if (!upIsPressed) {
-                        isInAir = true;
-                    }
-                    break;
 
-                case 2://duck
-                    break;
-
-                case 3: //jump
-                    float YJ = playerY - PApplet.cos(hoek) * jumpSpeed;
-                    if ((playerY - PApplet.cos(hoek) * jumpSpeed) < 1) {
-                        isInAir = true;
-                        upIsPressed = false;
-                        hoek = 0;
-                        playerY = 1;
-                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YJ - yblock) < blockSize)) {
-                        playerY = yblock + blockSize;
-                        hoek = 0;
-                        upIsPressed = false;
-                        isInAir = true;
-                        collide = true;
-                    }
-                    break;
-
-                case 4: //val
-                    float YV = playerY + PApplet.sin(hoek) * valSpeed;
-                    if ((playerY + PApplet.sin(hoek) * valSpeed) > sizeY - blockSize) {
-                        isInAir = false;
-                        hoek = 0;
-                        playerY = sizeY - blockSize;
-                    } else if ((PApplet.abs(playerX - xblock) < blockSize) && (PApplet.abs(YV - yblock) < blockSize)) {
-                        playerY  = yblock - blockSize;
-                        collide = true;
-                    }
-                    break;
-
-                default: //niets doen
-                    break;
-            }
-        }
-
-        return collide;
-    }
 
 
 }

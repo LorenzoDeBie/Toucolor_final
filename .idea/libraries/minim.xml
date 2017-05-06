@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="minim">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/custom libs/Minim-2.2.0/library" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/custom libs/Minim-2.2.0/library" recursive="false" />
+  </library>
+</component>

@@ -2,6 +2,7 @@ package Toucolor;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 import processing.core.PImage;
 
 /**
@@ -19,13 +20,14 @@ public class Block {
     private String name;
     private PImage img;
     private PApplet applet;
+    private PGraphics pg;
     private boolean brokkelt;
     private int framesUntillGone;
     private boolean drawBlock;
     private boolean killsPlayer;
 
     //constructor
-    Block(int id, String name, String imgFileName, boolean collision, boolean brokkelt, boolean killsPlayer,PApplet applet) {
+    Block(int id, String name, String imgFileName, boolean collision, boolean brokkelt, boolean killsPlayer,PGraphics pg, PApplet applet) {
         this.id = id;
         this.collision = collision;
         this.name = name;
@@ -40,12 +42,14 @@ public class Block {
         if(id == 0) {
             this.drawBlock = false;
         }
+        this.pg = pg;
     }
 
     //renders this block on given location
-    void renderblock(int x, int y) {
-        applet.imageMode(PConstants.CORNER);
-        applet.image(img, x, y, 80, 80);
+    PImage renderblock() {
+        return img;
+//        pg.imageMode(PConstants.CORNER);
+//        pg.image(img, x, y, 80, 80);
         //voor brokkelende blocks
     }
 
