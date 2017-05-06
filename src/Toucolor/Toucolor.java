@@ -329,7 +329,9 @@ public class Toucolor extends PApplet {
                                 speler.leftPressed = true;
                             }
                             if (keyCode == UP) {
-                                soundManager.play("jump");
+                                if(!speler.getIsInAir()){
+                                    soundManager.play("jump");
+                                }
                                 speler.upIsPressed = true;
                             }
                             if(keyCode == DOWN){
