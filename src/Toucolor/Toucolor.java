@@ -31,8 +31,8 @@ public class Toucolor extends PApplet {
      * PRIVATE VARIABLES
      */
     //width & height of world
-    static int WORLDWIDTH = 1280;
-    static int WORLDHEIGHT = 720;
+    static final int WORLDWIDTH = 1280;
+    static final int WORLDHEIGHT = 720;
     static int BLOCKSIZE = 80;
     //temp playerX --> goes into object later
     private int playerX;
@@ -44,9 +44,9 @@ public class Toucolor extends PApplet {
     public String status;
     private int levelToLoad;
 
-    Enemy lel= new Enemy(3,1,0.01f,200,500);
-    Enemy[] Enemies = {lel};
-    Animation playerWandelen, enemyWandelen;
+    private Enemy lel= new Enemy(3,1,0.01f,200,500);
+    private Enemy[] Enemies = {lel};
+    private Animation playerWandelen, enemyWandelen;
     private Player speler;
 
     //initializing variables
@@ -58,6 +58,12 @@ public class Toucolor extends PApplet {
     //endAnimation vars
     private boolean imageHasSwitched;
     private int lastOpacity;
+
+    //score vars
+    Score score;
+    static final int LEVELTIME = 500;
+    static final int VERMINDERING = 1;
+    Time timer;
 
 
     /**
@@ -122,7 +128,10 @@ public class Toucolor extends PApplet {
                     doPlayer();
                     EnemiesBehaviour(speler.playerX, speler.playerY);
                     enemyWandelen.display(lel.posX, lel.posY, 'n', 0);
+                    timer.renderTime();
+                    score.renderScore();
                 }
+
                 break;
         }
     }
@@ -321,6 +330,7 @@ public class Toucolor extends PApplet {
 
     }
 
+    @Override
     public void keyReleased() {
         if(keyCode == RIGHT){
             speler.rightPressed = false;
@@ -348,6 +358,9 @@ public class Toucolor extends PApplet {
         speler = new Player(this);
         this.imageHasSwitched = false;
         this.lastOpacity = 0;
+        timer = new Time(LEVELTIME, this);
+        score = new Score(this);
+
         this.status = "playing";
 
     }

@@ -6,7 +6,7 @@ import processing.core.PApplet;
  * calculating score based on time and mango
  */
 
-public class Score{
+class Score{
     //variables
     int points = 0;
     int multiplierS = 10;
@@ -17,25 +17,21 @@ public class Score{
     private PApplet applet;
 
 
-    void Score( Time tijd) {
-        // after game points + getting time
-        int sec = tijd.getSec();
-        points = points + (sec * multiplierS);
-    }
-    void addScore(){
-        // ingame score
-
-        points = points + addScore;
+    Score( Toucolor applet) {
+        this.applet = applet;
     }
 
-
+    void addToScore(int pointsToAdd) {
+        points += pointsToAdd;
+    }
 
     //getters and setters
-    public int getpoints() {
+    int getpoints() {
         return points;
     }
 
-    public void renderScore(PApplet applet){
+    void renderScore(){
+        applet.fill(0);
         applet.text("Score: "+points, 1160, 100);
     }
 }

@@ -1,45 +1,50 @@
 package Toucolor;
 
-import processing.core.PApplet;
+import processing.core.*;
 /**
  * Created by robbe on 31/03/2017.
  * Tijdsdruk kills
  */
 
-public class Time{
+class Time{
+
+    private int timeStart;
     //variables
-    float tijd;
-    float vermindering;
-    int sec;
+    private int timeLeftMSeconds;
+    private int timeLeftSeconds;
     private PApplet applet;
     private boolean gameOver;
 
 
 
     //Set time
-    Time(float tijd,  PApplet applet, float verm) {
-        this.tijd = tijd;
+    Time(int tijd,  PApplet applet) {
+        timeStart = applet.millis();
+        this.timeLeftSeconds = tijd;
+        this.timeLeftMSeconds = timeLeftSeconds * 1000;
         this.applet = applet;
-        this.vermindering = 1/verm;
     }
 
 
     //update time
-    void Update() {
-        tijd = tijd - vermindering;
-        sec = (int) tijd;
-        //times up scrub
-        if (sec == 0) {
-            gameOver = true;
-        }
+    private void update() {
+        PApplet.println(applet.millis());
+        timeLeftMSeconds = ((Toucolor.LEVELTIME * 1000) - (applet.millis() - timeStart));
+        timeLeftSeconds = timeLeftMSeconds/1000;
     }
 
-    public void renderScore(PApplet applet){
-        applet.text("Time: "+tijd, 960, 100);
+    void renderTime(){
+        update();
+        applet.fill(0);
+        applet.text("Time: " + timeLeftSeconds, 960, 100);
     }
 
-    //getters and setters
-    public int getSec() {
-        return sec;
+    int millisLeft() {
+        return timeLeftMSeconds;
     }
+
+    int secondsLeft() {
+        return timeLeftSeconds;
+    }
+
 }
