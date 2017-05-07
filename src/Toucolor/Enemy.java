@@ -5,14 +5,16 @@ import processing.core.*;
 /**
  * Created by Vince on 4/3/2017.
  */
-public class Enemy {
+class Enemy extends Actor {
     //Standaard vars voor een enemie
     private int bereik = 1;
-    public float posX = 0;
-    public float posY = 0;
     private float hoek = 0;
     private float moveSnelh = 0.01f;
     private int moveP;
+    private float PI = PApplet.PI;
+    float valSpeed = 8;
+    private int moveVar = 1;
+
 
 
     Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY){
@@ -21,20 +23,24 @@ public class Enemy {
         moveSnelh = moveSpeed;
 
         //Uiteindelijke positie van de speler
-        posX += spawnPosX;
-        posY += spawnPosY;
+        actorX = spawnPosX;
+        actorY = spawnPosY;
 
     }
 
 
-    private void Move(){
+    public void Move(){
+        updateR = 0;
+        updateL = 0;
+        updateD = 0;
+        updateU = 0;
         //Bewegen van enemie volgens verschillende beweegmodussen
         if(moveP == 1){ //Links-rechts
             if(PApplet.cos(hoek) > 0){
-                posX = posX + bereik;
+                updateR = bereik;
                 hoek += moveSnelh;
             }else{
-                posX = posX - bereik;
+                updateL = - bereik;
                 hoek += moveSnelh;
             }
             if(hoek >= 2* PApplet.PI){
@@ -43,10 +49,10 @@ public class Enemy {
         }
         else if(moveP == 2){ //Op-neer
             if(PApplet.cos(hoek) > 0){
-                posY = posY - bereik;
+                updateU = - bereik;
                 hoek += moveSnelh;
             }else{
-                posY = posY + bereik;
+                updateD = bereik;
                 hoek += moveSnelh;
             }
             if(hoek >= 2* PApplet.PI){
@@ -55,31 +61,37 @@ public class Enemy {
         }
         else if(moveP == 3){ //Cirkel
             if(PApplet.cos(hoek) > 0){
-                posX = posX + bereik*PApplet.cos(hoek);
-                posY = posY - bereik*PApplet.sin(hoek);
+                updateR = bereik*PApplet.cos(hoek);
+                updateU = - bereik*PApplet.sin(hoek);
                 hoek += moveSnelh;
             }else{
-                posX = posX + bereik*PApplet.cos(hoek);
-                posY = posY - bereik*PApplet.sin(hoek);
+                updateL = bereik*PApplet.cos(hoek);
+                updateD = - bereik*PApplet.sin(hoek);
                 hoek += moveSnelh;
             }
             if(hoek >= 2* PApplet.PI){
                 hoek = 0;
             }
         }
-    }
-
-    private boolean checkPlayer(float X, float Y){
-        if((PApplet.abs(X - posX)<80)&& (PApplet.abs(Y - posY)<80)){
-            return true;
+        else if(moveP == 4){
+            if(getIsInAir()){
+                if (hoek < PI / 2) {
+                    updateD = PApplet.sin(hoek) * valSpeed;
+                    hoek += 0.03;
+                    //isInAir = true;
+                } else {
+                    updateD = valSpeed;
+                    isInAir = true;
+                }
+            }
+           updateR = bereik;
         }
-        return false;
+        collision(updateR,updateL,updateU,updateD,true,false);
+
     }
 
-    public boolean EnemyBehave(float spelerX, float spelerY){
-        Move();
-        return checkPlayer(spelerX,spelerY);
-    }
+
+
 
 
 }

@@ -34,8 +34,8 @@ public class Toucolor extends PApplet {
     static final int WORLDWIDTH = 1280;
     static final int WORLDHEIGHT = 720;
     static int BLOCKSIZE = 80;
-    //temp playerX --> goes into object later
-    private int playerX;
+    //temp actorX --> goes into object later
+    private int actorX;
     //array of the world which stores the Level
 
     //levelmanager functions
@@ -44,10 +44,16 @@ public class Toucolor extends PApplet {
     public String status;
     private int levelToLoad;
 
-    private Enemy lel= new Enemy(3,1,0.01f,200,500);
-    private Enemy[] Enemies = {lel};
-    private Animation playerWandelen, enemyWandelen;
+
+    Animation playerWandelen, enemyWandelen;
+
+    private Enemy poep = new Enemy(4,1,0.5f,100,500);
+    private Enemy lel = new Enemy(1,2,0.001f,200,200);
+    private Enemy swag = new Enemy(3,2,0.09f,300,400);
+
     private Player speler;
+
+    private Enemy[] enemies;// =  {poep,lel,swag};
 
     //initializing variables
     private LoadScreen loadScreen;
@@ -59,11 +65,16 @@ public class Toucolor extends PApplet {
     private boolean imageHasSwitched;
     private int lastOpacity;
 
+
     //score vars
     Score score;
     static final int LEVELTIME = 500;
     static final int VERMINDERING = 1;
     Time timer;
+
+    //sound manager
+    Sounds soundManager;
+
 
 
     /**
@@ -108,30 +119,30 @@ public class Toucolor extends PApplet {
                 break;
             case "playing":
                 //renders the level (blocks and stuff)
-                currentLevel.renderLevel((int) speler.playerX);
+                currentLevel.renderLevel((int) speler.actorX);
                 //refreshes all the values for the blocks around the player
-                speler.refreshValues(currentLevel.getCoords((int) speler.playerX, (int) speler.playerY),
-                        currentLevel.getColAndDeath((int) speler.playerX, (int) speler.playerY));
+                refreshAllValues();
+                doEnemies();
                 //dot this if player is dead
                 //TODO: will be changed to fade to black and stuff
                 if(speler.playerIsDead){
-//                    speler.playerX = 300;
-//                    speler.playerY = 500;
+//                    speler.actorX = 300;
+//                    speler.actorY = 500;
                     speler.playerIsDead = false;
                 }
-                else if (currentLevel.isLevelEnding()) {
+                if (currentLevel.isLevelEnding()) {
                     //if the level is ending, do stuff
                     doEndAnimation();
                 }
                 else{
                     //if not dead do keypress
                     doPlayer();
-                    EnemiesBehaviour(speler.playerX, speler.playerY);
-                    enemyWandelen.display(lel.posX, lel.posY, 'n', 0);
+
                     timer.renderTime();
                     score.renderScore();
                 }
-
+            
+                checkDood();
                 break;
         }
     }
@@ -139,7 +150,28 @@ public class Toucolor extends PApplet {
     //handles player movement + rendering
     private void doPlayer() {
         speler.keyUse();
-        playerWandelen.display(speler.playerX, speler.playerY, speler.lastMove, speler.imgCounter);
+        playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
+    }
+
+    private void doEnemies(){
+        //Update movement van alle enemies
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                swag.Move();
+                enemyWandelen.display(swag.actorX, swag.actorY, 'r', 0);
+            }
+        }
+    }
+
+    private void checkDood(){
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
+                    PApplet.println("TIS DEUD");
+                }
+            }
+        }
+
     }
 
     //does the animation on the end of a level
@@ -199,24 +231,16 @@ public class Toucolor extends PApplet {
         for(int i = 0; i < numberOfLevels; i++) {
             levelFiles[i] = "level" + (i+1) + ".csv";
         }
-        print("Number of levels: " + numberOfLevels +"\n");
-
 
         //creating menu screen
         menu = new Startscreen( menuTexts, this);
 
+        //create a sound manager
+        soundManager = new Sounds(status, this);
+
         this.status = "startscreen";
     }
 
-
-    private void EnemiesBehaviour(float playerX, float playerY){
-        for (Enemy vijand:Enemies) {
-            if(vijand.EnemyBehave(playerX,playerY)){
-                PApplet.println("DEUD");
-                //exit();
-            }
-        }
-    }
 
     class Animation {
         PImage[] images;
@@ -268,10 +292,13 @@ public class Toucolor extends PApplet {
         switch (keyCode) {
             case KeyEvent.VK_ENTER:
                 //enter wordt ingedrukt
+                //sound of selection
+                soundManager.play("select2");
                 switch (status) {
                     case "startscreen":
                         //startscherm is geladen
                         if(menu.getTextOfSelected().equals(menuTexts[0])) {
+
                             //PLAY HAS BEEN SELECTED
                             menu = new Startscreen(this.numberOfLevels, this);
                             this.status = "levelSelectScreen";
@@ -294,9 +321,13 @@ public class Toucolor extends PApplet {
                 //andere toets
                 switch (status) {
                     case "startscreen":
+                        //sound of selection
+                        soundManager.play("select1");
                         menu.keyPressed(keyCode);
                         break;
                     case "levelSelectScreen":
+                        //sound of selection
+                        soundManager.play("select1");
                         menu.keyPressed(keyCode);
                         break;
                     case "loadScreen":
@@ -311,7 +342,10 @@ public class Toucolor extends PApplet {
                             if (keyCode == LEFT) {
                                 speler.leftPressed = true;
                             }
-                            if (keyCode == UP && !speler.isInAir) {
+                            if (keyCode == UP) {
+                                if(!speler.getIsInAir()){
+                                    soundManager.play("jump");
+                                }
                                 speler.upIsPressed = true;
                             }
                             if(keyCode == DOWN){
@@ -320,8 +354,8 @@ public class Toucolor extends PApplet {
                             //this is to respawn --> ONLY FOR TESTING
                             if(keyCode == KeyEvent.VK_R)
                             {
-                                speler.playerX = 300;
-                                speler.playerY = 500;
+                                speler.actorX = 300;
+                                speler.actorY = 500;
                             }
                         }
                         break;
@@ -332,14 +366,18 @@ public class Toucolor extends PApplet {
 
     @Override
     public void keyReleased() {
-        if(keyCode == RIGHT){
-            speler.rightPressed = false;
-        }
-        if(keyCode == LEFT){
-            speler.leftPressed = false;
-        }
-        if(keyCode == DOWN){
-            speler.downPressed = false;
+        switch (status) {
+            case "playing":
+                if (keyCode == RIGHT) {
+                    speler.rightPressed = false;
+                }
+                if (keyCode == LEFT) {
+                    speler.leftPressed = false;
+                }
+                if (keyCode == DOWN) {
+                    speler.downPressed = false;
+                }
+                break;
         }
     }
 
@@ -354,8 +392,9 @@ public class Toucolor extends PApplet {
         //this.currentLevel = new Level(this, "DemoLevel_NoEnemies.csv");
         this.currentLevel = new Level(this, this.levelToLoad);
         playerWandelen = new Animation("Toucolooor", 4);
-        enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
-        speler = new Player(this);
+        enemyWandelen = new Animation("Timberman",1);
+        //enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
+        speler = new Player();
         this.imageHasSwitched = false;
         this.lastOpacity = 0;
         timer = new Time(LEVELTIME, this);
@@ -365,8 +404,25 @@ public class Toucolor extends PApplet {
 
     }
 
+    public void refreshAllValues(){
+        speler.refreshValues(currentLevel.getCoords((int) speler.actorX, (int) speler.actorY),
+                currentLevel.getColAndDeath((int) speler.actorX, (int) speler.actorY));
+        //forach isspawn
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                swag.refreshValues(currentLevel.getCoords((int) swag.actorX, (int) swag.actorY),
+                        currentLevel.getColAndDeath((int) swag.actorX, (int) swag.actorY));
+            }
+        }
+
+    }
+
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void playSound(String event) {
+        soundManager.play(event);
     }
 
 

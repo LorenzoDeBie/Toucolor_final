@@ -119,7 +119,7 @@ class Startscreen {
             selectedButton.buildSelecter();
         }
         //down
-        else if(keyCode == KeyEvent.VK_DOWN && (selectedButton.arrayID < menuItems.length)) {
+        else if(keyCode == KeyEvent.VK_DOWN && (selectedButton.arrayID + 1  < menuItems.length)) {
             //down arrow
             selectedButton = menuItems[selectedButton.arrayID + 1];
             selectedButton.buildSelecter();

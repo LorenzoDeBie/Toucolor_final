@@ -10,7 +10,7 @@ import processing.core.PImage;
  *
  * this class holds all the properties of a certain block and is able to render the block on the Papplet.
  */
-public class Block {
+class Block {
 
     /**
      * PRIVATE VARIABLES
