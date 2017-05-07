@@ -84,8 +84,13 @@ class Enemy extends Actor {
                     isInAir = true;
                 }
             }
-           updateR = bereik;
+            if(getHorizontaleCollision()){
+                bereik = bereik *-1;
+                setHorizontaleCollision();
+            }
+            updateR = bereik;
         }
+        PApplet.println(bereik);
         collision(updateR,updateL,updateU,updateD,true,false);
 
     }

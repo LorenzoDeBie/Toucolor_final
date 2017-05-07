@@ -71,7 +71,7 @@ import processing.core.*;
             if (hoek < PI / 2) {
                 updateD = PApplet.sin(hoek) * valSpeed;
                 hoek += 0.03;
-                //isInAir = true;
+                isInAir = true;
             } else {
                 updateD = valSpeed;
                 isInAir = true;

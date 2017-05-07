@@ -51,7 +51,7 @@ public class Toucolor extends PApplet {
     private Enemy swag = new Enemy(3,2,0.09f,300,400);
     private Player speler;
 
-    private Enemy[] enemies;// =  {poep,lel,swag};
+    private Enemy[] enemies =  {poep};
 
     //initializing variables
     private LoadScreen loadScreen;

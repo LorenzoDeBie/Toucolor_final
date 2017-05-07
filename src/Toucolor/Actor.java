@@ -41,6 +41,7 @@ class Actor {
 
         if(fullUpdateX < 0){
             fullUpdateX = 0;
+            horizontaleCollision = true;
         }
 
         for (int i = 0; i< fullCoords.length; i++) {
@@ -50,7 +51,6 @@ class Actor {
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
 
-            //if(canCollide){
             if(canCollide && PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(actorY - yblock) < blockSize){
                 //enkel de x-beweging zal colliden
                 horizontaleCollision = true;
@@ -114,6 +114,10 @@ class Actor {
 
     protected boolean getHorizontaleCollision(){
         return  horizontaleCollision;
+    }
+
+    public void setHorizontaleCollision(){
+        horizontaleCollision = false;
     }
 
 

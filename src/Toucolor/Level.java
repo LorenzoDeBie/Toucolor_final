@@ -230,9 +230,6 @@ class Level {
     boolean[][] getColAndDeath(int playerX, int playerY) {
         boolean[][] bools = new boolean[8][2];
 
-        if(playerX < BLOCKWIDTH){
-            playerX = BLOCKWIDTH;
-        }
 
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
