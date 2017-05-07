@@ -31,8 +31,8 @@ public class Toucolor extends PApplet {
      * PRIVATE VARIABLES
      */
     //width & height of world
-    static int WORLDWIDTH = 1280;
-    static int WORLDHEIGHT = 720;
+    static final int WORLDWIDTH = 1280;
+    static final int WORLDHEIGHT = 720;
     static int BLOCKSIZE = 80;
     //temp actorX --> goes into object later
     private int actorX;
@@ -44,11 +44,13 @@ public class Toucolor extends PApplet {
     public String status;
     private int levelToLoad;
 
+
     Animation playerWandelen, enemyWandelen;
 
     private Enemy poep = new Enemy(4,1,0.5f,100,500);
     private Enemy lel = new Enemy(1,2,0.001f,200,200);
     private Enemy swag = new Enemy(3,2,0.09f,300,400);
+
     private Player speler;
 
     private Enemy[] enemies;// =  {poep,lel,swag};
@@ -63,8 +65,16 @@ public class Toucolor extends PApplet {
     private boolean imageHasSwitched;
     private int lastOpacity;
 
+
+    //score vars
+    Score score;
+    static final int LEVELTIME = 500;
+    static final int VERMINDERING = 1;
+    Time timer;
+
     //sound manager
     Sounds soundManager;
+
 
 
     /**
@@ -127,7 +137,11 @@ public class Toucolor extends PApplet {
                 else{
                     //if not dead do keypress
                     doPlayer();
+
+                    timer.renderTime();
+                    score.renderScore();
                 }
+            
                 checkDood();
                 break;
         }
@@ -350,6 +364,7 @@ public class Toucolor extends PApplet {
 
     }
 
+    @Override
     public void keyReleased() {
         switch (status) {
             case "playing":
@@ -382,6 +397,9 @@ public class Toucolor extends PApplet {
         speler = new Player();
         this.imageHasSwitched = false;
         this.lastOpacity = 0;
+        timer = new Time(LEVELTIME, this);
+        score = new Score(this);
+
         this.status = "playing";
 
     }
