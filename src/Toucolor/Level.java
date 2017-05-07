@@ -184,6 +184,10 @@ class Level {
     float[][] getCoords(float playerX, float playerY){
         float[][] coords = new float[8][2];
 
+        if(playerY < Toucolor.BLOCKSIZE) {
+            playerY = Toucolor.BLOCKSIZE;
+        }
+
 
         int startblockX = (PApplet.floor(playerX / Toucolor.BLOCKSIZE)) - 1;
         int startblockY = (PApplet.floor(playerY / Toucolor.BLOCKSIZE)) - 1;
@@ -191,8 +195,10 @@ class Level {
         coords[0][0] = startblockX * BLOCKWIDTH;
         coords[1][0] = (startblockX+1) * BLOCKWIDTH;
         coords[2][0] = (startblockX+2) * BLOCKWIDTH;
+
         coords[3][0] = startblockX * BLOCKWIDTH;
         coords[4][0] = (startblockX+2) * BLOCKWIDTH;
+
         coords[5][0] = startblockX * BLOCKWIDTH;
         coords[6][0] = (startblockX+1) * BLOCKWIDTH;
         coords[7][0] = (startblockX+2) * BLOCKWIDTH;
@@ -232,6 +238,9 @@ class Level {
 
         if(playerX < BLOCKWIDTH){
             playerX = BLOCKWIDTH;
+        }
+        if(playerY < Toucolor.BLOCKSIZE) {
+            playerY = Toucolor.BLOCKSIZE;
         }
 
         int startblockX = (playerX / Toucolor.BLOCKSIZE) - 1;
