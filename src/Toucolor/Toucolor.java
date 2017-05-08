@@ -43,8 +43,11 @@ public class Toucolor extends PApplet {
     //levelmanager functions
     private Level currentLevel;
     public Startscreen menu;
+    public ScoreBoard scoreb;
     public String status;
     private int levelToLoad;
+
+    private String[] kaka = {"Piemelanus"};
 
 
     Animation playerWandelen, enemyWandelen;
@@ -116,6 +119,10 @@ public class Toucolor extends PApplet {
                 break;
             case "startscreen":
                 menu.renderStartScreen();
+                break;
+            case "scoreboard":
+                menu.renderStartScreen();
+                PApplet.println("hier kom ik");
                 break;
             case "levelSelectScreen":
                 menu.renderStartScreen();
@@ -322,7 +329,8 @@ public class Toucolor extends PApplet {
                             this.status = "levelSelectScreen";
                         } else {
                             //SCORE HAS BEEN SELECTED
-                            //TODO:ROBBE'S Code here
+                            scoreb = new ScoreBoard("score.csv",this);
+                            this.status = "scoreboard";
                         }
                         break;
                     case "levelSelectScreen":
