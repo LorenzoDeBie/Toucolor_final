@@ -15,7 +15,7 @@ class Actor {
     boolean mD = false;
     boolean mU = false;
 
-    float actorX = 156, actorY=300, xblock, yblock;
+    float actorX = 150, actorY=300, xblock, yblock;
     boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping, cancelJump;
     int blockSize = Toucolor.BLOCKSIZE;
 
@@ -52,15 +52,6 @@ class Actor {
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
 
-            //if(canCollide){
-            if(canCollide && PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(actorY - yblock) < blockSize){
-                //enkel de x-beweging zal colliden
-                horizontaleCollision = true;
-                fullUpdateX = actorX;
-                if(isDeadly){
-                    touchedDeadly = true;
-                }
-            }
             if(canCollide && PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(actorX - xblock)< blockSize){
                 //enkel y-beweging zal colliden
                 verticaleCollision = true;
@@ -69,7 +60,6 @@ class Actor {
                     isInAir = false;
                     if(isDeadly){
                         touchedDeadly = true;
-
                     }
 
                 }
@@ -83,6 +73,22 @@ class Actor {
                     if(isDeadly){
                         touchedDeadly = true;
                     }
+                }
+            }
+
+            if(canCollide && PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(actorY - yblock) < blockSize){
+                //enkel de x-beweging zal colliden
+                horizontaleCollision = true;
+                if(updateD + updateU == 8) {
+                    if(xblock - fullUpdateX > 0 && xblock - fullUpdateX <= 5){
+                        fullUpdateX = xblock - blockSize;
+                    } else if(xblock - fullUpdateX < 0 && xblock - fullUpdateX >= -5){
+                        fullUpdateX = xblock + blockSize;
+                    } else{
+                        fullUpdateX = actorX;
+                    }
+                } else if (updateD + updateU != 8){
+                    fullUpdateX = actorX;
                 }
             }
         }
@@ -123,9 +129,4 @@ class Actor {
     protected boolean getCancelJump(){
         return cancelJump;
     }
-
-
-
-
-
 }

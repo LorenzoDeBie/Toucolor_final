@@ -51,7 +51,6 @@ import processing.core.*;
         }
         if (getIsInAir()) {
             upIsPressed = false;
-            jumping =false;
             mD = true;
         } else {
             if (jumping) {
