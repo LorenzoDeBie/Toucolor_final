@@ -31,7 +31,7 @@ class Sounds {
             soundFiles[i] = minim.loadFile(files.get(i));
         }
         AudioPlayer chiptune = minim.loadFile("Chiptune.mp3");
-        chiptune.loop();
+        //chiptune.loop();
     }
 
     public void play(String event) {
@@ -48,7 +48,7 @@ class Sounds {
          * end: einde level
          */
 
-         soundFiles[events.indexOf(event)].rewind();
-         soundFiles[events.indexOf(event)].play();
+         //soundFiles[events.indexOf(event)].rewind();
+         //soundFiles[events.indexOf(event)].play();
     }
 }
