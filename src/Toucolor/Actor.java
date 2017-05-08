@@ -73,10 +73,13 @@ class Actor {
                     }
 
                 }
-                if(fullUpdateY - yblock > 0){
+                else if(fullUpdateY - yblock > 0){
                     verticaleCollision = true;
-                    fullUpdateY = yblock + blockSize;
-                    cancelJump = true;
+                    fullUpdateY = actorY;
+                    if(jumping) {
+                        fullUpdateY = yblock + blockSize;
+                        cancelJump = true;
+                    }
                     if(isDeadly){
                         touchedDeadly = true;
                     }
