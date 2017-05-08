@@ -16,7 +16,7 @@ class Actor {
     boolean mU = false;
 
     float actorX = 156, actorY=300, xblock, yblock;
-    boolean canCollide, isDeadly, horizontaleCollision, verticaleCollisionB, isInAir, customHorizontaleCollision, touchedDeadly, jumping;
+    boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping, cancelJump;
     int blockSize = Toucolor.BLOCKSIZE;
 
 
@@ -35,6 +35,8 @@ class Actor {
         jumping = springt;
 
         horizontaleCollision = false;
+        verticaleCollision = false;
+        cancelJump = false;
 
         fullUpdateX = actorX + (updateL + updateR);
         fullUpdateY = actorY + (updateD + updateU);
@@ -62,7 +64,6 @@ class Actor {
             if(canCollide && PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(actorX - xblock)< blockSize){
                 //enkel y-beweging zal colliden
                 if(fullUpdateY - yblock < 0){
-                    //verticaleCollision = true;
                     fullUpdateY = yblock - blockSize;
                     isInAir = false;
                     if(isDeadly){
@@ -71,12 +72,10 @@ class Actor {
                     }
 
                 }else if(fullUpdateY - yblock > 0){
-                    verticaleCollisionB = true;
-                    isInAir = false;
+                    verticaleCollision = true;
                     if(jumping){
                         fullUpdateY = yblock + blockSize;
-                        isInAir = true;
-                        jumping = false;
+                        cancelJump = true;
                     }
                     if(isDeadly){
                         touchedDeadly = true;
@@ -90,8 +89,7 @@ class Actor {
         actorX = fullUpdateX;
         actorY = fullUpdateY;
 
-        //is dit test code?
-        if(actorY > 730){
+        if(actorY > 645){
             touchedDeadly = true;
         }
 
@@ -118,16 +116,9 @@ class Actor {
         return  horizontaleCollision;
     }
 
-    protected boolean getVerticaleCollision(){
-        return  verticaleCollisionB;
-    }
 
-    protected void setVerticaleCollision(){
-        verticaleCollisionB = false;
-    }
-
-    public void setHorizontaleCollision(){
-        horizontaleCollision = false;
+    protected boolean getCancelJump(){
+        return cancelJump;
     }
 
 

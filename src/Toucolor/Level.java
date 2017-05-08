@@ -145,7 +145,7 @@ class Level {
         //we draw the level here
         //render backgorund
         level.imageMode(PConstants.CORNER);
-        level.background(200);
+        level.background(48,169,226);
 
         //now draw all the blocks
         level.rectMode(PConstants.CORNER);

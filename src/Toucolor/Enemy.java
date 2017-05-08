@@ -86,7 +86,6 @@ class Enemy extends Actor {
             }
             if(getHorizontaleCollision()){
                 bereik = bereik *-1;
-                setHorizontaleCollision();
             }
             updateR = bereik;
         }

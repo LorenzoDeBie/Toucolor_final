@@ -30,12 +30,11 @@ import processing.core.*;
     float PI = PApplet.PI;
 
     void keyUse() {
-        if(getVerticaleCollision()){
+        if(getCancelJump()){
             isInAir = true;
             mU = false;
             jumping = false;
             upIsPressed = false;
-            setVerticaleCollision();
             hoek = 0;
         }
         if (rightPressed) {
@@ -51,6 +50,8 @@ import processing.core.*;
             mL = false;
         }
         if (getIsInAir()) {
+            upIsPressed = false;
+            jumping =false;
             mD = true;
         } else {
             if (jumping) {
@@ -83,6 +84,8 @@ import processing.core.*;
             } else {
                 updateD = valSpeed;
                 isInAir = true;
+                jumping = false;
+                upIsPressed = false;
             }
         }
         if (mU == true) {
@@ -101,9 +104,14 @@ import processing.core.*;
         return this.customHorizontaleCollision;
     }
 
+    public void setUp(){
+        upIsPressed = false;
+        jumping = false;
+    }
 
-    private boolean playerDie(){
-        if(playerIsDead) {
+
+    public boolean playerDie(){
+        if(playerIsDead || getTouchedDeadly()) {
             return true;
         } else {
             return false;
