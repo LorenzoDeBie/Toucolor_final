@@ -87,15 +87,15 @@ class Block {
     }
 
     //getters and setters
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public boolean isCollision() {
+    boolean isCollision() {
         return collision;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 

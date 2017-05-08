@@ -12,6 +12,9 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.data.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  *
@@ -47,6 +50,14 @@ class Level {
 
     //alles voor als player doodgaat
     private boolean playerDying; //misschien niet nodig
+
+    //alles voor mango's
+    private Mango[] mangos;
+
+    //returns an array of mango elements
+    Mango[] getMangos() {
+        return mangos;
+    }
 
     //not sure if this is used somewhere
     Level(PApplet applet, int number) {
@@ -134,15 +145,21 @@ class Level {
         //we draw the level here
         //render backgorund
         level.imageMode(PConstants.CORNER);
-        level.background(255);
+        level.background(200);
 
         //now draw all the blocks
         level.rectMode(PConstants.CORNER);
+
+        //list to add mangos
+        List<Mango> listMangos = new ArrayList<Mango>();
         for (int i = 0; i < columnCount; i++) {
             for (int u = 0; u < 9; u++) {
                 Block currentBlock = tileBlocks[levelMap[i][u]];
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+                    if(currentBlock.getName().equals("Mango")) {
+                        listMangos.add(new Mango(i * 80, u * 80));
+                    }
                 }
             }
         }
@@ -151,6 +168,8 @@ class Level {
 
         level.endDraw();
 
+        mangos = new Mango[listMangos.size()];
+        listMangos.toArray(mangos);
 
         PApplet.print( this.levelFileName + " has been loaded.\n");
     }
@@ -312,6 +331,23 @@ class Level {
 
     int numberOfcurrentLevel() {
         return this.number;
+    }
+
+    void changeBlock(int x, int y, int newBlock, boolean playerCoords) {
+        int drawX, drawY;
+        level.beginDraw();
+        if(playerCoords) {
+            drawX = x / Toucolor.BLOCKSIZE;
+            drawY = y / Toucolor.BLOCKSIZE;
+
+        }
+        else {
+            drawX = x;
+            drawY = y;
+        }
+        level.image(tileBlocks[newBlock].renderblock(), drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+        level.endDraw();
+        levelMap[drawX][drawY] = newBlock;
     }
 
     /**

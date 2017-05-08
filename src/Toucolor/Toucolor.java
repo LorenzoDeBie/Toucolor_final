@@ -10,6 +10,8 @@ import processing.core.PImage;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.security.Key;
+
 /**
  *
  * @author loren
@@ -75,6 +77,10 @@ public class Toucolor extends PApplet {
     //sound manager
     Sounds soundManager;
 
+    //mango's
+    private Mango[] mangos;
+    private static final int MANGOSCORE = 1000;
+
 
 
     /**
@@ -83,7 +89,7 @@ public class Toucolor extends PApplet {
      */
     @Override
     public  void setup() {
-        frameRate(144);
+        frameRate(60);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
@@ -122,7 +128,6 @@ public class Toucolor extends PApplet {
                 currentLevel.renderLevel((int) speler.actorX);
                 //refreshes all the values for the blocks around the player
                 refreshAllValues();
-                doEnemies();
                 //dot this if player is dead
                 //TODO: will be changed to fade to black and stuff
                 if(speler.playerIsDead){
@@ -136,14 +141,23 @@ public class Toucolor extends PApplet {
                 }
                 else{
                     //if not dead do keypress
+                    doEnemies();
                     doPlayer();
-
                     timer.renderTime();
                     score.renderScore();
                 }
-            
-                checkDood();
                 break;
+        }
+    }
+
+    private void doMango() {
+        mangos = currentLevel.getMangos();
+        for(Mango mango : mangos) {
+            if (mango.isColliding((int) speler.actorX, (int) speler.actorY) && !mango.isClaimed()) {
+                mango.claim();
+                currentLevel.changeBlock((int) mango.actorX, (int) mango.actorY, 0, true);
+                score.addToScore(MANGOSCORE);
+            }
         }
     }
 
@@ -151,6 +165,8 @@ public class Toucolor extends PApplet {
     private void doPlayer() {
         speler.keyUse();
         playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
+        checkDood();
+        doMango();
     }
 
     private void doEnemies(){
@@ -356,6 +372,14 @@ public class Toucolor extends PApplet {
                             {
                                 speler.actorX = 300;
                                 speler.actorY = 500;
+                            }
+                            if(keyCode == KeyEvent.VK_E) {
+                                //levle selectiescherm is geladen
+//                                this.levelToLoad = menu.getIdOfSelected() + 1; //set the number of level to load
+                                thread("startLevel"); //init the level in seperate thread
+                                //create new loading screen
+                                this.loadScreen = new LoadScreen("Loading, Please wait.", this);
+                                this.status = "loadScreen"; //change status
                             }
                         }
                         break;
