@@ -151,7 +151,6 @@ public class Toucolor extends PApplet {
     }
 
     private void doMango() {
-        mangos = currentLevel.getMangos();
         for(Mango mango : mangos) {
             if (mango.isColliding((int) speler.actorX, (int) speler.actorY) && !mango.isClaimed()) {
                 mango.claim();
@@ -423,6 +422,7 @@ public class Toucolor extends PApplet {
         this.lastOpacity = 0;
         timer = new Time(LEVELTIME, this);
         score = new Score(this);
+        mangos = currentLevel.getMangos();
 
         this.status = "playing";
 
@@ -448,9 +448,6 @@ public class Toucolor extends PApplet {
     public void playSound(String event) {
         soundManager.play(event);
     }
-
-
-
 
 
 }

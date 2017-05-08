@@ -5,7 +5,7 @@ import processing.core.PApplet;
 /**
  * Created by loren on 07/05/2017.
  */
-public class Mango extends Actor {
+class Mango extends Actor {
 
     private boolean isClaimed;
 
