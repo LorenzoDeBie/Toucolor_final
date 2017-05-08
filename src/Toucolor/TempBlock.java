@@ -2,17 +2,22 @@ package Toucolor;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 
 /**
  * Created by loren on 08/05/2017.
  */
-public class TempBlock extends Block {
+class TempBlock extends Block {
 
     private int millisTillGone;
+    private int startMillis;
+    private boolean isStandingOn;
+    private int timeTillGone;
 
-    TempBlock(int id, String name, String imgFileName, boolean collision, int millisTillGone, boolean killsPlayer, PGraphics pg, PApplet applet) {
+    TempBlock(int id, String name, String imgFileName, boolean collision, int timeTillGone, boolean killsPlayer, PGraphics pg, PApplet applet) {
         super(id, name, imgFileName, collision, killsPlayer, pg, applet);
-        this.millisTillGone = millisTillGone;
+        this.timeTillGone = timeTillGone;
+        isStandingOn = false;
     }
 
     //this makes the block flikker
@@ -24,12 +29,25 @@ public class TempBlock extends Block {
 
     //called by player
     void standOn() {
-        if(brokkelt) {
-            millisTillGone--;
-            if(this.millisTillGone == 0) {
-                destroyblock();
-            }
+        if(isStandingOn) {
+            millisTillGone = applet.millis() - startMillis;
             flikker();
         }
+        else {
+            startMillis = applet.millis();
+            millisTillGone = timeTillGone;
+        }
+
+        if(millisTillGone <= 0) {
+            //destroy the block here
+            destroyblock();
+
+        }
     }
+
+    private void destroyBlock() {
+        super.destroyblock();
+
+    }
+
 }
