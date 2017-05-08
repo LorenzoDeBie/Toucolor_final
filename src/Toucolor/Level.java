@@ -103,7 +103,13 @@ class Level {
             boolean brokkelt = PApplet.parseBoolean(row.getString("brokkelt"));
             boolean kills = PApplet.parseBoolean(row.getString("death"));
 
-            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, kills, level, applet); //load the img into the array
+            if(brokkelt) {
+                tileBlocks[id] = new Block(id, name, imgFileName, collision, kills, level, applet);
+            }
+            else {
+                tileBlocks[id] = new TempBlock(id, name, imgFileName, collision, 432, kills, level, applet); //load the img into the array
+            }
+
 
 //            //debug info
 //            PApplet.print("img loaded:" + row.getString("filename") + "\n");
