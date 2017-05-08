@@ -28,7 +28,6 @@ class Time{
 
     //update time
     private void update() {
-        PApplet.println(applet.millis());
         timeLeftMSeconds = ((Toucolor.LEVELTIME * 1000) - (applet.millis() - timeStart));
         timeLeftSeconds = timeLeftMSeconds/1000;
     }

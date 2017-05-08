@@ -16,7 +16,7 @@ class Actor {
     boolean mU = false;
 
     float actorX = 156, actorY=300, xblock, yblock;
-    boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping;
+    boolean canCollide, isDeadly, horizontaleCollision, verticaleCollisionB, isInAir, customHorizontaleCollision, touchedDeadly, jumping;
     int blockSize = Toucolor.BLOCKSIZE;
 
 
@@ -62,7 +62,7 @@ class Actor {
             if(canCollide && PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(actorX - xblock)< blockSize){
                 //enkel y-beweging zal colliden
                 if(fullUpdateY - yblock < 0){
-                    verticaleCollision = true;
+                    //verticaleCollision = true;
                     fullUpdateY = yblock - blockSize;
                     isInAir = false;
                     if(isDeadly){
@@ -71,10 +71,12 @@ class Actor {
                     }
 
                 }else if(fullUpdateY - yblock > 0){
-                    verticaleCollision = true;
+                    verticaleCollisionB = true;
                     isInAir = false;
                     if(jumping){
                         fullUpdateY = yblock + blockSize;
+                        isInAir = true;
+                        jumping = false;
                     }
                     if(isDeadly){
                         touchedDeadly = true;
@@ -114,6 +116,18 @@ class Actor {
 
     protected boolean getHorizontaleCollision(){
         return  horizontaleCollision;
+    }
+
+    protected boolean getVerticaleCollision(){
+        return  verticaleCollisionB;
+    }
+
+    protected void setVerticaleCollision(){
+        verticaleCollisionB = false;
+    }
+
+    public void setHorizontaleCollision(){
+        horizontaleCollision = false;
     }
 
 

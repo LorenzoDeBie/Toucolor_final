@@ -30,6 +30,14 @@ import processing.core.*;
     float PI = PApplet.PI;
 
     void keyUse() {
+        if(getVerticaleCollision()){
+            isInAir = true;
+            mU = false;
+            jumping = false;
+            upIsPressed = false;
+            setVerticaleCollision();
+            hoek = 0;
+        }
         if (rightPressed) {
             imgCounter++;
             mR = true;
@@ -71,7 +79,7 @@ import processing.core.*;
             if (hoek < PI / 2) {
                 updateD = PApplet.sin(hoek) * valSpeed;
                 hoek += 0.03;
-                //isInAir = true;
+                isInAir = true;
             } else {
                 updateD = valSpeed;
                 isInAir = true;
