@@ -63,6 +63,7 @@ class Actor {
             }
             if(canCollide && PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(actorX - xblock)< blockSize){
                 //enkel y-beweging zal colliden
+                verticaleCollision = true;
                 if(fullUpdateY - yblock < 0){
                     fullUpdateY = yblock - blockSize;
                     isInAir = false;
@@ -71,12 +72,11 @@ class Actor {
 
                     }
 
-                }else if(fullUpdateY - yblock > 0){
+                }
+                if(fullUpdateY - yblock > 0){
                     verticaleCollision = true;
-                    if(jumping){
-                        fullUpdateY = yblock + blockSize;
-                        cancelJump = true;
-                    }
+                    fullUpdateY = yblock + blockSize;
+                    cancelJump = true;
                     if(isDeadly){
                         touchedDeadly = true;
                     }
