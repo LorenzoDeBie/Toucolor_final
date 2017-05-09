@@ -131,7 +131,7 @@ public class Toucolor extends PApplet {
                 break;
             case "playing":
                 //renders the level (blocks and stuff)
-                currentLevel.renderLevel((int) speler.actorX);
+                currentLevel.renderLevel((int) speler.actorX, (int) speler.actorY);
                 //refreshes all the values for the blocks around the player
                 refreshAllValues();
                 //dot this if player is dead
