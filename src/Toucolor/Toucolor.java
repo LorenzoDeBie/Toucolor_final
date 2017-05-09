@@ -52,8 +52,6 @@ public class Toucolor extends PApplet {
     public String status;
     private int levelToLoad;
 
-    private String[] kaka = {"Piemelanus"};
-
 
     Animation playerWandelen, enemyWandelen;
 
@@ -470,19 +468,19 @@ public class Toucolor extends PApplet {
                         if(keyCode == RIGHT){
                             if(iH == 0){
                                 iA++;
-                                if(iA > A.length ){
+                                if(iA > A.length-1 ){
                                     iA = A.length-1;
                                 }
                                 kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
                             } else if(iH == 1){
                                 iB++;
-                                if(iB > B.length ){
+                                if(iB > B.length-1 ){
                                     iB = B.length-1;
                                 }
                                 kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
                             }else if (iH == 2){
                                 iC++;
-                                if(iC > C.length ){
+                                if(iC > C.length-1 ){
                                     iC = C.length-1;
                                 }
                                 kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
