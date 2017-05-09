@@ -9,12 +9,8 @@ import processing.data.*;
 public class ScoreBoard extends Startscreen{
     Table scoreb;
     String[] bestplayers = new String[10];
-    PApplet applet;
-
-
 
     ScoreBoard(String file, PApplet applet){
-        super();
         this.applet = applet;
         scoreb = applet.loadTable(file, "header, csv");
         for (int i = 0; i < 10; i++) {
@@ -24,12 +20,8 @@ public class ScoreBoard extends Startscreen{
             int score = row.getInt("score");
             bestplayers[i] = id+" "+naam+" "+score;
         }
+        logo = applet.loadImage("menu_logo.png");
         super.changeNames(bestplayers);
-
-
-
-
-
     }
 
 }
