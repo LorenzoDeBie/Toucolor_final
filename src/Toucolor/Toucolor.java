@@ -95,12 +95,12 @@ public class Toucolor extends PApplet {
         frameRate(144);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
-        //thread("initWorld");
+        thread("initWorld");
         //custom test code
-        this.levelToLoad = 4;
-        //create a sound manager
-        soundManager = new Sounds(this);
-        thread("startLevel");
+//        this.levelToLoad = 4;
+//        //create a sound manager
+//        soundManager = new Sounds(this);
+//        thread("startLevel");
     }
 
     /**

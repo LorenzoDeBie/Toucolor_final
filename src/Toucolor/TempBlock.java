@@ -30,34 +30,37 @@ class TempBlock extends Block {
         this.isBroken = false;
     }
 
+    void update() {
+        if(!isBroken) {
+            if(isStandingOn) {
+                millisTillGone = applet.millis() - startMillis;
+            }
+
+            flikker();
+
+            if(millisTillGone > timeTillGone) {
+                //destroy the block here
+                destroyBlock();
+            }
+        }
+    }
+
     //this makes the block flikker
-    void flikker() {
-        if(isStandingOn) {
+    private void flikker() {
             if(millisTillGone < 3000) {
                 this.drawBlock = (millisTillGone / 1000) % 2 == 0;
             }
             else {
                 this.drawBlock = (millisTillGone / 100) % 2 == 0;
             }
-        }
     }
 
     //called by player
     void standOn() {
-        if(!isBroken) {
-            if(isStandingOn) {
-                millisTillGone = applet.millis() - startMillis;
-            }
-            else {
-                startMillis = applet.millis();
-                isStandingOn = true;
-            }
-            if(millisTillGone > timeTillGone) {
-                //destroy the block here
-                destroyBlock();
-            }
+        if(!isBroken && !isStandingOn) {
+            startMillis = applet.millis();
+            isStandingOn = true;
         }
-
     }
 
     private void destroyBlock() {

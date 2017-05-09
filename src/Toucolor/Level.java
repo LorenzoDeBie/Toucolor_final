@@ -210,15 +210,15 @@ class Level {
 
         //render each tempblock that in on the screen
         for(TempBlock block : tempBlocks) {
-            if(drawX < block.getBlockX() / Toucolor.BLOCKSIZE && block.getBlockX() < columns * Toucolor.BLOCKSIZE && block.drawBlock) {
-                int drawBlockX = block.getBlockX() - drawX;
+            if(drawX < block.getBlockX() && block.getBlockX() < -drawX + Toucolor.WORLDWIDTH && block.drawBlock) {
+                int drawBlockX = block.getBlockX() + drawX;
                 applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
             }
             //and to everything that needs to happen when standing on it
             if(PApplet.abs(block.getBlockX() - playerX) < Toucolor.BLOCKSIZE && block.getBlockY() - playerY == Toucolor.BLOCKSIZE) {
                 block.standOn();
             }
-            block.flikker();
+            block.update();
         }
     }
 
