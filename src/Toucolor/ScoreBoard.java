@@ -16,15 +16,17 @@ class ScoreBoard extends Startscreen{
     private int iH = 0;
     private char[] arr = {'A','A','A'};
 
+    private String fileName;
+
     ScoreBoard(String file, Toucolor applet){
         this.applet = applet;
         logo = applet.loadImage("menu_logo.png");
-        String fileName = file;
-        loadScores(fileName);
+        fileName = file;
+        loadScores();
     }
 
     //loads the highscores
-    private void loadScores(String fileName) {
+    void loadScores() {
         Table scoreb = applet.loadTable(fileName, "header, csv");
         for (int i = 0; i < 10; i++) {
             TableRow row = scoreb.getRow(i);
@@ -45,11 +47,9 @@ class ScoreBoard extends Startscreen{
 
         for (int i = 0; i < 10; i++) {
             TableRow row = scores.getRow(i);
-            score = row.getInt("score");
-            name = row.getString("naam");
             int id = row.getInt("id");
-            sbpoints[i] = score;
-            sbnames[i] = name;
+            sbpoints[i] = row.getInt("score");;
+            sbnames[i] = row.getString("naam");;
             sbid[i] = id;
         }
 

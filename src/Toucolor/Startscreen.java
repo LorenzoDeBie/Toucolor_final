@@ -37,12 +37,22 @@ class Startscreen {
 
     //used in scoreboard
     void changeNames(String[] names){
+        int textLength = 0;
         menuItems = new menuButton[names.length];
+        int heightPerBlock = (Toucolor.WORLDHEIGHT - STARTY) / names.length;
+        int buttonHeight = ((int) (0.75 * heightPerBlock)) < BUTTONHEIGHT ? ((int) (0.75 * heightPerBlock)) : BUTTONHEIGHT;
+        int spaceBetweenButtons = heightPerBlock - buttonHeight < SPACEBETWOONBUTTONS ? heightPerBlock - buttonHeight : SPACEBETWOONBUTTONS;
+
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, names[i], applet, i);
+            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (buttonHeight + spaceBetweenButtons)), BUTTONWIDTH, buttonHeight, names[i], applet, i);
+            textLength = applet.textWidth(names[i]) > textLength ? (int) applet.textWidth(names[i]) : textLength;
         }
         selectedButton = menuItems[0];
         selectedButton.buildSelecter();
+
+        for(menuButton button : menuItems) {
+            button.setDimensions(textLength + 20, buttonHeight);
+        }
     }
 
     //menu selection screen
@@ -56,7 +66,7 @@ class Startscreen {
         menuItems = new menuButton[itemsText.length];
 
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new menuButton(applet.width/2, 200 + (i * 120), 160, 80, itemsText[i], applet, i);
+            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, itemsText[i], applet, i);
         }
         selectedButton = menuItems[0];
         selectedButton.buildSelecter();
@@ -105,7 +115,6 @@ class Startscreen {
         for(menuButton button : menuItems) {
             button.renderbutton();
         }
-
     }
 
     //handles key movement in the selection screen
@@ -226,6 +235,11 @@ class Startscreen {
                     selecterCoords[i][2] = selecterRectLengt * 2;
                 }
             }
+        }
+
+        void setDimensions(int width, int height) {
+            this.buttonHeight = height > BUTTONHEIGHT ? height : BUTTONHEIGHT;
+            this.buttonWidth = width > BUTTONWIDTH ? width : BUTTONWIDTH;
         }
     }
 }

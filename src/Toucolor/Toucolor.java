@@ -359,6 +359,7 @@ public class Toucolor extends PApplet {
                         break;
                     case "naamkiezen":
                         scoreb.saveScore(score.getpoints());
+                        scoreb.loadScores();
                         this.status = "scoreboard";
                         break;
                     case "levelSelectScreen":
