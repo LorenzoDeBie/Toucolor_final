@@ -58,7 +58,7 @@ class Startscreen {
         menuItems = new menuButton[itemsText.length];
 
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new menuButton(applet.width/2, 200 + (i * 120), 160, 80, itemsText[i], applet, i);
+            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, itemsText[i], applet, i);
         }
 
         selectedButton = menuItems[0];
