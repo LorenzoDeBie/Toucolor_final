@@ -40,7 +40,7 @@ class Startscreen {
     void changeNames(String[] names){
         menuItems = new menuButton[names.length];
         for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new menuButton(20, 20 + (i * 120), 250, 80, names[i], applet, i);
+            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, names[i], applet, i);
         }
         selectedButton = menuItems[0];
         selectedButton.buildSelecter();
