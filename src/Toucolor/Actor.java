@@ -64,36 +64,40 @@ class Actor {
             Rectangle currblock = new Rectangle((int)xblock, (int)yblock, blockSize, blockSize);
 
 
-            if(canCollide && fullplayer.intersects(currblock)){
-                if(canCollide && playerY.intersects(currblock) && !upispressed ){
-                    if(!lastplayer.intersects(currblock)) {
-                        fullUpdateY = actorY;
-                        isInAir = false;
-                    } else {
-                        fullUpdateY = fullCoords[6][1] - blockSize;
-                        isInAir = false;
-                        if(jumping){
-                            fullUpdateY = fullCoords[1][1] + blockSize;
-                            cancelJump = true;
+            if(canCollide && fullplayer.intersects(currblock)) {
+                if (!isDeadly) {
+                    if (canCollide && playerY.intersects(currblock) && !upispressed) {
+                        if (!lastplayer.intersects(currblock)) {
+                            fullUpdateY = actorY;
+                            isInAir = false;
+                        } else {
+                            fullUpdateY = fullCoords[6][1] - blockSize;
+                            isInAir = false;
+                            if (jumping) {
+                                fullUpdateY = fullCoords[1][1] + blockSize;
+                                cancelJump = true;
+                            }
                         }
-                    }
-                } else {
-                    PApplet.println("collide niet met Y");
-                }
-                if(canCollide && playerX.intersects(currblock)){
-                    if(!lastplayer.intersects(currblock)){
-                        fullUpdateX = actorX;
                     } else {
-                        if(updateL + updateR > 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)){
-                            fullUpdateX = fullCoords[4][0] - blockSize;
-                        } else if(updateL + updateR < 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)){
-                            fullUpdateX = fullCoords[3][0] + blockSize;
-                        }
+                        PApplet.println("collide niet met Y");
                     }
-                } else {
-                    PApplet.println("Collide niet met x");
-                }
+                    if (canCollide && playerX.intersects(currblock)) {
+                        if (!lastplayer.intersects(currblock)) {
+                            fullUpdateX = actorX;
+                        } else {
+                            if (updateL + updateR > 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)) {
+                                fullUpdateX = fullCoords[4][0] - blockSize;
+                            } else if (updateL + updateR < 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)) {
+                                fullUpdateX = fullCoords[3][0] + blockSize;
+                            }
+                        }
+                    } else {
+                        PApplet.println("Collide niet met x");
+                    }
 
+                } else {
+                    touchedDeadly = true;
+                }
             }
 
         }
