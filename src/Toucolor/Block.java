@@ -19,14 +19,14 @@ class Block {
     protected boolean collision;
     protected String name;
     protected PImage img;
-    protected PApplet applet;
+    protected Toucolor applet;
     private PGraphics pg;
     protected boolean brokkelt;
     protected boolean drawBlock;
     protected boolean killsPlayer;
 
     //constructor
-    Block(int id, String name, String imgFileName, boolean collision, boolean killsPlayer,PGraphics pg, PApplet applet) {
+    Block(int id, String name, String imgFileName, boolean collision, boolean killsPlayer,PGraphics pg, Toucolor applet) {
         this.id = id;
         this.collision = collision;
         this.name = name;

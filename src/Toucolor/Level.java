@@ -34,7 +34,7 @@ class Level {
      * PRIVATE VARIABLES
      */
     //applet
-    private PApplet applet;
+    private Toucolor applet;
     //alles voor loadTiles();
     private Block[] tileBlocks; //array met alle afbeeldingen van de tiles
     private String levelFileName; //name of the file which describes the Level
@@ -66,7 +66,7 @@ class Level {
     }
 
     //not sure if this is used somewhere
-    Level(PApplet applet, int number) {
+    Level(Toucolor applet, int number) {
         this.applet = applet;
         this.levelFileName = "level" + number + ".csv";
         loadTiles();
@@ -168,7 +168,7 @@ class Level {
             for (int u = 0; u < rows; u++) {
                 Block currentBlock = tileBlocks[levelMap[i][u]];
                 if(currentBlock.getName().equals("Tijdelijke blok")) {
-                    tempBlocks.add(new TempBlock(i * 80, u * 80, 432, currentBlock.killsPlayer, applet));
+                    tempBlocks.add(new TempBlock(i * 80, u * 80, 5000, currentBlock.killsPlayer, applet));
                 }
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
@@ -195,6 +195,8 @@ class Level {
      * @param playerX x-coordinate of player
      */
     void renderLevel(int playerX, int playerY) {
+
+        //render map
         int drawX = 0;
         if(!cameraLocked) {
             if(tileBlocks[levelMap[(playerX / BLOCKWIDTH) + 1][2]].getName().equals("Test")) {
@@ -206,15 +208,17 @@ class Level {
         applet.imageMode(PConstants.CORNER);
         applet.image(level, drawX, 0);
 
+        //render each tempblock that in on the screen
         for(TempBlock block : tempBlocks) {
             if(drawX < block.getBlockX() / Toucolor.BLOCKSIZE && block.getBlockX() < columns * Toucolor.BLOCKSIZE && block.drawBlock) {
                 int drawBlockX = block.getBlockX() - drawX;
                 applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
             }
-
+            //and to everything that needs to happen when standing on it
             if(PApplet.abs(block.getBlockX() - playerX) < Toucolor.BLOCKSIZE && block.getBlockY() - playerY == Toucolor.BLOCKSIZE) {
                 block.standOn();
             }
+            block.flikker();
         }
     }
 

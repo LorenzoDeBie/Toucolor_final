@@ -463,6 +463,10 @@ public class Toucolor extends PApplet {
         soundManager.play(event);
     }
 
+    Level getCurrentLevel() {
+        return this.currentLevel;
+    }
+
 
 }
 

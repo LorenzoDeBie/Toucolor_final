@@ -17,7 +17,7 @@ class TempBlock extends Block {
     private int blockY;
     private boolean isBroken;
 
-    TempBlock(int blockX, int blockY,int timeTillGone, boolean killsPlayer, PApplet applet) {
+    TempBlock(int blockX, int blockY,int timeTillGone, boolean killsPlayer, Toucolor applet) {
         this.timeTillGone = timeTillGone;
         isStandingOn = false;
         this.killsPlayer = killsPlayer;
@@ -31,32 +31,33 @@ class TempBlock extends Block {
     }
 
     //this makes the block flikker
-    private void flikker() {
-        if(millisTillGone < 2000) {
-            this.drawBlock = (millisTillGone / 1000) % 2 == 0;
+    void flikker() {
+        if(isStandingOn) {
+            if(millisTillGone < 3000) {
+                this.drawBlock = (millisTillGone / 1000) % 2 == 0;
+            }
+            else {
+                this.drawBlock = (millisTillGone / 100) % 2 == 0;
+            }
         }
-        else {
-            this.drawBlock = (millisTillGone / 100) % 2 == 0;
-        }
-
     }
 
     //called by player
     void standOn() {
-        if(isStandingOn) {
-            millisTillGone = applet.millis() - startMillis;
-            flikker();
-        }
-        else {
-            startMillis = applet.millis();
-            millisTillGone = timeTillGone;
-            isStandingOn = true;
+        if(!isBroken) {
+            if(isStandingOn) {
+                millisTillGone = applet.millis() - startMillis;
+            }
+            else {
+                startMillis = applet.millis();
+                isStandingOn = true;
+            }
+            if(millisTillGone > timeTillGone) {
+                //destroy the block here
+                destroyBlock();
+            }
         }
 
-        if(millisTillGone <= 0) {
-            //destroy the block here
-            destroyblock();
-        }
     }
 
     private void destroyBlock() {
@@ -64,6 +65,7 @@ class TempBlock extends Block {
         this.isStandingOn = false;
         this.isBroken = true;
         super.destroyblock();
+        applet.getCurrentLevel().changeBlock(blockX, blockY, 0, true);
     }
 
     boolean getIsBroken() {
