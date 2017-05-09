@@ -207,7 +207,7 @@ class Level {
         applet.image(level, drawX, 0);
 
         for(TempBlock block : tempBlocks) {
-            if(drawX < block.getBlockX() / Toucolor.BLOCKSIZE && block.getBlockX() < columns * Toucolor.BLOCKSIZE) {
+            if(drawX < block.getBlockX() / Toucolor.BLOCKSIZE && block.getBlockX() < columns * Toucolor.BLOCKSIZE && block.drawBlock) {
                 int drawBlockX = block.getBlockX() - drawX;
                 applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
             }

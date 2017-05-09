@@ -48,7 +48,6 @@ class TempBlock extends Block {
         if(millisTillGone <= 0) {
             //destroy the block here
             destroyblock();
-
         }
     }
 
