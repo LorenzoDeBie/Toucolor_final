@@ -6,7 +6,7 @@ import processing.data.*;
 /**
  * Created by Vince on 8/05/2017.
  */
-public class ScoreBoard extends Startscreen{
+class ScoreBoard extends Startscreen{
     Table scoreb;
     String[] bestplayers = new String[10];
 
