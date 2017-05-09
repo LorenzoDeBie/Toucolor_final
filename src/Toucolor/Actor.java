@@ -21,6 +21,7 @@ class Actor {
     boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping, cancelJump, upispressed;
     int blockSize = Toucolor.BLOCKSIZE;
     Actor type;
+    int collblocks;
 
 
 
@@ -30,6 +31,7 @@ class Actor {
     }
 
     protected void collision(float r, float l, float u, float d, boolean inDeLucht, boolean springt, boolean upispressed) {
+        collblocks = 0;
         this.updateR = r;
         this.updateL = l;
         this.updateU = u;
@@ -47,6 +49,10 @@ class Actor {
 
         if(fullUpdateX < 0){
             fullUpdateX = 0;
+        }
+
+        if((propterties[1][0] || propterties[2][0]) && propterties[6][0] && !propterties[4][0]){
+            fullUpdateY = actorY;
         }
 
         for (int i = 0; i< fullCoords.length; i++) {
@@ -68,14 +74,21 @@ class Actor {
                 if (!isDeadly) {
                     if (canCollide && playerY.intersects(currblock) && !upispressed) {
                         if (!lastplayer.intersects(currblock)) {
-                            fullUpdateY = actorY;
-                            isInAir = false;
+                            if(jumping){
+                                fullUpdateY = fullCoords[1][1] + blockSize;
+                                cancelJump = true;
+                            } else {
+                                fullUpdateY = actorY;
+                                isInAir = false;
+                            }
+
                         } else {
-                            fullUpdateY = fullCoords[6][1] - blockSize;
-                            isInAir = false;
                             if (jumping) {
                                 fullUpdateY = fullCoords[1][1] + blockSize;
                                 cancelJump = true;
+                            } else {
+                                fullUpdateY = fullCoords[6][1] - blockSize;
+                                isInAir = false;
                             }
                         }
                     }
