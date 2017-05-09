@@ -295,7 +295,6 @@ class Level {
         if(startblockY+3 > this.rows){
             startblockY = rows - 3;
         }
-        PApplet.println(startblockY);
         if(startblockX < 0){
             startblockX = 0;
         }
