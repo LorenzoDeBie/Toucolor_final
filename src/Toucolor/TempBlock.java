@@ -13,11 +13,17 @@ class TempBlock extends Block {
     private int startMillis;
     private boolean isStandingOn;
     private int timeTillGone;
+    private int blockX;
+    private int blockY;
 
-    TempBlock(int id, String name, String imgFileName, boolean collision, int timeTillGone, boolean killsPlayer, PGraphics pg, PApplet applet) {
-        super(id, name, imgFileName, collision, killsPlayer, pg, applet);
+    TempBlock(int blockX, int blockY,int timeTillGone, boolean killsPlayer, PApplet applet) {
         this.timeTillGone = timeTillGone;
         isStandingOn = false;
+        this.killsPlayer = killsPlayer;
+        this.blockX = blockX;
+        this.blockY = blockY;
+        this.img = applet.loadImage("TempBlock.png");
+        this.id = 4;
     }
 
     //this makes the block flikker
@@ -47,7 +53,16 @@ class TempBlock extends Block {
 
     private void destroyBlock() {
         super.destroyblock();
-
     }
+
+    int getBlockX(){
+        return this.blockX;
+    }
+
+    int getBlockY() {
+        return this.blockY;
+    }
+
+
 
 }

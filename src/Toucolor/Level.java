@@ -57,6 +57,9 @@ class Level {
     //alles voor mango's
     private Mango[] mangos;
 
+    //alles voor tempblocks
+    List<TempBlock> tempBlocks;
+
     //returns an array of mango elements
     Mango[] getMangos() {
         return mangos;
@@ -111,7 +114,7 @@ class Level {
                 tileBlocks[id] = new Block(id, name, imgFileName, collision, kills, level, applet);
             }
             else {
-                tileBlocks[id] = new TempBlock(id, name, imgFileName, collision, 432, kills, level, applet); //load the img into the array
+                tileBlocks[id] = new Block(id, name, "Background.jpg", collision, kills, level, applet); //load the img into the array
             }
 //            //debug info
 //            PApplet.print("img loaded:" + row.getString("filename") + "\n");
@@ -160,9 +163,13 @@ class Level {
 
         //list to add mangos
         List<Mango> listMangos = new ArrayList<Mango>();
+        tempBlocks = new ArrayList<TempBlock>();
         for (int i = 0; i < columns; i++) {
             for (int u = 0; u < rows; u++) {
                 Block currentBlock = tileBlocks[levelMap[i][u]];
+                if(currentBlock.getName().equals("Tijdelijke blok")) {
+                    tempBlocks.add(new TempBlock(i * 80, u * 80, 432, currentBlock.killsPlayer, applet));
+                }
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
                     if(currentBlock.getName().equals("Mango")) {
@@ -198,6 +205,13 @@ class Level {
 
         applet.imageMode(PConstants.CORNER);
         applet.image(level, drawX, 0);
+
+        for(TempBlock block : tempBlocks) {
+            if(drawX < block.getBlockX() / Toucolor.BLOCKSIZE && block.getBlockX() < columns * Toucolor.BLOCKSIZE) {
+                int drawBlockX = block.getBlockX() - drawX;
+                applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+            }
+        }
     }
 
     /**

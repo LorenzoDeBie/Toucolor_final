@@ -228,7 +228,6 @@ public class Toucolor extends PApplet {
             fill(0, this.lastOpacity);
             rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
             lastOpacity+=2;
-
         }
 
     }

@@ -32,6 +32,7 @@ class Boss extends Actor {
         }
         if(actorX == jumpX && actorY == jumpY) {
             //TODO make temp block
+
         }
     }
 

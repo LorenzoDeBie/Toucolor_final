@@ -15,15 +15,15 @@ class Block {
     /**
      * PRIVATE VARIABLES
      */
-    private int id;
-    private boolean collision;
-    private String name;
-    private PImage img;
+    protected int id;
+    protected boolean collision;
+    protected String name;
+    protected PImage img;
     protected PApplet applet;
     private PGraphics pg;
     protected boolean brokkelt;
     protected boolean drawBlock;
-    private boolean killsPlayer;
+    protected boolean killsPlayer;
 
     //constructor
     Block(int id, String name, String imgFileName, boolean collision, boolean killsPlayer,PGraphics pg, PApplet applet) {
@@ -40,6 +40,8 @@ class Block {
         }
         this.pg = pg;
     }
+
+    protected Block() {}
 
     //renders this block on given location
     PImage renderblock() {
