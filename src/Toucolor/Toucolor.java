@@ -7,9 +7,13 @@ package Toucolor;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.data.*;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.security.Key;
 
 /**
@@ -44,6 +48,7 @@ public class Toucolor extends PApplet {
     private Level currentLevel;
     public Startscreen menu;
     public ScoreBoard scoreb;
+    public Startscreen kiesnaam;
     public String status;
     private int levelToLoad;
 
@@ -57,6 +62,7 @@ public class Toucolor extends PApplet {
     private Enemy swag = new Enemy(3,2,0.09f,300,400);
 
     private Player speler;
+    private boolean isDead = false;
 
     private Enemy[] enemies;// =  {poep,lel,swag};
 
@@ -84,7 +90,11 @@ public class Toucolor extends PApplet {
     private Mango[] mangos;
     private static final int MANGOSCORE = 1000;
 
-
+    int iA = 0, iB = 0, iC = 0, iH = 0;
+    String[] A = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+    String[] B = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+    String[] C = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+    String[] arr = {"A","A","A"};
 
     /**
      * initializes the world
@@ -122,7 +132,9 @@ public class Toucolor extends PApplet {
                 break;
             case "scoreboard":
                 scoreb.renderStartScreen();
-                PApplet.println("hier kom ik");
+                break;
+            case "naamkiezen":
+                kiesnaam.renderStartScreen();
                 break;
             case "levelSelectScreen":
                 menu.renderStartScreen();
@@ -188,16 +200,84 @@ public class Toucolor extends PApplet {
     private void checkDood(){
         if(speler.playerDie()){
             PApplet.println("TIS DEUD");
+            isDead =true;
         }
         if(enemies != null) {
             for (Enemy swag : enemies) {
                 if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
                     PApplet.println("TIS DEUD");
+                    isDead = true;
                 }
             }
         }
 
+        //Display de score aan de speler
+        //laat speler naam kiezen en score opslaan
+        //Laad oude csv score
+        //Vergelijk en pas aan
+        //Sla op
+        if(isDead) {
+            getName();
+        }
+
     }
+
+    private void makeScoreFile(){
+        int playerscore = score.getpoints();
+        String playername = A[iA]+B[iB]+C[iC];
+        PApplet.println(playername);
+        int[] sbpoints = new int[10];
+        String[] sbnames = new String[10];
+        int[] sbid = new int[10];
+
+        Table scores = loadTable("score.csv", "header, csv");
+
+        for (int i = 0; i < 10; i++) {
+            TableRow row = scores.getRow(i);
+            int score = row.getInt("score");
+            String name = row.getString("naam");
+            int id = row.getInt("id");
+            sbpoints[i] = score;
+            sbnames[i] = name;
+            sbid[i] = id;
+        }
+
+        for (int i = 0; i < sbpoints.length; i++) {
+            if (playerscore >= sbpoints[i]) {
+                for (int j = sbpoints.length - 1; j >= max(i, 1); j--) {
+                    sbpoints[j] = sbpoints[j - 1];
+                    sbnames[j] = sbnames[j - 1];
+                }
+                sbpoints[i] = playerscore;
+                sbnames[i] = playername;
+                break;
+            }
+        }
+        scores.clearRows();
+
+        PrintWriter scorefile = createWriter("\\data\\score.csv");
+
+        scorefile.println("id,naam,score");
+
+        for (int i = 0; i < sbid.length; i++) {
+            scorefile.println((i+1)+","+sbnames[i]+","+sbpoints[i]);
+        }
+
+        scorefile.flush();
+        scorefile.close();
+        showScoreboard();
+    }
+
+    public void showScoreboard(){
+        status = "scoreboard";
+        scoreb = new ScoreBoard("score.csv",this);
+    }
+
+    private void getName(){
+        status = "naamkiezen";
+        kiesnaam = new Startscreen(arr,this,iH);
+    }
+
 
     //does the animation on the end of a level
     private void doEndAnimation() {
@@ -266,7 +346,6 @@ public class Toucolor extends PApplet {
         this.status = "startscreen";
     }
 
-
     class Animation {
         PImage[] images;
         int imageCount;
@@ -320,6 +399,9 @@ public class Toucolor extends PApplet {
                 //sound of selection
                 soundManager.play("select2");
                 switch (status) {
+                    case "scoreboard":
+                        this.status = "startscreen";
+                        break;
                     case "startscreen":
                         //startscherm is geladen
                         if(menu.getTextOfSelected().equals(menuTexts[0])) {
@@ -329,9 +411,13 @@ public class Toucolor extends PApplet {
                             this.status = "levelSelectScreen";
                         } else {
                             //SCORE HAS BEEN SELECTED
-                            scoreb = new ScoreBoard("score.csv",this);
-                            this.status = "scoreboard";
+                            showScoreboard();
                         }
+                        break;
+                    case "naamkiezen":
+                        PApplet.println("Hier kom ik!");
+                        this.status = "scoreboard";
+                        makeScoreFile();
                         break;
                     case "levelSelectScreen":
                         //levle selectiescherm is geladen
@@ -363,6 +449,66 @@ public class Toucolor extends PApplet {
                         break;
                     case "loadScreen":
 
+                        break;
+                    case "naamkiezen":
+                        soundManager.play("select1");
+                        if(keyCode == UP){
+                            iH--;
+                            if(iH < 0){
+                                iH = 0;
+                            }
+                            kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                        }
+                        if(keyCode == DOWN){
+                            iH++;
+                            if(iH >2){
+                                iH = 2;
+                            }
+                            kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                        }
+                        menu.keyPressed(iH,1);
+                        if(keyCode == RIGHT){
+                            if(iH == 0){
+                                iA++;
+                                if(iA > A.length ){
+                                    iA = A.length-1;
+                                }
+                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                            } else if(iH == 1){
+                                iB++;
+                                if(iB > B.length ){
+                                    iB = B.length-1;
+                                }
+                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                            }else if (iH == 2){
+                                iC++;
+                                if(iC > C.length ){
+                                    iC = C.length-1;
+                                }
+                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                            }
+                        }
+                        if(keyCode == LEFT){
+                            if(iH == 0){
+                                iA--;
+                                if(iA < 0){
+                                    iA = 0;
+                                }
+                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                            } else if(iH == 1){
+                                iB --;
+                                if(iB < 0){
+                                    iB = 0;
+                                }
+                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                            }else if (iH == 2){
+                                iC--;
+                                if(iC < 0){
+                                    iC = 0;
+                                }
+                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
+                            }
+                        }
                         break;
                     case "playing":
                         //only check for input when level is not ending
@@ -419,8 +565,6 @@ public class Toucolor extends PApplet {
                 break;
         }
     }
-
-
     /**
      * creates new level object and initializes it.
      * makes it ready to render the level

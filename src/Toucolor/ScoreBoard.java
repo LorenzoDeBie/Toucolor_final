@@ -18,10 +18,12 @@ class ScoreBoard extends Startscreen{
             int id = row.getInt("id");
             String naam = row.getString("naam");
             int score = row.getInt("score");
-            bestplayers[i] = id+" "+naam+" "+score;
+            bestplayers[i] = id+"       "+naam+"        "+score;
         }
+
         logo = applet.loadImage("menu_logo.png");
         super.changeNames(bestplayers);
     }
+
 
 }

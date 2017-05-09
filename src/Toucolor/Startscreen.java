@@ -12,10 +12,10 @@ import java.awt.print.Paper;
  */
 class Startscreen {
     //these be static bcuz lulz
-    private static int BUTTONWIDTH = 160;
-    private static int BUTTONHEIGHT = 80;
-    private static int STARTY = 200;
-    private static int SPACEBETWOONBUTTONS = 40;
+    private static int BUTTONWIDTH = 600;
+    private static int BUTTONHEIGHT = 50;
+    private static int STARTY = 160;
+    private static int SPACEBETWOONBUTTONS = 5;
 
     //PROPERTIES
     protected PImage bImage; //background image
@@ -44,7 +44,15 @@ class Startscreen {
         }
         selectedButton = menuItems[0];
         selectedButton.buildSelecter();
+    }
 
+    void changeNames(String[] names, int p){
+        menuItems = new menuButton[names.length];
+        for (int i = 0; i < menuItems.length; i++) {
+            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, names[i], applet, i);
+        }
+        selectedButton = menuItems[p];
+        selectedButton.buildSelecter();
     }
 
     //menu selection screen
@@ -60,7 +68,6 @@ class Startscreen {
         for (int i = 0; i < menuItems.length; i++) {
             menuItems[i] = new menuButton(applet.width/2, 200 + (i * 120), 160, 80, itemsText[i], applet, i);
         }
-
         selectedButton = menuItems[0];
         selectedButton.buildSelecter();
 //
@@ -96,6 +103,22 @@ class Startscreen {
         }
 
         selectedButton = menuItems[0];
+        selectedButton.buildSelecter();
+    }
+
+    public Startscreen(String[] itemsText, PApplet applet, int o) {
+        //load the logo to display on top of page
+        logo = applet.loadImage("menu_logo.png");
+        //set on which applet to draw
+        this.applet = applet;
+
+        //all the items in the menu
+        menuItems = new menuButton[itemsText.length];
+
+        for (int i = 0; i < menuItems.length; i++) {
+            menuItems[i] = new menuButton(applet.width / 2, 200 + (i * 120), 160, 80, itemsText[i], applet, i);
+        }
+        selectedButton = menuItems[o];
         selectedButton.buildSelecter();
     }
 
@@ -135,6 +158,25 @@ class Startscreen {
         else if(keyCode == KeyEvent.VK_DOWN && (selectedButton.arrayID + 1  < menuItems.length)) {
             //down arrow
             selectedButton = menuItems[selectedButton.arrayID + 1];
+            selectedButton.buildSelecter();
+        }
+    }
+
+    void keyPressed(int select, int random) {
+        int test = random;
+        //checks which key and if the key is possible
+        //up
+        if(select == 0) {
+            selectedButton = menuItems[0];
+            selectedButton.buildSelecter();
+        }
+        else if(select == 1) {
+            //down arrow
+            selectedButton = menuItems[1];
+            selectedButton.buildSelecter();
+        }
+        else if(select == 2){
+            selectedButton = menuItems[2];
             selectedButton.buildSelecter();
         }
     }

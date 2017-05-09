@@ -26,7 +26,7 @@ class Score{
     }
 
     //getters and setters
-    int getpoints() {
+    public int getpoints() {
         return points;
     }
 
