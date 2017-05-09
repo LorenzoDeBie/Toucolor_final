@@ -37,7 +37,7 @@ class Startscreen {
 
     }
 
-    void changeNames(String[] names, PApplet applet){
+    void changeNames(String[] names){
         menuItems = new menuButton[names.length];
         for (int i = 0; i < menuItems.length; i++) {
             menuItems[i] = new menuButton(20, 20 + (i * 120), 250, 80, names[i], applet, i);

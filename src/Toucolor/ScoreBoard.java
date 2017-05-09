@@ -24,7 +24,7 @@ public class ScoreBoard extends Startscreen{
             int score = row.getInt("score");
             bestplayers[i] = id+" "+naam+" "+score;
         }
-        super.changeNames(bestplayers, applet);
+        super.changeNames(bestplayers);
 
 
 
