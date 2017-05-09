@@ -98,7 +98,7 @@ class Actor {
         actorX = fullUpdateX;
         actorY = fullUpdateY;
 
-        if(actorY > 645){
+        if(actorY > Toucolor.WORLDHEIGHT){
             touchedDeadly = true;
         }
 

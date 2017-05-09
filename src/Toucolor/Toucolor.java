@@ -34,7 +34,7 @@ public class Toucolor extends PApplet {
      */
     //width & height of world
     static final int WORLDWIDTH = 1280;
-    static final int WORLDHEIGHT = 720;
+    static final int WORLDHEIGHT = 1024;
     static int BLOCKSIZE = 80;
     //temp actorX --> goes into object later
     private int actorX;
@@ -92,7 +92,12 @@ public class Toucolor extends PApplet {
         frameRate(144);
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
-        thread("initWorld");
+        //thread("initWorld");
+        //custom test code
+        this.levelToLoad = 4;
+        //create a sound manager
+        soundManager = new Sounds(this);
+        thread("startLevel");
     }
 
     /**
@@ -102,6 +107,7 @@ public class Toucolor extends PApplet {
     @Override
     public void settings() {
         size(WORLDWIDTH, WORLDHEIGHT);
+        //fullScreen();
     }
 
     /**
@@ -254,7 +260,7 @@ public class Toucolor extends PApplet {
         menu = new Startscreen( menuTexts, this);
 
         //create a sound manager
-        soundManager = new Sounds(status, this);
+        soundManager = new Sounds(this);
 
         this.status = "startscreen";
     }
@@ -286,7 +292,9 @@ public class Toucolor extends PApplet {
             }else{
                 speler.imgCounter = 0;
             }
-            xpos = (((xpos - 600) < 0) ? xpos : 600);
+            if(!currentLevel.isCameraLocked()) {
+                xpos = (((xpos - 600) < 0) ? xpos : 600);
+            }
             //kijkt naar rechts
             if(lastM == 'r' || lastM == 'n') {
                 //TODO: edit to make the
@@ -426,6 +434,10 @@ public class Toucolor extends PApplet {
         timer = new Time(LEVELTIME, this);
         score = new Score(this);
         mangos = currentLevel.getMangos();
+        //lock camera if boss level
+        if(currentLevel.numberOfcurrentLevel() == 4) {
+            currentLevel.setCameraLocked(true);
+        }
 
         this.status = "playing";
 

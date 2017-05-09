@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 class Sounds {
-    private String status;
     private Toucolor applet;
 
     private static final List<String> events = Arrays.asList("select1", "select2", "jump", "die", "coin", "end");
@@ -17,9 +16,8 @@ class Sounds {
     private Minim minim;
     private AudioPlayer[] soundFiles;
 
-    Sounds(String status, Toucolor applet) {
+    Sounds(Toucolor applet) {
         this.applet = applet;
-        this.status = status;
         loadFiles();
 
     }
