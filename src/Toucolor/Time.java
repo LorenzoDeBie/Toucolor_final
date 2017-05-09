@@ -34,8 +34,9 @@ class Time{
 
     void renderTime(){
         update();
+        applet.textSize(16);
         applet.fill(0);
-        applet.text("Time: " + timeLeftSeconds, 960, 100);
+        applet.text("Time: " + timeLeftSeconds, 1060, 20);
     }
 
     int millisLeft() {

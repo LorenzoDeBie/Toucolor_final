@@ -2,6 +2,8 @@ package Toucolor;
 
 import processing.core.PApplet;
 
+import java.awt.*;
+
 /**
  * Created by Vince on 5/5/2017.
  */
@@ -16,8 +18,10 @@ class Actor {
     boolean mU = false;
 
     float actorX = 150, actorY=300, xblock, yblock;
-    boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping, cancelJump;
+    boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping, cancelJump, upispressed;
     int blockSize = Toucolor.BLOCKSIZE;
+    Actor type;
+    int collblocks;
 
 
 
@@ -26,13 +30,15 @@ class Actor {
         this.propterties = props;
     }
 
-    protected void collision(float r, float l, float u, float d, boolean inDeLucht, boolean springt) {
-        updateR = r;
-        updateL = l;
-        updateU = u;
-        updateD = d;
+    protected void collision(float r, float l, float u, float d, boolean inDeLucht, boolean springt, boolean upispressed) {
+        collblocks = 0;
+        this.updateR = r;
+        this.updateL = l;
+        this.updateU = u;
+        this.updateD = d;
         isInAir = inDeLucht;
         jumping = springt;
+        this.type = type;
 
         horizontaleCollision = false;
         verticaleCollision = false;
@@ -45,6 +51,10 @@ class Actor {
             fullUpdateX = 0;
         }
 
+        if((propterties[1][0] || propterties[2][0]) && propterties[6][0] && !propterties[4][0]){
+            fullUpdateY = actorY;
+        }
+
         for (int i = 0; i< fullCoords.length; i++) {
             //PApplet.println(i);
             xblock = fullCoords[i][0];
@@ -52,45 +62,57 @@ class Actor {
             canCollide = propterties[i][0];
             isDeadly = propterties[i][1];
 
-            if(canCollide && PApplet.abs(fullUpdateY - yblock)< blockSize && PApplet.abs(actorX - xblock)< blockSize){
-                //enkel y-beweging zal colliden
-                verticaleCollision = true;
-                if(fullUpdateY - yblock < 0){
-                    fullUpdateY = yblock - blockSize;
-                    isInAir = false;
-                    if(isDeadly){
-                        touchedDeadly = true;
+
+            Rectangle fullplayer = new Rectangle((int)fullUpdateX, (int)fullUpdateY, blockSize, blockSize);
+            Rectangle lastplayer = new Rectangle((int)actorX, (int)actorY, blockSize, blockSize);
+            Rectangle playerX = new Rectangle((int)fullUpdateX, (int)actorY, blockSize, blockSize);
+            Rectangle playerY = new Rectangle((int)actorX, (int)fullUpdateY, blockSize, blockSize);
+            Rectangle currblock = new Rectangle((int)xblock, (int)yblock, blockSize, blockSize);
+
+
+            if(canCollide && fullplayer.intersects(currblock)) {
+                if (!isDeadly) {
+                    if (canCollide && playerY.intersects(currblock) && !upispressed) {
+                        if (!lastplayer.intersects(currblock)) {
+                            if(jumping){
+                                fullUpdateY = fullCoords[1][1] + blockSize;
+                                cancelJump = true;
+                            } else {
+                                fullUpdateY = actorY;
+                                isInAir = false;
+                            }
+
+                        } else {
+                            if (jumping) {
+                                fullUpdateY = fullCoords[1][1] + blockSize;
+                                cancelJump = true;
+                            } else {
+                                fullUpdateY = fullCoords[6][1] - blockSize;
+                                isInAir = false;
+                            }
+                        }
+                    } else {
+                        PApplet.println("collide niet met Y");
+                    }
+                    if (canCollide && playerX.intersects(currblock)) {
+                        if (!lastplayer.intersects(currblock)) {
+                            fullUpdateX = actorX;
+                        } else {
+                            if (updateL + updateR > 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)) {
+                                fullUpdateX = fullCoords[4][0] - blockSize;
+                            } else if (updateL + updateR < 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)) {
+                                fullUpdateX = fullCoords[3][0] + blockSize;
+                            }
+                        }
+                    } else {
+                        PApplet.println("Collide niet met x");
                     }
 
-                }
-                else if(fullUpdateY - yblock > 0){
-                    verticaleCollision = true;
-                    fullUpdateY = actorY;
-                    if(jumping) {
-                        fullUpdateY = yblock + blockSize;
-                        cancelJump = true;
-                    }
-                    if(isDeadly){
-                        touchedDeadly = true;
-                    }
+                } else {
+                    touchedDeadly = true;
                 }
             }
 
-            if(canCollide && PApplet.abs(fullUpdateX - xblock) < blockSize && PApplet.abs(actorY - yblock) < blockSize){
-                //enkel de x-beweging zal colliden
-                horizontaleCollision = true;
-                if(updateD + updateU == 8) {
-                    if(xblock - fullUpdateX > 0 && xblock - fullUpdateX <= 5){
-                        fullUpdateX = xblock - blockSize;
-                    } else if(xblock - fullUpdateX < 0 && xblock - fullUpdateX >= -5){
-                        fullUpdateX = xblock + blockSize;
-                    } else{
-                        fullUpdateX = actorX;
-                    }
-                } else if (updateD + updateU != 8){
-                    fullUpdateX = actorX;
-                }
-            }
         }
 
         customHorizontaleCollision = horizontaleCollision;

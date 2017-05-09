@@ -54,6 +54,7 @@ import processing.core.*;
             mD = true;
         } else {
             if (jumping) {
+                upIsPressed = false;
                 mU = true;
             } else {
                 if (upIsPressed) {
@@ -96,7 +97,7 @@ import processing.core.*;
                 upIsPressed = false;
             }
         }
-        collision(updateR, updateL, updateU, updateD, isInAir, jumping);
+        collision(updateR, updateL, updateU, updateD, isInAir, jumping, upIsPressed);
     }
 
     public boolean isHorizontaleCollision() {
@@ -107,6 +108,15 @@ import processing.core.*;
         upIsPressed = false;
         jumping = false;
     }
+
+    public void setRight(){
+        rightPressed = false;
+    }
+
+    public void setLeft(){
+        leftPressed = false;
+    }
+
 
 
     public boolean playerDie(){
