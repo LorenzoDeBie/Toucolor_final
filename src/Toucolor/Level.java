@@ -34,7 +34,7 @@ class Level {
      * PRIVATE VARIABLES
      */
     //applet
-    private PApplet applet;
+    private Toucolor applet;
     //alles voor loadTiles();
     private Block[] tileBlocks; //array met alle afbeeldingen van de tiles
     private String levelFileName; //name of the file which describes the Level
@@ -43,6 +43,9 @@ class Level {
     private PGraphics level;
     private int length;
     private int number;
+    private int rows;
+    private int columns;
+    private boolean cameraLocked;
 
     //alles voor einde van level
     private boolean levelEnding;
@@ -54,13 +57,16 @@ class Level {
     //alles voor mango's
     private Mango[] mangos;
 
+    //alles voor tempblocks
+    List<TempBlock> tempBlocks;
+
     //returns an array of mango elements
     Mango[] getMangos() {
         return mangos;
     }
 
     //not sure if this is used somewhere
-    Level(PApplet applet, int number) {
+    Level(Toucolor applet, int number) {
         this.applet = applet;
         this.levelFileName = "level" + number + ".csv";
         loadTiles();
@@ -68,6 +74,7 @@ class Level {
         background = applet.loadImage("Background.jpg");
         this.levelEnding = false;
         this.number = number;
+        this.cameraLocked = false;
     }
 
     /**
@@ -103,8 +110,12 @@ class Level {
             boolean brokkelt = PApplet.parseBoolean(row.getString("brokkelt"));
             boolean kills = PApplet.parseBoolean(row.getString("death"));
 
-            tileBlocks[id] = new Block(id, name, imgFileName, collision, brokkelt, kills, level, applet); //load the img into the array
-
+            if(!brokkelt) {
+                tileBlocks[id] = new Block(id, name, imgFileName, collision, kills, level, applet);
+            }
+            else {
+                tileBlocks[id] = new Block(id, name, "Background.jpg", collision, kills, level, applet); //load the img into the array
+            }
 //            //debug info
 //            PApplet.print("img loaded:" + row.getString("filename") + "\n");
         }
@@ -119,27 +130,27 @@ class Level {
         Table myTable = applet.loadTable(levelFileName, "csv");
 
         //get number of rows & columns in the Level
-        int rowCount = myTable.getRowCount();
-        int columnCount = myTable.getColumnCount();
+        this.rows = myTable.getRowCount();
+        this.columns = myTable.getColumnCount();
 
         //this var is used when determining if the level is ending
-        this.length = columnCount * this.BLOCKWIDTH;
+        this.length = columns * this.BLOCKWIDTH;
 
         //create the array for the Level
-        levelMap = new int[columnCount][rowCount];
+        levelMap = new int[columns][rows];
 
         //loop through the rows
-        for (int i = 0; i < rowCount; i++) {
+        for (int i = 0; i < rows; i++) {
             TableRow row = myTable.getRow(i);//get next row
             //loop through the columns
-            for(int c = 0; c < columnCount; c++) {
+            for(int c = 0; c < columns; c++) {
                 levelMap[c][i] = row.getInt(c);//map the int to right position in array
                 //PApplet.print(i +" " + c + "\n");
             }
         }
 
-        int levelWidth = columnCount * Toucolor.BLOCKSIZE;
-        int levelHeight = rowCount * Toucolor.BLOCKSIZE;
+        int levelWidth = columns * Toucolor.BLOCKSIZE;
+        int levelHeight = rows * Toucolor.BLOCKSIZE;
         level = applet.createGraphics(levelWidth, levelHeight);
         level.beginDraw();
         //we draw the level here
@@ -152,9 +163,13 @@ class Level {
 
         //list to add mangos
         List<Mango> listMangos = new ArrayList<Mango>();
-        for (int i = 0; i < columnCount; i++) {
-            for (int u = 0; u < 9; u++) {
+        tempBlocks = new ArrayList<TempBlock>();
+        for (int i = 0; i < columns; i++) {
+            for (int u = 0; u < rows; u++) {
                 Block currentBlock = tileBlocks[levelMap[i][u]];
+                if(currentBlock.getName().equals("Tijdelijke blok")) {
+                    tempBlocks.add(new TempBlock(i * 80, u * 80, 5000, currentBlock.killsPlayer, applet));
+                }
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
                     if(currentBlock.getName().equals("Mango")) {
@@ -179,13 +194,35 @@ class Level {
      *
      * @param playerX x-coordinate of player
      */
-    void renderLevel(int playerX) {
-        if(tileBlocks[levelMap[(playerX / BLOCKWIDTH) + 1][2]].getName().equals("Test")) {
-            this.levelEnding = true;
+    void renderLevel(int playerX, int playerY) {
+
+        //render map
+        int drawX = 0;
+        if(!cameraLocked) {
+            if(tileBlocks[levelMap[(playerX / BLOCKWIDTH) + 1][2]].getName().equals("Test")) {
+                this.levelEnding = true;
+            }
+            drawX = -((((playerX - 600) < 0) ? 0 : (playerX - 600)));
         }
-        int drawX = -((((playerX - 600) < 0) ? 0 : (playerX - 600)));
+
         applet.imageMode(PConstants.CORNER);
         applet.image(level, drawX, 0);
+
+        //render each tempblock that in on the screen
+        for(TempBlock block : tempBlocks) {
+            if(drawX < block.getBlockX() && block.getBlockX() < -drawX + Toucolor.WORLDWIDTH && block.drawBlock) {
+                //calc where to draw  the block
+                int drawBlockX = block.getBlockX() + drawX;
+                //draw the block
+                applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+            }
+            //and to everything that needs to happen when standing on it
+            if(PApplet.abs(block.getBlockX() - playerX) < Toucolor.BLOCKSIZE && block.getBlockY() - playerY == Toucolor.BLOCKSIZE) {
+                block.standOn();
+            }
+            //update the block (this does the counting down + changes the drawBlock field
+            block.update();
+        }
     }
 
     /**
@@ -251,7 +288,7 @@ class Level {
 
         return coords;
     }
-
+    //is used with getCoords, gives the properties of the blocks from coords
     boolean[][] getColAndDeath(int playerX, int playerY) {
         boolean[][] bools = new boolean[8][2];
 
@@ -266,8 +303,8 @@ class Level {
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
 
         //PApplet.println(startblockX+" "+startblockY);
-        if(startblockY+2 > 8){
-            startblockY = 6;
+        if(startblockY+3 > this.rows){
+            startblockY = rows - 3;
         }
         if(startblockX < 0){
             startblockX = 0;
@@ -325,14 +362,26 @@ class Level {
         return  bools;
     }
 
+    //getter for levelEnding
     boolean isLevelEnding() {
         return this.levelEnding;
     }
 
+    //getter for the number of the level that is being played
     int numberOfcurrentLevel() {
         return this.number;
     }
 
+    //used to lock the camera (is used in boss level)
+    void setCameraLocked(boolean locked) {
+        this.cameraLocked = locked;
+    }
+
+    boolean isCameraLocked() {
+        return this.cameraLocked;
+    }
+
+    //changes one block in the map
     void changeBlock(int x, int y, int newBlock, boolean playerCoords) {
         int drawX, drawY;
         level.beginDraw();
@@ -348,19 +397,5 @@ class Level {
         level.image(tileBlocks[newBlock].renderblock(), drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
         level.endDraw();
         levelMap[drawX][drawY] = newBlock;
-    }
-
-    /**
-     * test function
-     * @param x qsdf
-     * @param y qsdf
-     * @param width qdsf
-     * @param height qsdf
-     * @param applet  Applet to draw on
-     *
-     */
-    public void drawRect(int x, int y, int width, int height, PApplet applet) {
-        //rect(x, y, width, height);
-        applet.rect(10,10,10,10);
     }
 }

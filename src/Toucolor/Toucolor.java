@@ -45,6 +45,7 @@ public class Toucolor extends PApplet {
     //array of the world which stores the Level
 
     //levelmanager functions
+
     private Level currentLevel;
     private Startscreen menu;
     private ScoreBoard scoreb;
@@ -102,6 +103,11 @@ public class Toucolor extends PApplet {
         status = "initializing";
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
         thread("initWorld");
+        //custom test code
+//        this.levelToLoad = 4;
+//        //create a sound manager
+//        soundManager = new Sounds(this);
+//        thread("startLevel");
     }
 
     /**
@@ -111,6 +117,7 @@ public class Toucolor extends PApplet {
     @Override
     public void settings() {
         size(WORLDWIDTH, WORLDHEIGHT);
+        //fullScreen();
     }
 
     /**
@@ -143,7 +150,7 @@ public class Toucolor extends PApplet {
                 break;
             case "playing":
                 //renders the level (blocks and stuff)
-                currentLevel.renderLevel((int) speler.actorX);
+                currentLevel.renderLevel((int) speler.actorX, (int) speler.actorY);
                 //refreshes all the values for the blocks around the player
                 refreshAllValues();
                 //dot this if player is dead
@@ -225,63 +232,6 @@ public class Toucolor extends PApplet {
                     case "naamkiezen":
                         soundManager.play("select1");
                         scoreb.keyPressed(keyCode, status);
-//                        if(keyCode == UP){
-//                            iH--;
-//                            if(iH < 0){
-//                                iH = 0;
-//                            }
-//                            kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                        }
-//                        if(keyCode == DOWN){
-//                            iH++;
-//                            if(iH >2){
-//                                iH = 2;
-//                            }
-//                            kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                        }
-//                        menu.keyPressed(iH,1);
-//                        if(keyCode == RIGHT){
-//                            if(iH == 0){
-//                                iA++;
-//                                if(iA > A.length-1 ){
-//                                    iA = A.length-1;
-//                                }
-//                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                            } else if(iH == 1){
-//                                iB++;
-//                                if(iB > B.length-1 ){
-//                                    iB = B.length-1;
-//                                }
-//                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                            }else if (iH == 2){
-//                                iC++;
-//                                if(iC > C.length-1 ){
-//                                    iC = C.length-1;
-//                                }
-//                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                            }
-//                        }
-//                        if(keyCode == LEFT){
-//                            if(iH == 0){
-//                                iA--;
-//                                if(iA < 0){
-//                                    iA = 0;
-//                                }
-//                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                            } else if(iH == 1){
-//                                iB --;
-//                                if(iB < 0){
-//                                    iB = 0;
-//                                }
-//                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                            }else if (iH == 2){
-//                                iC--;
-//                                if(iC < 0){
-//                                    iC = 0;
-//                                }
-//                                kiesnaam = new Startscreen(new String[]{A[iA],B[iB],C[iC]},this,iH);
-//                            }
-//                        }
                         break;
                     case "playing":
                         //only check for input when level is not ending
@@ -425,7 +375,6 @@ public class Toucolor extends PApplet {
             fill(0, this.lastOpacity);
             rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
             lastOpacity+=2;
-
         }
 
     }
@@ -456,7 +405,9 @@ public class Toucolor extends PApplet {
             }else{
                 speler.imgCounter = 0;
             }
-            xpos = (((xpos - 600) < 0) ? xpos : 600);
+            if(!currentLevel.isCameraLocked()) {
+                xpos = (((xpos - 600) < 0) ? xpos : 600);
+            }
             //kijkt naar rechts
             if(lastM == 'r' || lastM == 'n') {
                 //TODO: edit to make the
@@ -511,6 +462,10 @@ public class Toucolor extends PApplet {
         timer = new Time(LEVELTIME, this);
         score = new Score(this);
         mangos = currentLevel.getMangos();
+        //lock camera if boss level
+        if(currentLevel.numberOfcurrentLevel() == 4) {
+            currentLevel.setCameraLocked(true);
+        }
 
         this.status = "playing";
 
@@ -546,6 +501,10 @@ public class Toucolor extends PApplet {
         soundManager = new Sounds(status, this);
 
         this.status = "startscreen";
+    }
+
+    Level getCurrentLevel() {
+        return this.currentLevel;
     }
 
 
