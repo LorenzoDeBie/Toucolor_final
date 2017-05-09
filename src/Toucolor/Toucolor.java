@@ -121,7 +121,7 @@ public class Toucolor extends PApplet {
                 menu.renderStartScreen();
                 break;
             case "scoreboard":
-                menu.renderStartScreen();
+                scoreb.renderStartScreen();
                 PApplet.println("hier kom ik");
                 break;
             case "levelSelectScreen":
