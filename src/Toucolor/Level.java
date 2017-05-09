@@ -194,7 +194,7 @@ class Level {
      *
      * @param playerX x-coordinate of player
      */
-    void renderLevel(int playerX) {
+    void renderLevel(int playerX, int playerY) {
         int drawX = 0;
         if(!cameraLocked) {
             if(tileBlocks[levelMap[(playerX / BLOCKWIDTH) + 1][2]].getName().equals("Test")) {
