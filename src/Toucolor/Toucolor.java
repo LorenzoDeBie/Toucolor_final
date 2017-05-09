@@ -41,7 +41,7 @@ public class Toucolor extends PApplet {
     //array of the world which stores the Level
 
     //levelmanager functions
-    private Level currentLevel;
+    Level currentLevel;
     public Startscreen menu;
     public String status;
     private int levelToLoad;
