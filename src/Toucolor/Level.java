@@ -292,9 +292,10 @@ class Level {
         int startblockY = (playerY / Toucolor.BLOCKSIZE) - 1;
 
         //PApplet.println(startblockX+" "+startblockY);
-        if(startblockY+2 > this.rows){
-            startblockY = rows - 2;
+        if(startblockY+3 > this.rows){
+            startblockY = rows - 3;
         }
+        PApplet.println(startblockY);
         if(startblockX < 0){
             startblockX = 0;
         }
