@@ -211,7 +211,7 @@ class Level {
                 int drawBlockX = block.getBlockX() - drawX;
                 applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
             }
-            PApplet.println(block.getBlockY() - playerY);
+
             if(PApplet.abs(block.getBlockX() - playerX) < Toucolor.BLOCKSIZE && block.getBlockY() - playerY == Toucolor.BLOCKSIZE) {
                 block.standOn();
             }

@@ -15,6 +15,7 @@ class TempBlock extends Block {
     private int timeTillGone;
     private int blockX;
     private int blockY;
+    private boolean isBroken;
 
     TempBlock(int blockX, int blockY,int timeTillGone, boolean killsPlayer, PApplet applet) {
         this.timeTillGone = timeTillGone;
@@ -25,13 +26,19 @@ class TempBlock extends Block {
         this.img = applet.loadImage("TempBlock.png");
         this.id = 4;
         this.applet = applet;
+        this.drawBlock = true;
+        this.isBroken = false;
     }
 
     //this makes the block flikker
     private void flikker() {
-        if((millisTillGone % (applet.frameRate / 2)) == 0) {
-            this.drawBlock = !this.drawBlock; //changes true to false and opposite
+        if(millisTillGone < 2000) {
+            this.drawBlock = (millisTillGone / 1000) % 2 == 0;
         }
+        else {
+            this.drawBlock = (millisTillGone / 100) % 2 == 0;
+        }
+
     }
 
     //called by player
@@ -43,6 +50,7 @@ class TempBlock extends Block {
         else {
             startMillis = applet.millis();
             millisTillGone = timeTillGone;
+            isStandingOn = true;
         }
 
         if(millisTillGone <= 0) {
@@ -52,7 +60,14 @@ class TempBlock extends Block {
     }
 
     private void destroyBlock() {
+        this.drawBlock = false;
+        this.isStandingOn = false;
+        this.isBroken = true;
         super.destroyblock();
+    }
+
+    boolean getIsBroken() {
+        return this.isBroken;
     }
 
     int getBlockX(){
