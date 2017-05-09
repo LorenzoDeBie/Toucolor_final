@@ -31,7 +31,8 @@ class Score{
     }
 
     void renderScore(){
+        applet.textSize(16);
         applet.fill(0);
-        applet.text("Score: "+points, 1160, 100);
+        applet.text("Score: "+points, 1160, 20);
     }
 }
