@@ -7,9 +7,13 @@ package Toucolor;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.data.*;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.security.Key;
 
 /**
@@ -41,22 +45,22 @@ public class Toucolor extends PApplet {
     //array of the world which stores the Level
 
     //levelmanager functions
-    Level currentLevel;
-    public Startscreen menu;
-    public ScoreBoard scoreb;
-    public String status;
+
+    private Level currentLevel;
+    private Startscreen menu;
+    private ScoreBoard scoreb;
+    private String status;
     private int levelToLoad;
 
-    private String[] kaka = {"Piemelanus"};
 
-
-    Animation playerWandelen, enemyWandelen;
+    private Animation playerWandelen, enemyWandelen;
 
     private Enemy poep = new Enemy(4,1,0.5f,100,500);
     private Enemy lel = new Enemy(1,2,0.001f,200,200);
     private Enemy swag = new Enemy(3,2,0.09f,300,400);
 
     private Player speler;
+    private boolean isDead = false;
 
     private Enemy[] enemies;// =  {poep,lel,swag};
 
@@ -84,7 +88,10 @@ public class Toucolor extends PApplet {
     private Mango[] mangos;
     private static final int MANGOSCORE = 1000;
 
+    //score stuff
+    private static final String SCOREFILE = "score.csv";
 
+    //Processing functions
 
     /**
      * initializes the world
@@ -125,13 +132,18 @@ public class Toucolor extends PApplet {
                 break;
             case "startscreen":
                 menu.renderStartScreen();
+                menu.renderSelecter();
                 break;
             case "scoreboard":
-                scoreb.renderStartScreen();
-                PApplet.println("hier kom ik");
+                scoreb.renderScoreboard();
+                break;
+            case "naamkiezen":
+                scoreb.renderNameSelection();
+                scoreb.renderSelecter();
                 break;
             case "levelSelectScreen":
                 menu.renderStartScreen();
+                menu.renderSelecter();
                 break;
             case "loadScreen":
                 loadScreen.renderLoadScreen();
@@ -144,8 +156,6 @@ public class Toucolor extends PApplet {
                 //dot this if player is dead
                 //TODO: will be changed to fade to black and stuff
                 if(speler.playerIsDead){
-//                    speler.actorX = 300;
-//                    speler.actorY = 500;
                     speler.playerIsDead = false;
                 }
                 if (currentLevel.isLevelEnding()) {
@@ -162,162 +172,6 @@ public class Toucolor extends PApplet {
                 break;
         }
     }
-
-    private void doMango() {
-        for(Mango mango : mangos) {
-            if (mango.isColliding((int) speler.actorX, (int) speler.actorY) && !mango.isClaimed()) {
-                mango.claim();
-                currentLevel.changeBlock((int) mango.actorX, (int) mango.actorY, 0, true);
-                score.addToScore(MANGOSCORE);
-            }
-        }
-    }
-
-    //handles player movement + rendering
-    private void doPlayer() {
-        speler.keyUse();
-        playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
-        checkDood();
-        doMango();
-    }
-
-    private void doEnemies(){
-        //Update movement van alle enemies
-        if(enemies != null) {
-            for (Enemy swag : enemies) {
-                swag.Move();
-                enemyWandelen.display(swag.actorX, swag.actorY, 'r', 0);
-            }
-        }
-    }
-
-    private void checkDood(){
-        if(speler.playerDie()){
-            PApplet.println("TIS DEUD");
-        }
-        if(enemies != null) {
-            for (Enemy swag : enemies) {
-                if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
-                    PApplet.println("TIS DEUD");
-                }
-            }
-        }
-
-    }
-
-    //does the animation on the end of a level
-    private void doEndAnimation() {
-        /**
-         * the player keeps going right untill it collides with a block
-         * the map will be made so that on the end of the level there will only be one block which collides
-         * as soon as he collides we switch images
-         * and then the screen slowly fades to black
-         */
-        //do movement
-        speler.rightPressed = true;
-        doPlayer();
-        //check for collision
-        if (speler.isHorizontaleCollision()) {
-            //if collides check if images have changed
-            if(!imageHasSwitched) {
-                //switch images here
-                imageHasSwitched = true;
-            }
-            //slowly fade to black
-            if(lastOpacity > 255) {
-                //set the loading screen and change status
-                loadScreen.setText("Loading next level, please wait.");
-                this.levelToLoad = currentLevel.numberOfcurrentLevel() + 1;
-                thread("startLevel");
-                this.status = "loadScreen";
-                return;
-            }
-            fill(0, this.lastOpacity);
-            rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
-            lastOpacity+=2;
-        }
-
-    }
-
-    /**
-     * creates menu screen
-     * loads in all the files for the levels, blocks and other info
-     * creates player
-     *
-     */
-    public void initWorld() {
-        //check if the files for the levels exist
-        numberOfLevels = 0;
-        boolean fileExists = true;
-        //load necessary files
-        for (int i = 0; fileExists; i++) {
-            File f = new File(sketchPath() + "/data/level" + (i+1) + ".csv");
-            if(f.exists() && !f.isDirectory()) {
-                numberOfLevels++;
-            } else { fileExists = false;}
-        }
-
-        levelFiles = new String[numberOfLevels];
-        for(int i = 0; i < numberOfLevels; i++) {
-            levelFiles[i] = "level" + (i+1) + ".csv";
-        }
-
-        //creating menu screen
-        menu = new Startscreen( menuTexts, this);
-
-        //create a sound manager
-        soundManager = new Sounds(this);
-
-        this.status = "startscreen";
-    }
-
-
-    class Animation {
-        PImage[] images;
-        int imageCount;
-        int frame;
-
-        Animation(String imagePrefix, int count) {
-            imageCount = count;
-            images = new PImage[imageCount];
-            for (int i = 0; i < imageCount; i++) {
-                String filename = imagePrefix + nf(i, 1) + ".png";
-                images[i] = loadImage(filename);
-            }
-        }
-
-        void display(float xpos, float ypos, char lastM, int frameR) {
-            if(frameR < (144/4)) {
-                frame = 0;
-            }else if(frameR < (144/4)*2){
-                frame = 1;
-            }else if(frameR < (144/4)*3 ){
-                frame = 2;
-            }else if(frameR < (144/4) *4){
-                frame = 3;
-            }else{
-                speler.imgCounter = 0;
-            }
-            if(!currentLevel.isCameraLocked()) {
-                xpos = (((xpos - 600) < 0) ? xpos : 600);
-            }
-            //kijkt naar rechts
-            if(lastM == 'r' || lastM == 'n') {
-                //TODO: edit to make the
-
-                image(images[frame], xpos, ypos, BLOCKSIZE, BLOCKSIZE);
-            }
-            //kijkt naar links
-            else{
-                pushMatrix();
-                scale(-1,1);
-                image(images[frame], - (xpos + images[frame].width), ypos, BLOCKSIZE, BLOCKSIZE);
-                popMatrix();
-            }
-        }
-
-    }
-
     @Override
     public void keyPressed() {
         //TODO: een defitge logica schrijven voor dit
@@ -327,18 +181,25 @@ public class Toucolor extends PApplet {
                 //sound of selection
                 soundManager.play("select2");
                 switch (status) {
+                    case "scoreboard":
+                        this.status = "startscreen";
+                        break;
                     case "startscreen":
                         //startscherm is geladen
                         if(menu.getTextOfSelected().equals(menuTexts[0])) {
-
                             //PLAY HAS BEEN SELECTED
                             menu = new Startscreen(this.numberOfLevels, this);
                             this.status = "levelSelectScreen";
                         } else {
                             //SCORE HAS BEEN SELECTED
-                            scoreb = new ScoreBoard("score.csv",this);
+                            scoreb = new ScoreBoard(SCOREFILE, this);
                             this.status = "scoreboard";
                         }
+                        break;
+                    case "naamkiezen":
+                        scoreb.saveScore(score.getpoints());
+                        scoreb.loadScores();
+                        this.status = "scoreboard";
                         break;
                     case "levelSelectScreen":
                         //levle selectiescherm is geladen
@@ -361,15 +222,16 @@ public class Toucolor extends PApplet {
                     case "scoreboard":
                         //sound of selection
                         soundManager.play("select1");
-                        scoreb.keyPressed(keyCode);
+                        scoreb.keyPressed(keyCode, status);
                         break;
                     case "levelSelectScreen":
                         //sound of selection
                         soundManager.play("select1");
                         menu.keyPressed(keyCode);
                         break;
-                    case "loadScreen":
-
+                    case "naamkiezen":
+                        soundManager.play("select1");
+                        scoreb.keyPressed(keyCode, status);
                         break;
                     case "playing":
                         //only check for input when level is not ending
@@ -427,7 +289,161 @@ public class Toucolor extends PApplet {
         }
     }
 
+    //custom functions
+    private void doMango() {
+        for(Mango mango : mangos) {
+            if (mango.isColliding((int) speler.actorX, (int) speler.actorY) && !mango.isClaimed()) {
+                mango.claim();
+                currentLevel.changeBlock((int) mango.actorX, (int) mango.actorY, 0, true);
+                score.addToScore(MANGOSCORE);
+            }
+        }
+    }
 
+    //handles player movement + rendering
+    private void doPlayer() {
+        speler.keyUse();
+        playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
+        checkDood();
+        doMango();
+    }
+
+    private void doEnemies(){
+        //Update movement van alle enemies
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                swag.Move();
+                enemyWandelen.display(swag.actorX, swag.actorY, 'r', 0);
+            }
+        }
+    }
+
+    private void checkDood(){
+        if(speler.playerDie()){
+            PApplet.println("TIS DEUD");
+            isDead =true;
+        }
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
+                    PApplet.println("TIS DEUD");
+                    isDead = true;
+                }
+            }
+        }
+
+        //Display de score aan de speler
+        //laat speler naam kiezen en score opslaan
+        //Laad oude csv score
+        //Vergelijk en pas aan
+        //Sla op
+        if(isDead) {
+            scoreb = new ScoreBoard(SCOREFILE, this);
+            status = "naamkiezen";
+        }
+
+    }
+
+
+    //does the animation on the end of a level
+    private void doEndAnimation() {
+        /**
+         * the player keeps going right untill it collides with a block
+         * the map will be made so that on the end of the level there will only be one block which collides
+         * as soon as he collides we switch images
+         * and then the screen slowly fades to black
+         */
+        //do movement
+        speler.rightPressed = true;
+        doPlayer();
+        //check for collision
+        if (speler.isHorizontaleCollision()) {
+            //if collides check if images have changed
+            if(!imageHasSwitched) {
+                //switch images here
+                imageHasSwitched = true;
+            }
+            //slowly fade to black
+            if(lastOpacity > 255) {
+                //set the loading screen and change status
+                loadScreen.setText("Loading next level, please wait.");
+                this.levelToLoad = currentLevel.numberOfcurrentLevel() + 1;
+                thread("startLevel");
+                this.status = "loadScreen";
+                return;
+            }
+            fill(0, this.lastOpacity);
+            rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
+            lastOpacity+=2;
+        }
+
+    }
+
+    class Animation {
+        PImage[] images;
+        int imageCount;
+        int frame;
+
+        Animation(String imagePrefix, int count) {
+            imageCount = count;
+            images = new PImage[imageCount];
+            for (int i = 0; i < imageCount; i++) {
+                String filename = imagePrefix + nf(i, 1) + ".png";
+                images[i] = loadImage(filename);
+            }
+        }
+
+        void display(float xpos, float ypos, char lastM, int frameR) {
+            if(frameR < (144/4)) {
+                frame = 0;
+            }else if(frameR < (144/4)*2){
+                frame = 1;
+            }else if(frameR < (144/4)*3 ){
+                frame = 2;
+            }else if(frameR < (144/4) *4){
+                frame = 3;
+            }else{
+                speler.imgCounter = 0;
+            }
+            if(!currentLevel.isCameraLocked()) {
+                xpos = (((xpos - 600) < 0) ? xpos : 600);
+            }
+            //kijkt naar rechts
+            if(lastM == 'r' || lastM == 'n') {
+                //TODO: edit to make the
+
+                image(images[frame], xpos, ypos, BLOCKSIZE, BLOCKSIZE);
+            }
+            //kijkt naar links
+            else{
+                pushMatrix();
+                scale(-1,1);
+                image(images[frame], - (xpos + images[frame].width), ypos, BLOCKSIZE, BLOCKSIZE);
+                popMatrix();
+            }
+        }
+
+    }
+
+
+    private void refreshAllValues(){
+        speler.refreshValues(currentLevel.getCoords((int) speler.actorX, (int) speler.actorY),
+                currentLevel.getColAndDeath((int) speler.actorX, (int) speler.actorY));
+        //forach isspawn
+        if(enemies != null) {
+            for (Enemy swag : enemies) {
+                swag.refreshValues(currentLevel.getCoords((int) swag.actorX, (int) swag.actorY),
+                        currentLevel.getColAndDeath((int) swag.actorX, (int) swag.actorY));
+            }
+        }
+
+    }
+
+    void setStatus(String status) {
+        this.status = status;
+    }
+
+    //these are function which are executed in other threads
     /**
      * creates new level object and initializes it.
      * makes it ready to render the level
@@ -455,30 +471,42 @@ public class Toucolor extends PApplet {
 
     }
 
-    public void refreshAllValues(){
-        speler.refreshValues(currentLevel.getCoords((int) speler.actorX, (int) speler.actorY),
-                currentLevel.getColAndDeath((int) speler.actorX, (int) speler.actorY));
-        //forach isspawn
-        if(enemies != null) {
-            for (Enemy swag : enemies) {
-                swag.refreshValues(currentLevel.getCoords((int) swag.actorX, (int) swag.actorY),
-                        currentLevel.getColAndDeath((int) swag.actorX, (int) swag.actorY));
-            }
+    /**
+     * creates menu screen
+     * loads in all the files for the levels, blocks and other info
+     * creates player
+     *
+     */
+    public void initWorld() {
+        //check if the files for the levels exist
+        numberOfLevels = 0;
+        boolean fileExists = true;
+        //load necessary files
+        for (int i = 0; fileExists; i++) {
+            File f = new File(sketchPath() + "/data/level" + (i+1) + ".csv");
+            if(f.exists() && !f.isDirectory()) {
+                numberOfLevels++;
+            } else { fileExists = false;}
         }
 
-    }
+        levelFiles = new String[numberOfLevels];
+        for(int i = 0; i < numberOfLevels; i++) {
+            levelFiles[i] = "level" + (i+1) + ".csv";
+        }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+        //creating menu screen
+        menu = new Startscreen( menuTexts, this);
 
-    public void playSound(String event) {
-        soundManager.play(event);
+        //create a sound manager
+        soundManager = new Sounds(status, this);
+
+        this.status = "startscreen";
     }
 
     Level getCurrentLevel() {
         return this.currentLevel;
     }
+
 
 
 }

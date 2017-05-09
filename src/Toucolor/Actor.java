@@ -103,7 +103,6 @@ class Actor {
                             }
                         }
                     }
-
                 } else {
                     touchedDeadly = true;
                 }
