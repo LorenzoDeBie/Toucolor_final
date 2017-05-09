@@ -24,6 +24,7 @@ class TempBlock extends Block {
         this.blockY = blockY;
         this.img = applet.loadImage("TempBlock.png");
         this.id = 4;
+        this.applet = applet;
     }
 
     //this makes the block flikker

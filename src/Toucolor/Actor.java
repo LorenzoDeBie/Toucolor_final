@@ -78,8 +78,6 @@ class Actor {
                                 cancelJump = true;
                             }
                         }
-                    } else {
-                        PApplet.println("collide niet met Y");
                     }
                     if (canCollide && playerX.intersects(currblock)) {
                         if (!lastplayer.intersects(currblock)) {
@@ -91,8 +89,6 @@ class Actor {
                                 fullUpdateX = fullCoords[3][0] + blockSize;
                             }
                         }
-                    } else {
-                        PApplet.println("Collide niet met x");
                     }
 
                 } else {
