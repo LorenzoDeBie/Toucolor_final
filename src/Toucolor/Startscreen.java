@@ -12,16 +12,16 @@ import java.awt.print.Paper;
  */
 class Startscreen {
     //these be static bcuz lulz
-    private static int BUTTONWIDTH = 600;
-    private static int BUTTONHEIGHT = 50;
-    private static int STARTY = 160;
-    private static int SPACEBETWOONBUTTONS = 5;
+    private static int BUTTONWIDTH = 160;
+    private static int BUTTONHEIGHT = 80;
+    private static int STARTY = 200;
+    private static int SPACEBETWOONBUTTONS = 40;
 
     //PROPERTIES
     protected PImage bImage; //background image
     protected menuButton[] menuItems; //all the items in the menu
     protected PImage logo;
-    protected PApplet applet;
+    protected Toucolor applet;
     protected menuButton selectedButton;
 
     //in the level selection screen
@@ -33,10 +33,9 @@ class Startscreen {
     2) for a level selection screen
         takes the number of levels as param
      */
-    Startscreen(){
+    Startscreen(){}
 
-    }
-
+    //used in scoreboard
     void changeNames(String[] names){
         menuItems = new menuButton[names.length];
         for (int i = 0; i < menuItems.length; i++) {
@@ -46,17 +45,8 @@ class Startscreen {
         selectedButton.buildSelecter();
     }
 
-    void changeNames(String[] names, int p){
-        menuItems = new menuButton[names.length];
-        for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new menuButton(applet.width/2, STARTY + (i * (BUTTONHEIGHT + SPACEBETWOONBUTTONS)), BUTTONWIDTH, BUTTONHEIGHT, names[i], applet, i);
-        }
-        selectedButton = menuItems[p];
-        selectedButton.buildSelecter();
-    }
-
     //menu selection screen
-    public Startscreen(String[] itemsText, PApplet applet) {
+    Startscreen(String[] itemsText, Toucolor applet) {
         //load the logo to display on top of page
         logo = applet.loadImage("menu_logo.png");
         //set on which applet to draw
@@ -70,25 +60,10 @@ class Startscreen {
         }
         selectedButton = menuItems[0];
         selectedButton.buildSelecter();
-//
-//        //all the coords for the buttons for level select
-//        levelSelectPoints = new int[4][2];
-//
-//        levelSelectPoints[0][0] = 560;
-//        levelSelectPoints[0][1] = 200;
-//
-//        levelSelectPoints[1][0] = 680;
-//        levelSelectPoints[1][1] = 200;
-//
-//        levelSelectPoints[2][0] = 560;
-//        levelSelectPoints[2][1] = 300;
-//
-//        levelSelectPoints[3][0] = 680;
-//        levelSelectPoints[3][1] = 300;
     }
 
     //level selectin screen
-    Startscreen(int numberOfLevels, PApplet applet) {
+    Startscreen(int numberOfLevels, Toucolor applet) {
         //load the logo to display on top of page
         logo = applet.loadImage("menu_logo.png");
         //set on which applet to draw
@@ -106,27 +81,15 @@ class Startscreen {
         selectedButton.buildSelecter();
     }
 
-    public Startscreen(String[] itemsText, PApplet applet, int o) {
-        //load the logo to display on top of page
-        logo = applet.loadImage("menu_logo.png");
-        //set on which applet to draw
-        this.applet = applet;
-
-        //all the items in the menu
-        menuItems = new menuButton[itemsText.length];
-
-        for (int i = 0; i < menuItems.length; i++) {
-            menuItems[i] = new menuButton(applet.width / 2, 200 + (i * 120), 160, 80, itemsText[i], applet, i);
-        }
-        selectedButton = menuItems[o];
-        selectedButton.buildSelecter();
-    }
-
     //this function is called by the sketches
     void renderStartScreen() {
         applet.background(0);
         renderLogo();
         renderMenu();
+    }
+
+    //renders selector of selected button
+    void renderSelecter() {
         selectedButton.renderSelecter();
     }
 
@@ -162,25 +125,6 @@ class Startscreen {
         }
     }
 
-    void keyPressed(int select, int random) {
-        int test = random;
-        //checks which key and if the key is possible
-        //up
-        if(select == 0) {
-            selectedButton = menuItems[0];
-            selectedButton.buildSelecter();
-        }
-        else if(select == 1) {
-            //down arrow
-            selectedButton = menuItems[1];
-            selectedButton.buildSelecter();
-        }
-        else if(select == 2){
-            selectedButton = menuItems[2];
-            selectedButton.buildSelecter();
-        }
-    }
-
     //returns the index in the array of the selcted element
     int getIdOfSelected() {
         return this.selectedButton.arrayID;
@@ -190,7 +134,7 @@ class Startscreen {
     String getTextOfSelected() { return this.selectedButton.buttonText; }
 
     //a subclass for the menubuttons, will only be used here
-    private class menuButton {
+    protected class menuButton {
         private int posX;
         private int posY;
         private int buttonWidth;
@@ -245,7 +189,7 @@ class Startscreen {
             }
         }
 
-        private void buildSelecter() {
+        void buildSelecter() {
 
              selecterCoords = new int[8][4];
 

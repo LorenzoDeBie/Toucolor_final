@@ -8,26 +8,20 @@ import processing.core.*;
  class Player extends Actor {
     //Alle stuff voor keyuse, snelheid enz
 
-    private int moveSpeed = 6;
     private float iceSpeed = 0;
-    public boolean isInAir = true;
+    private boolean isInAir = true;
     private float hoek = 0;
-    public boolean upIsPressed = false;
-    float jumpSpeed = 10;
-    float valSpeed = 8;
-    public boolean rightPressed;
-    public boolean leftPressed;
-    public boolean downPressed;
-    int cProfile = 1;
-    public boolean playerIsDead = false;
+    boolean upIsPressed = false;
+    boolean rightPressed;
+    boolean leftPressed;
+    boolean downPressed;
+    boolean playerIsDead = false;
 
     //Voor collision
     private boolean jumping = false;
 
-    public int imgCounter = 0;
-    public char lastMove = 'n';
-
-    float PI = PApplet.PI;
+    int imgCounter = 0;
+    char lastMove = 'n';
 
     void keyUse() {
         if(getCancelJump()){
@@ -68,15 +62,19 @@ import processing.core.*;
     }
 
     private void updateMove() {
-        if (mR == true) {
+        int moveSpeed = 6;
+        int cProfile = 1;
+        if (mR) {
             updateR = (moveSpeed * cProfile);
             lastMove = 'r';
         }
-        if (mL == true) {
+        if (mL) {
             updateL = -(moveSpeed * cProfile);
             lastMove = 'l';
         }
-        if (mD == true) {
+        float PI = PApplet.PI;
+        if (mD) {
+            float valSpeed = 8;
             if (hoek < PI / 2) {
                 updateD = PApplet.sin(hoek) * valSpeed;
                 hoek += 0.03;
@@ -88,8 +86,9 @@ import processing.core.*;
                 upIsPressed = false;
             }
         }
-        if (mU == true) {
+        if (mU) {
             if (hoek < PI / 2) {
+                float jumpSpeed = 10;
                 updateU = -PApplet.cos(hoek) * jumpSpeed;
                 hoek += 0.0005;
             } else {
@@ -100,7 +99,7 @@ import processing.core.*;
         collision(updateR, updateL, updateU, updateD, isInAir, jumping, upIsPressed);
     }
 
-    public boolean isHorizontaleCollision() {
+    boolean isHorizontaleCollision() {
         return this.customHorizontaleCollision;
     }
 
@@ -119,12 +118,8 @@ import processing.core.*;
 
 
 
-    public boolean playerDie(){
-        if(playerIsDead || getTouchedDeadly()) {
-            return true;
-        } else {
-            return false;
-        }
+    boolean playerDie(){
+        return playerIsDead || getTouchedDeadly();
     }
 
 
