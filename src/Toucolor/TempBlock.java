@@ -31,13 +31,15 @@ class TempBlock extends Block {
     }
 
     void update() {
+        //only update if block is not broken
         if(!isBroken) {
+            //if the block has been stand on --> calc how long since first stand on
             if(isStandingOn) {
                 millisTillGone = applet.millis() - startMillis;
             }
-
+            //make the block flikker
             flikker();
-
+            //enough time has passed
             if(millisTillGone > timeTillGone) {
                 //destroy the block here
                 destroyBlock();
@@ -47,15 +49,18 @@ class TempBlock extends Block {
 
     //this makes the block flikker
     private void flikker() {
-            if(millisTillGone < 3000) {
-                this.drawBlock = (millisTillGone / 1000) % 2 == 0;
-            }
-            else {
-                this.drawBlock = (millisTillGone / 100) % 2 == 0;
-            }
+        //first 3 secs, only change every sec
+        if(millisTillGone < 3000) {
+            this.drawBlock = (millisTillGone / 1000) % 2 == 0;
+        }
+        else {
+            //after three secs, chagne very 1/10th of a sec
+            this.drawBlock = (millisTillGone / 100) % 2 == 0;
+        }
     }
 
     //called by player
+    //starts timer and sets the fields right
     void standOn() {
         if(!isBroken && !isStandingOn) {
             startMillis = applet.millis();
@@ -63,6 +68,7 @@ class TempBlock extends Block {
         }
     }
 
+    //sets the fields right and changes the block in the level
     private void destroyBlock() {
         this.drawBlock = false;
         this.isStandingOn = false;

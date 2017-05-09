@@ -211,13 +211,16 @@ class Level {
         //render each tempblock that in on the screen
         for(TempBlock block : tempBlocks) {
             if(drawX < block.getBlockX() && block.getBlockX() < -drawX + Toucolor.WORLDWIDTH && block.drawBlock) {
+                //calc where to draw  the block
                 int drawBlockX = block.getBlockX() + drawX;
+                //draw the block
                 applet.image(block.renderblock(),drawBlockX, block.getBlockY(), Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
             }
             //and to everything that needs to happen when standing on it
             if(PApplet.abs(block.getBlockX() - playerX) < Toucolor.BLOCKSIZE && block.getBlockY() - playerY == Toucolor.BLOCKSIZE) {
                 block.standOn();
             }
+            //update the block (this does the counting down + changes the drawBlock field
             block.update();
         }
     }
