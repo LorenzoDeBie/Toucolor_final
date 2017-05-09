@@ -51,7 +51,7 @@ class Actor {
             fullUpdateX = 0;
         }
 
-        if((propterties[1][0] || propterties[2][0]) && propterties[6][0]){
+        if((propterties[1][0] || propterties[2][0]) && propterties[6][0] && !propterties[4][0]){
             fullUpdateY = actorY;
         }
 
