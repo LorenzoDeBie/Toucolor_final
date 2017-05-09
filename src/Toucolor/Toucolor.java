@@ -121,7 +121,7 @@ public class Toucolor extends PApplet {
                 menu.renderStartScreen();
                 break;
             case "scoreboard":
-                menu.renderStartScreen();
+                scoreb.renderStartScreen();
                 PApplet.println("hier kom ik");
                 break;
             case "levelSelectScreen":
@@ -350,6 +350,11 @@ public class Toucolor extends PApplet {
                         //sound of selection
                         soundManager.play("select1");
                         menu.keyPressed(keyCode);
+                        break;
+                    case "scoreboard":
+                        //sound of selection
+                        soundManager.play("select1");
+                        scoreb.keyPressed(keyCode);
                         break;
                     case "levelSelectScreen":
                         //sound of selection
