@@ -15,6 +15,7 @@ class Score{
     private boolean gameEnded;
     private boolean gameOver;
     private PApplet applet;
+    Time tijd;
 
 
     Score( Toucolor applet) {
@@ -23,6 +24,12 @@ class Score{
 
     void addToScore(int pointsToAdd) {
         points += pointsToAdd;
+    }
+
+    void timeToPoints(Time tijd){
+        this.tijd = tijd;
+        int seconden = tijd.secondsLeft();
+        points += seconden*multiplierS;
     }
 
     //getters and setters

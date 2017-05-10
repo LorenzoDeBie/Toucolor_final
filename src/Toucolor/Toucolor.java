@@ -66,6 +66,7 @@ public class Toucolor extends PApplet {
 
     //initializing variables
     private LoadScreen loadScreen;
+    private LoadScreen coinInput;
     private String[] levelFiles;
     private int numberOfLevels;
     private String[] menuTexts = {"Play", "Score"};
@@ -100,9 +101,9 @@ public class Toucolor extends PApplet {
     @Override
     public  void setup() {
         frameRate(144);
-        status = "initializing";
+        status = "coin";
+        coinInput = new LoadScreen("Insert Coin Please", this);
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
-        thread("initWorld");
         //custom test code
 //        this.levelToLoad = 4;
 //        //create a sound manager
@@ -126,6 +127,9 @@ public class Toucolor extends PApplet {
     @Override
     public void draw() {
         switch (status) {
+            case "coin":
+                coinInput.renderLoadScreen();
+                break;
             case "initializing":
                 //show first loading screen
                 loadScreen.renderLoadScreen();
@@ -182,7 +186,12 @@ public class Toucolor extends PApplet {
                 soundManager.play("select2");
                 switch (status) {
                     case "scoreboard":
-                        this.status = "startscreen";
+                        if(isDead){
+                            this.status = "coin";
+                            isDead = false;
+                        } else {
+                            this.status = "startscreen";
+                        }
                         break;
                     case "startscreen":
                         //startscherm is geladen
@@ -208,6 +217,15 @@ public class Toucolor extends PApplet {
                         //create new loading screen
                         this.loadScreen = new LoadScreen("Loading, Please wait.", this);
                         this.status = "loadScreen"; //change status
+                        break;
+                }
+                break;
+            case KeyEvent.VK_C:
+                switch (status){
+                    case "coin":
+                        PApplet.println("Hier kom ik");
+                        this.status = "initializing";
+                        thread("initWorld");
                         break;
                 }
                 break;
@@ -320,8 +338,8 @@ public class Toucolor extends PApplet {
 
     private void checkDood(){
         if(speler.playerDie()){
+            isDead = true;
             PApplet.println("TIS DEUD");
-            isDead =true;
         }
         if(enemies != null) {
             for (Enemy swag : enemies) {
@@ -338,6 +356,7 @@ public class Toucolor extends PApplet {
         //Vergelijk en pas aan
         //Sla op
         if(isDead) {
+            score.timeToPoints(timer);
             scoreb = new ScoreBoard(SCOREFILE, this);
             status = "naamkiezen";
         }
