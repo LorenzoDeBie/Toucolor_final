@@ -498,7 +498,7 @@ public class Toucolor extends PApplet {
         menu = new Startscreen( menuTexts, this);
 
         //create a sound manager
-        soundManager = new Sounds(status, this);
+        soundManager = new Sounds(this);
 
         this.status = "startscreen";
     }

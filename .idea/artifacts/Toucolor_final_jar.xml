@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Toucolor_final:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Toucolor_final_jar</output-path>
+    <root id="archive" name="Toucolor_final.jar">
+      <element id="module-output" name="Toucolor_final" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/Minim-2.2.0/library/jl1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/Minim-2.2.0/library/minim.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/Minim-2.2.0/library/jsminim.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/Minim-2.2.0/library/mp3spi1.9.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/Minim-2.2.0/library/tritonus_aos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/Minim-2.2.0/library/tritonus_share.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/custom libs/sound/library/sound.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../processing-3.3/core/library/core.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
