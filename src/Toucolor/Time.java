@@ -9,6 +9,7 @@ import processing.core.*;
 class Time{
 
     private int timeStart;
+    private int tijdForLevel;
     //variables
     private int timeLeftMSeconds;
     private int timeLeftSeconds;
@@ -19,6 +20,7 @@ class Time{
 
     //Set time
     Time(int tijd,  PApplet applet) {
+        this.tijdForLevel = tijd;
         timeStart = applet.millis();
         this.timeLeftSeconds = tijd;
         this.timeLeftMSeconds = timeLeftSeconds * 1000;
@@ -37,6 +39,10 @@ class Time{
         applet.textSize(16);
         applet.fill(0);
         applet.text("Time: " + timeLeftSeconds, 1060, 20);
+    }
+
+    int getTimeForLevel(){
+        return tijdForLevel;
     }
 
     int millisLeft() {
