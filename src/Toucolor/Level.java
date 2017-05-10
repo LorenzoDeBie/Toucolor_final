@@ -336,7 +336,7 @@ class Level {
         level.endDraw();
         levelMap[drawX][drawY] = newBlock;
         if(newBlock == 4) {
-            tempBlocks.add(new TempBlock(drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, 5000, false, applet));
+            tempBlocks.add(new TempBlock(drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, 6000, false, applet));
         }
     }
 

@@ -32,7 +32,7 @@ class Boss extends Actor {
         this.status = "waiting";
         this.applet = applet;
         this.bossImage = applet.loadImage("Leprechaun0.png");
-        millisTillNextJump = 500;
+        millisTillNextJump = 400;
     }
 
     private void jumpToNextBlock() {

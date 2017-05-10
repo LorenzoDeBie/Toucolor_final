@@ -73,12 +73,12 @@ public class Toucolor extends PApplet {
 
 
     //score vars
-    Score score;
+    private Score score;
     static final int LEVELTIME = 500;
-    Time timer;
+    private Time timer;
 
     //sound manager
-    Sounds soundManager;
+    private Sounds soundManager;
 
     //mango's
     private Mango[] mangos;
@@ -88,7 +88,7 @@ public class Toucolor extends PApplet {
     private static final String SCOREFILE = "score.csv";
 
     //boss vars
-    Boss baasje;
+    private Boss baasje;
     private static final int BOSSLEVELNUMBER = 5;
 
     //beatgame vars
