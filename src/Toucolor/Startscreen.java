@@ -19,10 +19,10 @@ class Startscreen {
 
     //PROPERTIES
     protected PImage bImage; //background image
-    protected menuButton[] menuItems; //all the items in the menu
-    protected PImage logo;
-    protected Toucolor applet;
-    protected menuButton selectedButton;
+    menuButton[] menuItems; //all the items in the menu
+    PImage logo;
+    Toucolor applet;
+    menuButton selectedButton;
 
     //in the level selection screen
 

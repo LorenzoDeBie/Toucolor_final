@@ -237,11 +237,6 @@ public class Toucolor extends PApplet {
                         soundManager.play("select1");
                         menu.keyPressed(keyCode);
                         break;
-                    case "scoreboard":
-                        //sound of selection
-                        soundManager.play("select1");
-                        scoreb.keyPressed(keyCode, status);
-                        break;
                     case "levelSelectScreen":
                         //sound of selection
                         soundManager.play("select1");
