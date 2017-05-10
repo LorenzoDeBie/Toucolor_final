@@ -55,14 +55,10 @@ public class Toucolor extends PApplet {
 
     private Animation playerWandelen, enemyWandelen;
 
-    private Enemy poep = new Enemy(4,1,0.5f,100,500);
-    private Enemy lel = new Enemy(1,2,0.001f,200,200);
-    private Enemy swag = new Enemy(3,2,0.09f,300,400);
+    private Enemy[] enemies;
 
     private Player speler;
     private boolean isDead = false;
-
-    private Enemy[] enemies;// =  {poep,lel,swag};
 
     //initializing variables
     private LoadScreen loadScreen;
@@ -400,7 +396,7 @@ public class Toucolor extends PApplet {
                         loadScreen.setText("YOU DID IT! YOU BEAT THE GAME!");
                         scoreb = new ScoreBoard(SCOREFILE, this);
                         this.status = "beatgame";
-                        this.framesleft = 5000;
+                        this.framesleft = 3000;
                         return;
                     }
                     fill(0, this.lastOpacity);

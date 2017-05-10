@@ -20,7 +20,6 @@ class Block {
     protected String name;
     protected PImage img;
     protected Toucolor applet;
-    private PGraphics pg;
     protected boolean brokkelt;
     protected boolean drawBlock;
     protected boolean killsPlayer;
@@ -38,7 +37,6 @@ class Block {
         if(id == 0) {
             this.drawBlock = false;
         }
-        this.pg = pg;
     }
 
     protected Block() {}
