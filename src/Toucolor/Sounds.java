@@ -11,7 +11,6 @@ class Sounds {
 
     private static final List<String> events = Arrays.asList("select1", "select2", "jump", "die", "coin", "end");
     private static final List<String> files = Arrays.asList("Select1.wav", "Select2.mp3", "Jump.wav", "Hurt.wav", "Coin.wav", "End.mp3");
-    //private SoundFile[] soundFiles;
 
     //minim
     private Minim minim;

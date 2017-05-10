@@ -53,7 +53,6 @@ class Boss extends Actor {
     }
 
     private void jump() {
-        //PApplet.println("Trying to jump to: (" + jumpX + ", " + jumpY + ")");
         if(actorX < jumpX) {
             actorX++;
         }
@@ -68,7 +67,6 @@ class Boss extends Actor {
             actorY--;
         }
         if(actorX == jumpX && actorY == jumpY) {
-            //TODO make temp block
             currentLevel.changeBlock((int) actorX, (int) actorY + 80, 4, true);
             timesLeft--;
             millisTillNextJump = 500;

@@ -79,7 +79,6 @@ public class Toucolor extends PApplet {
     //score vars
     Score score;
     static final int LEVELTIME = 500;
-    static final int VERMINDERING = 1;
     Time timer;
 
     //sound manager
@@ -111,11 +110,6 @@ public class Toucolor extends PApplet {
         status = "coin";
         coinInput = new LoadScreen("Insert Coin Please", this);
         loadScreen = new LoadScreen("Initializing, Please wait.", this);
-        //custom test code
-//        this.levelToLoad = 4;
-//        //create a sound manager
-//        soundManager = new Sounds(this);
-//        thread("startLevel");
     }
 
     /**
@@ -125,7 +119,6 @@ public class Toucolor extends PApplet {
     @Override
     public void settings() {
         size(WORLDWIDTH, WORLDHEIGHT);
-        //fullScreen();
     }
 
     /**
@@ -291,8 +284,6 @@ public class Toucolor extends PApplet {
                                 speler.actorY = 500;
                             }
                             if(keyCode == KeyEvent.VK_E) {
-                                //levle selectiescherm is geladen
-//                                this.levelToLoad = menu.getIdOfSelected() + 1; //set the number of level to load
                                 thread("startLevel"); //init the level in seperate thread
                                 //create new loading screen
                                 this.loadScreen = new LoadScreen("Loading, Please wait.", this);
@@ -302,7 +293,6 @@ public class Toucolor extends PApplet {
                         break;
                 }
         }
-
     }
 
     @Override
@@ -461,8 +451,6 @@ public class Toucolor extends PApplet {
             }
             //kijkt naar rechts
             if(lastM == 'r' || lastM == 'n') {
-                //TODO: edit to make the
-
                 image(images[frame], xpos, ypos, BLOCKSIZE, BLOCKSIZE);
             }
             //kijkt naar links
@@ -501,8 +489,6 @@ public class Toucolor extends PApplet {
      * this function is used in a seperate thread
      */
     public void startLevel() {
-        //this.currentLevel = new Level(this, levelFiles[this.levelToLoad -1 ]);
-        //this.currentLevel = new Level(this, "DemoLevel_NoEnemies.csv");
         this.currentLevel = new Level(this, this.levelToLoad);
         playerWandelen = new Animation("Toucolooor", 4);
         enemyWandelen = new Animation("Timberman",1);
@@ -560,11 +546,5 @@ public class Toucolor extends PApplet {
     Level getCurrentLevel() {
         return this.currentLevel;
     }
-
-    //gets called when user beats the boss --> game ends
-    void beatGame() {
-        //TODO: write this
-    }
-
 }
 

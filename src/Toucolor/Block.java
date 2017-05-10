@@ -46,9 +46,6 @@ class Block {
     //renders this block on given location
     PImage renderblock() {
         return img;
-//        pg.imageMode(PConstants.CORNER);
-//        pg.image(img, x, y, 80, 80);
-        //voor brokkelende blocks
     }
 
     //getter for killplayer
