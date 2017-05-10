@@ -153,7 +153,9 @@ public class Toucolor extends PApplet {
             case "beatgame":
                 doEndAnimation();
                 break;
-
+            case "died":
+                doPlayer();
+                break;
             case "playing":
                 //renders the level (blocks and stuff)
                 currentLevel.renderLevel((int) speler.actorX, (int) speler.actorY);
@@ -331,7 +333,9 @@ public class Toucolor extends PApplet {
 
     //handles player movement + rendering
     private void doPlayer() {
-        speler.keyUse();
+        if(!isDead) {
+            speler.keyUse();
+        }
         playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
         checkDood();
         doMango();
@@ -372,9 +376,30 @@ public class Toucolor extends PApplet {
         //Vergelijk en pas aan
         //Sla op
         if(isDead) {
-            score.timeToPointsD(timer, (int) speler.actorX);
-            scoreb = new ScoreBoard(SCOREFILE, this);
-            status = "naamkiezen";
+            switch (status) {
+                case "playing":
+                    //slowly fade to black
+                    if(lastOpacity > 255) {
+                        //set the loading screen and change status
+                        loadScreen.setText("YOU DIED!");
+                        this.status = "died";
+                        this.framesleft = 500;
+                        return;
+                    }
+                    fill(0, this.lastOpacity);
+                    rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
+                    lastOpacity+=2;
+                    break;
+                case "died":
+                    loadScreen.renderLoadScreen();
+                    framesleft--;
+                    if(framesleft < 0) {
+                        score.timeToPointsD(timer, (int) speler.actorX);
+                        scoreb = new ScoreBoard(SCOREFILE, this);
+                        this.status = "naamkiezen";
+                    }
+                    break;
+            }
         }
 
     }
