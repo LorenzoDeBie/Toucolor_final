@@ -7,15 +7,16 @@ import processing.core.PApplet;
  */
 
 class Score{
+    Time tijd;
     //variables
     int points = 0;
-    int multiplierS = 10;
+    int multiplierF = 5;
+    int multiplierD = 1;
     boolean touchingMango;
     int addScore = 1000;
     private boolean gameEnded;
     private boolean gameOver;
     private PApplet applet;
-    Time tijd;
 
 
     Score( Toucolor applet) {
@@ -26,14 +27,23 @@ class Score{
         points += pointsToAdd;
     }
 
-    void timeToPoints(Time tijd){
+    void timeToPointsF(Time tijd){
+        int startTijd = tijd.getTimeForLevel();
         this.tijd = tijd;
-        int seconden = tijd.secondsLeft();
-        points += seconden*multiplierS;
+        int seconden = startTijd - tijd.secondsLeft();
+        points += seconden*multiplierF;
     }
 
+    void timeToPointsD(Time tijd){
+        int startTijd = tijd.getTimeForLevel();
+        this.tijd = tijd;
+        int seconden = startTijd - tijd.secondsLeft();
+        points += seconden*multiplierD;
+    }
+
+
     //getters and setters
-    public int getpoints() {
+    int getpoints() {
         return points;
     }
 
