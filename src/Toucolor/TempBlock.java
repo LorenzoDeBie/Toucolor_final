@@ -28,6 +28,7 @@ class TempBlock extends Block {
         this.applet = applet;
         this.drawBlock = true;
         this.isBroken = false;
+        this.collision = true;
     }
 
     void update() {

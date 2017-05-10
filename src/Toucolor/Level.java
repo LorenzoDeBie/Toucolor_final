@@ -48,7 +48,7 @@ class Level {
     private boolean cameraLocked;
 
     //alles voor einde van level
-    private boolean levelEnding;
+    boolean levelEnding;
     private static int pixelsBeforeEnd = 400; //moet nog een echte waarde krijgen.
 
     //alles voor als player doodgaat
@@ -388,7 +388,6 @@ class Level {
         if(playerCoords) {
             drawX = x / Toucolor.BLOCKSIZE;
             drawY = y / Toucolor.BLOCKSIZE;
-
         }
         else {
             drawX = x;
@@ -397,5 +396,27 @@ class Level {
         level.image(tileBlocks[newBlock].renderblock(), drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
         level.endDraw();
         levelMap[drawX][drawY] = newBlock;
+        if(newBlock == 4) {
+            tempBlocks.add(new TempBlock(drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, 5000, false, applet));
+        }
+    }
+
+    void addTempBlock(int x, int y, int newBlock, boolean playerCoords, int timeTillGone) {
+        int drawX, drawY;
+        level.beginDraw();
+        if(playerCoords) {
+            drawX = x / Toucolor.BLOCKSIZE;
+            drawY = y / Toucolor.BLOCKSIZE;
+        }
+        else {
+            drawX = x;
+            drawY = y;
+        }
+        level.image(tileBlocks[newBlock].renderblock(), drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+        level.endDraw();
+        levelMap[drawX][drawY] = newBlock;
+        if(newBlock == 4) {
+            tempBlocks.add(new TempBlock(drawX * Toucolor.BLOCKSIZE, drawY * Toucolor.BLOCKSIZE, timeTillGone, false, applet));
+        }
     }
 }
