@@ -55,7 +55,7 @@ public class Toucolor extends PApplet {
 
     private Animation playerWandelen, enemyWandelen;
 
-    private Enemy[] enemies;
+    Enemy[] enemies = {new Enemy(1, 2, 2, 200, 100)};
 
     private Player speler;
     private boolean isDead = false;
@@ -332,7 +332,13 @@ public class Toucolor extends PApplet {
         if(enemies != null) {
             for (Enemy swag : enemies) {
                 swag.Move();
-                enemyWandelen.display(swag.actorX, swag.actorY, 'r', 0);
+                int drawX = -(((((int) speler.actorX - 600) < 0) ? 0 : ((int) speler.actorX - 600)));
+                if(drawX < swag.actorX && swag.actorX < -drawX + Toucolor.WORLDWIDTH) {
+                    //calc where to draw  the block
+                    int drawEnemyX = (int) swag.actorX + drawX;
+                    //draw the block
+                    enemyWandelen.display(drawEnemyX, swag.actorY, 'r', 0);
+                }
             }
         }
     }
@@ -357,7 +363,7 @@ public class Toucolor extends PApplet {
         //Vergelijk en pas aan
         //Sla op
         if(isDead) {
-            score.timeToPointsD(timer);
+            score.timeToPointsD(timer, (int) speler.actorX);
             scoreb = new ScoreBoard(SCOREFILE, this);
             status = "naamkiezen";
         }
@@ -384,7 +390,7 @@ public class Toucolor extends PApplet {
                     //TODO: switch images here
                     imageHasSwitched = true;
                 }
-
+                score.timeToPointsF(timer, (int) speler.actorX);
             }
         }
         else {

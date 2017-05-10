@@ -17,6 +17,7 @@ class Score{
     private boolean gameEnded;
     private boolean gameOver;
     private PApplet applet;
+    int pos = 300;
 
 
     Score( Toucolor applet) {
@@ -27,20 +28,22 @@ class Score{
         points += pointsToAdd;
     }
 
-    void timeToPointsF(Time tijd){
+    void timeToPointsF(Time tijd, int xpos){
+        this.pos = xpos;
         int startTijd = tijd.getTimeForLevel();
         this.tijd = tijd;
         int seconden = startTijd - tijd.secondsLeft();
-        points += seconden*multiplierF;
+        points += (pos/seconden)*multiplierF;
     }
 
-    void timeToPointsD(Time tijd){
+    void timeToPointsD(Time tijd, int xpos){
+        this.pos = xpos;
         int startTijd = tijd.getTimeForLevel();
         this.tijd = tijd;
         int seconden = startTijd - tijd.secondsLeft();
-        points += seconden*multiplierD;
+        points += (pos/seconden)*multiplierD;
+        PApplet.println(points);
     }
-
 
     //getters and setters
     int getpoints() {

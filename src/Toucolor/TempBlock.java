@@ -30,7 +30,6 @@ class TempBlock extends Block {
         this.isBroken = false;
         this.collision = true;
     }
-
     void update() {
         //only update if block is not broken
         if(!isBroken) {
