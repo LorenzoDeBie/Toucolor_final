@@ -92,6 +92,13 @@ public class Toucolor extends PApplet {
     //score stuff
     private static final String SCOREFILE = "score.csv";
 
+    //boss vars
+    Boss baasje;
+    private static final int BOSSLEVELNUMBER = 5;
+
+    //beatgame vars
+    private int framesleft;
+
     //Processing functions
 
     /**
@@ -152,6 +159,9 @@ public class Toucolor extends PApplet {
             case "loadScreen":
                 loadScreen.renderLoadScreen();
                 break;
+            case "beatgame":
+                doEndAnimation();
+                break;
             case "playing":
                 //renders the level (blocks and stuff)
                 currentLevel.renderLevel((int) speler.actorX, (int) speler.actorY);
@@ -172,6 +182,9 @@ public class Toucolor extends PApplet {
                     doPlayer();
                     timer.renderTime();
                     score.renderScore();
+                    if(currentLevel.numberOfcurrentLevel() == BOSSLEVELNUMBER) {
+                        baasje.renderBoss();
+                    }
                 }
                 break;
         }
@@ -351,7 +364,7 @@ public class Toucolor extends PApplet {
         //Vergelijk en pas aan
         //Sla op
         if(isDead) {
-            score.timeToPoints(timer);
+            score.timeToPointsD(timer);
             scoreb = new ScoreBoard(SCOREFILE, this);
             status = "naamkiezen";
         }
@@ -361,36 +374,53 @@ public class Toucolor extends PApplet {
 
     //does the animation on the end of a level
     private void doEndAnimation() {
-        /**
-         * the player keeps going right untill it collides with a block
-         * the map will be made so that on the end of the level there will only be one block which collides
-         * as soon as he collides we switch images
-         * and then the screen slowly fades to black
-         */
-        //do movement
-        speler.rightPressed = true;
-        doPlayer();
-        //check for collision
-        if (speler.isHorizontaleCollision()) {
-            //if collides check if images have changed
-            if(!imageHasSwitched) {
-                //switch images here
-                imageHasSwitched = true;
-            }
-            //slowly fade to black
-            if(lastOpacity > 255) {
-                //set the loading screen and change status
-                loadScreen.setText("Loading next level, please wait.");
-                this.levelToLoad = currentLevel.numberOfcurrentLevel() + 1;
-                thread("startLevel");
-                this.status = "loadScreen";
-                return;
-            }
-            fill(0, this.lastOpacity);
-            rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
-            lastOpacity+=2;
-        }
+        if(currentLevel.numberOfcurrentLevel() != 4) {
+            /**
+             * the player keeps going right untill it collides with a block
+             * the map will be made so that on the end of the level there will only be one block which collides
+             * as soon as he collides we switch images
+             * and then the screen slowly fades to black
+             */
+            //do movement
+            speler.rightPressed = true;
+            doPlayer();
+            //check for collision
+            if (speler.isHorizontaleCollision()) {
+                //if collides check if images have changed
+                if(!imageHasSwitched) {
+                    //TODO: switch images here
+                    imageHasSwitched = true;
+                }
 
+            }
+        }
+        else {
+            switch (status) {
+                case "playing":
+                    //slowly fade to black
+                    if(lastOpacity > 255) {
+                        //set the loading screen and change status
+                        loadScreen.setText("YOU DID IT! YOU BEAT THE GAME!");
+                        scoreb = new ScoreBoard(SCOREFILE, this);
+                        this.status = "beatgame";
+                        this.framesleft = 500;
+                        return;
+                    }
+                    fill(0, this.lastOpacity);
+                    rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
+                    lastOpacity+=2;
+                    break;
+                case "beatgame":
+                    loadScreen.renderLoadScreen();
+                    framesleft--;
+                    if(framesleft < 0) {
+                        this.status = "naamkiezen";
+                    }
+                    break;
+
+            }
+
+        }
     }
 
     class Animation {
@@ -477,10 +507,13 @@ public class Toucolor extends PApplet {
         score = new Score(this);
         mangos = currentLevel.getMangos();
         //lock camera if boss level
-        if(currentLevel.numberOfcurrentLevel() == 4) {
+        if(currentLevel.numberOfcurrentLevel() == BOSSLEVELNUMBER) {
+            speler.actorX = 80;
+            speler.actorY = 0;
             currentLevel.setCameraLocked(true);
+            baasje = new Boss(200,100, this);
+            currentLevel.addTempBlock(80,160,4, true, 10000);
         }
-
         this.status = "playing";
 
     }
@@ -521,7 +554,10 @@ public class Toucolor extends PApplet {
         return this.currentLevel;
     }
 
-
+    //gets called when user beats the boss --> game ends
+    void beatGame() {
+        //TODO: write this
+    }
 
 }
 

@@ -78,7 +78,7 @@ class Actor {
                                 fullUpdateY = fullCoords[1][1] + blockSize;
                                 cancelJump = true;
                             } else {
-                                fullUpdateY = actorY;
+                                fullUpdateY =  fullCoords[6][1] - blockSize;
                                 isInAir = false;
                             }
 
