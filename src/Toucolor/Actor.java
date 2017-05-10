@@ -17,7 +17,7 @@ class Actor {
     boolean mD = false;
     boolean mU = false;
 
-    float actorX = 150, actorY=300, xblock, yblock;
+    float actorX = 300, actorY=500, xblock, yblock;
     boolean canCollide, isDeadly, horizontaleCollision, verticaleCollision, isInAir, customHorizontaleCollision, touchedDeadly, jumping, cancelJump, upispressed;
     int blockSize = Toucolor.BLOCKSIZE;
     Actor type;
@@ -78,10 +78,9 @@ class Actor {
                                 fullUpdateY = fullCoords[1][1] + blockSize;
                                 cancelJump = true;
                             } else {
-                                fullUpdateY =  fullCoords[6][1] - blockSize;
+                                fullUpdateY = fullCoords[6][1] - blockSize;
                                 isInAir = false;
                             }
-
                         } else {
                             if (jumping) {
                                 fullUpdateY = fullCoords[1][1] + blockSize;
@@ -97,6 +96,8 @@ class Actor {
                             fullUpdateX = actorX;
                         } else {
                             if (updateL + updateR > 0 && !propterties[2][0] && propterties[4][0] && !isInAir) {
+                                fullUpdateX = fullCoords[4][0] - blockSize;
+                            } else if(updateL + updateR > 0 && propterties[2][0] && propterties[4][0] && propterties[7][0]){
                                 fullUpdateX = fullCoords[4][0] - blockSize;
                             } else {
                                 fullUpdateX = actorX;

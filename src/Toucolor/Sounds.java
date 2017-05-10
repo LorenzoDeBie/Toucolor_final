@@ -7,6 +7,7 @@ import java.util.List;
 
 class Sounds {
     private Toucolor applet;
+    AudioPlayer chiptune;
 
     private static final List<String> events = Arrays.asList("select1", "select2", "jump", "die", "coin", "end");
     private static final List<String> files = Arrays.asList("Select1.wav", "Select2.mp3", "Jump.wav", "Hurt.wav", "Coin.wav", "End.mp3");
@@ -28,7 +29,15 @@ class Sounds {
         for(int i = 0; i < soundFiles.length; i++) {
             soundFiles[i] = minim.loadFile(files.get(i));
         }
-        AudioPlayer chiptune = minim.loadFile("Chiptune.mp3");
+        chiptune = minim.loadFile("Chiptune.mp3");
+        chiptune.loop();
+    }
+
+    public void stopMuziek(){
+        chiptune.close();
+    }
+
+    public void restartMuziek(){
         chiptune.loop();
     }
 

@@ -196,17 +196,22 @@ public class Toucolor extends PApplet {
             case KeyEvent.VK_ENTER:
                 //enter wordt ingedrukt
                 //sound of selection
-                soundManager.play("select2");
                 switch (status) {
                     case "scoreboard":
+                        soundManager.play("select2");
                         if(isDead){
                             this.status = "coin";
+                            soundManager.stopMuziek();
                             isDead = false;
                         } else {
                             this.status = "startscreen";
                         }
                         break;
+                    case "coin":
+                        this.status = "coin";
+                        break;
                     case "startscreen":
+                        soundManager.play("select2");
                         //startscherm is geladen
                         if(menu.getTextOfSelected().equals(menuTexts[0])) {
                             //PLAY HAS BEEN SELECTED
@@ -219,11 +224,13 @@ public class Toucolor extends PApplet {
                         }
                         break;
                     case "naamkiezen":
+                        soundManager.play("select2");
                         scoreb.saveScore(score.getpoints());
                         scoreb.loadScores();
                         this.status = "scoreboard";
                         break;
                     case "levelSelectScreen":
+                        soundManager.play("select2");
                         //levle selectiescherm is geladen
                         this.levelToLoad = menu.getIdOfSelected() + 1; //set the number of level to load
                         thread("startLevel"); //init the level in seperate thread
