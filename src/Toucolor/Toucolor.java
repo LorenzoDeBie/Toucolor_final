@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -55,7 +57,7 @@ public class Toucolor extends PApplet {
 
     private Animation playerWandelen, enemyWandelen;
 
-    Enemy[] enemies = {new Enemy(1, 2, 2, 200, 100)};
+    List<Enemy> enemies;
 
     private Player speler;
     private boolean isDead = false;
@@ -416,9 +418,7 @@ public class Toucolor extends PApplet {
                         this.status = "naamkiezen";
                     }
                     break;
-
             }
-
         }
     }
 
@@ -491,6 +491,7 @@ public class Toucolor extends PApplet {
      * this function is used in a seperate thread
      */
     public void startLevel() {
+        enemies = new ArrayList<Enemy>();
         this.currentLevel = new Level(this, this.levelToLoad);
         playerWandelen = new Animation("Toucolooor", 4);
         enemyWandelen = new Animation("Timberman",1);

@@ -33,7 +33,7 @@ class Score{
         int startTijd = tijd.getTimeForLevel();
         this.tijd = tijd;
         int seconden = startTijd - tijd.secondsLeft();
-        points += (pos/seconden)*multiplierF;
+        points += (pos/(seconden/2))*multiplierF;
     }
 
     void timeToPointsD(Time tijd, int xpos){
@@ -41,7 +41,7 @@ class Score{
         int startTijd = tijd.getTimeForLevel();
         this.tijd = tijd;
         int seconden = startTijd - tijd.secondsLeft();
-        points += (pos/seconden)*multiplierD;
+        points += (pos/(seconden/2))*multiplierD;
         PApplet.println(points);
     }
 

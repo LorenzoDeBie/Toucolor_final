@@ -102,12 +102,13 @@ class Level {
             boolean collision = PApplet.parseBoolean(row.getString("collision"));
             boolean brokkelt = PApplet.parseBoolean(row.getString("brokkelt"));
             boolean kills = PApplet.parseBoolean(row.getString("death"));
+            boolean enemy = PApplet.parseBoolean(row.getString("enemy"));
 
             if(!brokkelt) {
-                tileBlocks[id] = new Block(id, name, imgFileName, collision, kills, level, applet);
+                tileBlocks[id] = new Block(id, name, imgFileName, collision, kills, enemy, level, applet);
             }
             else {
-                tileBlocks[id] = new Block(id, name, "Background.jpg", collision, kills, level, applet); //load the img into the array
+                tileBlocks[id] = new Block(id, name, "Background.jpg", collision, kills,enemy, level, applet); //load the img into the array
             }
         }
     }
@@ -159,6 +160,9 @@ class Level {
                 Block currentBlock = tileBlocks[levelMap[i][u]];
                 if(currentBlock.getName().equals("Tijdelijke blok")) {
                     tempBlocks.add(new TempBlock(i * 80, u * 80, 5000, currentBlock.killsPlayer, applet));
+                }
+                if(currentBlock.getEnemy()) {
+                    applet.enemies.add(new Enemy(4, 0, 0.03f, i * 80, u * 80));
                 }
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);

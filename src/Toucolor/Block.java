@@ -23,9 +23,10 @@ class Block {
     protected boolean brokkelt;
     protected boolean drawBlock;
     protected boolean killsPlayer;
+    protected boolean enemy;
 
     //constructor
-    Block(int id, String name, String imgFileName, boolean collision, boolean killsPlayer,PGraphics pg, Toucolor applet) {
+    Block(int id, String name, String imgFileName, boolean collision, boolean killsPlayer, boolean enemy, PGraphics pg, Toucolor applet) {
         this.id = id;
         this.collision = collision;
         this.name = name;
@@ -37,6 +38,7 @@ class Block {
         if(id == 0) {
             this.drawBlock = false;
         }
+        this.enemy = enemy;
     }
 
     protected Block() {}
@@ -76,4 +78,7 @@ class Block {
         return name;
     }
 
+    boolean getEnemy() {
+        return enemy;
+    }
 }
