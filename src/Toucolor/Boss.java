@@ -48,8 +48,10 @@ class Boss extends Actor {
         int currentY = (int) actorY / Toucolor.BLOCKSIZE;
         int nextY = timesLeft > 0 ? currentY : ROWSTOJUMP[row++];
         timesLeft = timesLeft > 0 ? timesLeft : row;
+        if(nextY == 1 && nextBlockX == 1) {
+            nextBlockX = 3;
+        }
         jumpX = nextBlockX * Toucolor.BLOCKSIZE; jumpY = nextY * Toucolor.BLOCKSIZE;
-        PApplet.println("Now jumping to: " + nextBlockX + ", " + nextY);
     }
 
     private void jump() {
