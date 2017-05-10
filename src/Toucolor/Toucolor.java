@@ -188,6 +188,7 @@ public class Toucolor extends PApplet {
                     case "scoreboard":
                         if(isDead){
                             this.status = "coin";
+                            soundManager.stopMuziek();
                             isDead = false;
                         } else {
                             this.status = "startscreen";
