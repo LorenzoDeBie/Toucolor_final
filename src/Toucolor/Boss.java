@@ -32,7 +32,7 @@ class Boss extends Actor {
         this.status = "waiting";
         this.applet = applet;
         this.bossImage = applet.loadImage("Leprechaun0.png");
-        millisTillNextJump = 400;
+        millisTillNextJump = 300;
     }
 
     private void jumpToNextBlock() {
@@ -71,7 +71,7 @@ class Boss extends Actor {
         if(actorX == jumpX && actorY == jumpY) {
             currentLevel.changeBlock((int) actorX, (int) actorY + 80, 4, true);
             timesLeft--;
-            millisTillNextJump = 400;
+            millisTillNextJump = 300;
             this.status = "waiting";
         }
     }
@@ -87,7 +87,7 @@ class Boss extends Actor {
     }
 
     private void update() {
-        if(row == 3 && timesLeft == 0) {
+        if(row == 3 && timesLeft == 0 && millisTillNextJump < 100) {
             PApplet.println("YOU BEAT THIS STUPID ASS GAME, WHAT ARE YOU DOING WITH YOUR LIFE?");
             currentLevel.levelEnding = true;
         }
