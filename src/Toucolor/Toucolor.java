@@ -281,6 +281,11 @@ public class Toucolor extends PApplet {
                                 speler.actorX = 300;
                                 speler.actorY = 500;
                             }
+                            if(keyCode == KeyEvent.VK_T)
+                            {
+                                speler.actorX = 15000;
+                                speler.actorY = 500;
+                            }
                             if(keyCode == KeyEvent.VK_E) {
                                 thread("startLevel"); //init the level in seperate thread
                                 //create new loading screen
@@ -382,17 +387,23 @@ public class Toucolor extends PApplet {
              * and then the screen slowly fades to black
              */
             //do movement
-            speler.rightPressed = true;
-            doPlayer();
-            //check for collision
-            if (speler.isHorizontaleCollision()) {
-                //if collides check if images have changed
-                if(!imageHasSwitched) {
-                    //TODO: switch images here
-                    imageHasSwitched = true;
-                }
+            if(!imageHasSwitched) {
+                //TODO: switch images here
+                imageHasSwitched = true;
                 score.timeToPointsF(timer, (int) speler.actorX);
+                lastOpacity = 0;
+                loadScreen.setText("");
             }
+            else {
+                if(lastOpacity > 255) {
+                    this.levelToLoad = currentLevel.numberOfcurrentLevel() + 1;
+                    thread("startLevel");
+                    this.status = "loadscreen";
+                }
+            }
+            fill(0, this.lastOpacity);
+            rect(0, 0, Toucolor.WORLDWIDTH * 2 , Toucolor.WORLDHEIGHT *2);
+            lastOpacity+=2;
         }
         else {
             switch (status) {

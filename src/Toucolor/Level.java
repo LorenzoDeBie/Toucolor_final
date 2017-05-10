@@ -190,7 +190,7 @@ class Level {
         //render map
         int drawX = 0;
         if(!cameraLocked) {
-            if(tileBlocks[levelMap[(playerX / BLOCKWIDTH) + 1][2]].getName().equals("Test")) {
+            if(playerX == (columns * Toucolor.BLOCKSIZE) - (9 * Toucolor.BLOCKSIZE)) {
                 this.levelEnding = true;
             }
             drawX = -((((playerX - 600) < 0) ? 0 : (playerX - 600)));

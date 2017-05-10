@@ -35,7 +35,7 @@ class Block {
         this.drawBlock = true;
         img = applet.loadImage(imgFileName); //load the image
         this.brokkelt = brokkelt;
-        if(id == 0) {
+        if(id == 0 || id == 16) {
             this.drawBlock = false;
         }
         this.enemy = enemy;
