@@ -161,8 +161,8 @@ class Level {
                 if(currentBlock.getName().equals("Tijdelijke blok")) {
                     tempBlocks.add(new TempBlock(i * 80, u * 80, 5000, currentBlock.killsPlayer, applet));
                 }
-                if(currentBlock.getEnemy()) {
-                    applet.enemies.add(new Enemy(4, 0, 0.03f, i * 80, u * 80));
+                else if(currentBlock.getEnemy()) {
+                    applet.enemies.add(new Enemy(4, 0, 0.03f, i * 80, u * 80, currentBlock.img, applet));
                 }
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);

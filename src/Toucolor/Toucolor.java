@@ -338,8 +338,7 @@ public class Toucolor extends PApplet {
                 if(drawX < swag.actorX && swag.actorX < -drawX + Toucolor.WORLDWIDTH) {
                     //calc where to draw  the block
                     int drawEnemyX = (int) swag.actorX + drawX;
-                    //draw the block
-                    enemyWandelen.display(drawEnemyX, swag.actorY, 'r', 0);
+                    swag.renderEnemy(drawEnemyX, (int) swag.actorY);
                 }
             }
         }
@@ -493,9 +492,7 @@ public class Toucolor extends PApplet {
     public void startLevel() {
         enemies = new ArrayList<Enemy>();
         this.currentLevel = new Level(this, this.levelToLoad);
-        playerWandelen = new Animation("Toucolooor", 4);
-        enemyWandelen = new Animation("Timberman",1);
-        //enemyWandelen = new Animation("soccer_player_fro", 1); //testenemy
+        playerWandelen = new Animation("ToucolorLvl" + currentLevel.numberOfcurrentLevel(), 4);
         speler = new Player();
         this.imageHasSwitched = false;
         this.lastOpacity = 0;

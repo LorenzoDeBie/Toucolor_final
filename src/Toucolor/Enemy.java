@@ -13,8 +13,10 @@ class Enemy extends Actor {
     private int moveP;
     private float PI = PApplet.PI;
     float valSpeed = 8;
+    private PImage img;
+    private Toucolor applet;
 
-    Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY){
+    Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY, PImage imgFileName, Toucolor applet){
         moveP = movePath;
         bereik = range;
         moveSnelh = moveSpeed;
@@ -22,9 +24,13 @@ class Enemy extends Actor {
         //Uiteindelijke positie van de speler
         actorX = spawnPosX;
         actorY = spawnPosY;
-
+        img = imgFileName;
+        this.applet = applet;
     }
 
+    void renderEnemy(int x, int y) {
+        applet.image(img, x, y, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
+    }
 
     public void Move(){
         updateR = 0;
