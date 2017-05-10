@@ -371,7 +371,7 @@ public class Toucolor extends PApplet {
 
     //does the animation on the end of a level
     private void doEndAnimation() {
-        if(currentLevel.numberOfcurrentLevel() != 4) {
+        if(currentLevel.numberOfcurrentLevel() != BOSSLEVELNUMBER) {
             /**
              * the player keeps going right untill it collides with a block
              * the map will be made so that on the end of the level there will only be one block which collides
@@ -400,7 +400,7 @@ public class Toucolor extends PApplet {
                         loadScreen.setText("YOU DID IT! YOU BEAT THE GAME!");
                         scoreb = new ScoreBoard(SCOREFILE, this);
                         this.status = "beatgame";
-                        this.framesleft = 500;
+                        this.framesleft = 5000;
                         return;
                     }
                     fill(0, this.lastOpacity);

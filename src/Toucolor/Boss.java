@@ -69,7 +69,7 @@ class Boss extends Actor {
         if(actorX == jumpX && actorY == jumpY) {
             currentLevel.changeBlock((int) actorX, (int) actorY + 80, 4, true);
             timesLeft--;
-            millisTillNextJump = 500;
+            millisTillNextJump = 400;
             this.status = "waiting";
         }
     }
