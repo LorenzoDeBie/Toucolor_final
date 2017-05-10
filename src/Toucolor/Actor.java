@@ -96,10 +96,10 @@ class Actor {
                         if (!lastplayer.intersects(currblock)) {
                             fullUpdateX = actorX;
                         } else {
-                            if (updateL + updateR > 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)) {
+                            if (updateL + updateR > 0 && !propterties[2][0] && propterties[4][0] && !isInAir) {
                                 fullUpdateX = fullCoords[4][0] - blockSize;
-                            } else if (updateL + updateR < 0 && (fullUpdateY == actorY || fullCoords[6][1] - fullUpdateY == blockSize)) {
-                                fullUpdateX = fullCoords[3][0] + blockSize;
+                            } else {
+                                fullUpdateX = actorX;
                             }
                         }
                     }
