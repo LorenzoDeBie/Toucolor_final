@@ -166,6 +166,8 @@ public class Toucolor extends PApplet {
                 if (currentLevel.isLevelEnding()) {
                     //if the level is ending, do stuff
                     doEndAnimation();
+                    playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
+
                 }
                 else{
                     //if not dead do keypress
