@@ -346,14 +346,14 @@ public class Toucolor extends PApplet {
 
     private void checkDood(){
         if(speler.playerDie()){
-            isDead = true;
+            //isDead = true;
             PApplet.println("TIS DEUD");
         }
         if(enemies != null) {
             for (Enemy swag : enemies) {
                 if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
                     PApplet.println("TIS DEUD");
-                    isDead = true;
+                    //isDead = true;
                 }
             }
         }
