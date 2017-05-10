@@ -37,6 +37,10 @@ class Sounds {
         chiptune.close();
     }
 
+    public void restartMuziek(){
+        chiptune.loop();
+    }
+
     public void play(String event) {
         //mogelijke events:
         /*
