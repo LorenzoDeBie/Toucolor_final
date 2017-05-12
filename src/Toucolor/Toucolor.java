@@ -59,8 +59,8 @@ public class Toucolor extends PApplet {
 
     List<Enemy> enemies;
 
-    private Player speler;
-    private boolean isDead = false;
+    Player speler;
+    boolean isDead = false;
 
     //initializing variables
     private LoadScreen loadScreen;
@@ -168,9 +168,8 @@ public class Toucolor extends PApplet {
                 }
                 if (currentLevel.isLevelEnding()) {
                     //if the level is ending, do stuff
-                    doEndAnimation();
                     playerWandelen.display(speler.actorX, speler.actorY, speler.lastMove, speler.imgCounter);
-
+                    doEndAnimation();
                 }
                 else{
                     //if not dead do keypress

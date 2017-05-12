@@ -13,13 +13,13 @@ class Time{
     //variables
     private int timeLeftMSeconds;
     private int timeLeftSeconds;
-    private PApplet applet;
+    private Toucolor applet;
     private boolean gameOver;
 
 
 
     //Set time
-    Time(int tijd,  PApplet applet) {
+    Time(int tijd,  Toucolor applet) {
         this.tijdForLevel = tijd;
         timeStart = applet.millis();
         this.timeLeftSeconds = tijd;
@@ -30,8 +30,11 @@ class Time{
 
     //update time
     private void update() {
-        timeLeftMSeconds = ((Toucolor.LEVELTIME * 1000) - (applet.millis() - timeStart));
+        timeLeftMSeconds = ((tijdForLevel * 1000) - (applet.millis() - timeStart));
         timeLeftSeconds = timeLeftMSeconds/1000;
+        if(timeLeftSeconds <= 0) {
+            applet.isDead = true;
+        }
     }
 
     void renderTime(){
