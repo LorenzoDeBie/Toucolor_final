@@ -41,6 +41,8 @@ class Time{
         applet.text("Time: " + timeLeftSeconds, 1060, 20);
     }
 
+    //todo negatieve punted? git good
+
     int getTimeForLevel(){
         return tijdForLevel;
     }
