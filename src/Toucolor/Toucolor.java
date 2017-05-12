@@ -222,6 +222,7 @@ public class Toucolor extends PApplet {
                     case "naamkiezen":
                         soundManager.play("select2");
                         scoreb.saveScore(score.getpoints());
+                        score = new Score(this);
                         scoreb.loadScores();
                         this.status = "scoreboard";
                         break;
@@ -359,12 +360,10 @@ public class Toucolor extends PApplet {
     private void checkDood(){
         if(speler.playerDie()){
             isDead = true;
-            PApplet.println("TIS DEUD");
         }
         if(enemies != null) {
             for (Enemy swag : enemies) {
                 if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
-                    PApplet.println("TIS DEUD");
                     isDead = true;
                 }
             }
@@ -536,7 +535,6 @@ public class Toucolor extends PApplet {
         this.imageHasSwitched = false;
         this.lastOpacity = 0;
         timer = new Time(LEVELTIME, this);
-        score = new Score(this);
         mangos = currentLevel.getMangos();
         //lock camera if boss level
         if(currentLevel.numberOfcurrentLevel() == BOSSLEVELNUMBER) {
@@ -578,12 +576,16 @@ public class Toucolor extends PApplet {
 
         //create a sound manager
         soundManager = new Sounds(this);
-
+        score = new Score(this);
         this.status = "startscreen";
     }
 
     Level getCurrentLevel() {
         return this.currentLevel;
+    }
+
+    void addToScore(int points) {
+        score.addToScore(points);
     }
 }
 

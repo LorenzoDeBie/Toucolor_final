@@ -88,8 +88,8 @@ class Boss extends Actor {
 
     private void update() {
         if(row == 3 && timesLeft == 0 && millisTillNextJump < 100) {
-            PApplet.println("YOU BEAT THIS STUPID ASS GAME, WHAT ARE YOU DOING WITH YOUR LIFE?");
             currentLevel.levelEnding = true;
+            applet.addToScore(10000);
         }
         else {
             //jump further if not jumped already
