@@ -292,6 +292,7 @@ public class Toucolor extends PApplet {
                                 speler.actorY = 500;
                             }
                             if(keyCode == KeyEvent.VK_E) {
+                                isDead = false;
                                 thread("startLevel"); //init the level in seperate thread
                                 //create new loading screen
                                 this.loadScreen = new LoadScreen("Loading, Please wait.", this);
