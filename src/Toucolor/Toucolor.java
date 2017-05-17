@@ -365,6 +365,7 @@ public class Toucolor extends PApplet {
         if(enemies != null) {
             for (Enemy swag : enemies) {
                 if (PApplet.abs(swag.actorX - speler.actorX) < BLOCKSIZE && PApplet.abs(swag.actorY - speler.actorY) < BLOCKSIZE) {
+                    System.out.println("EnemeyX:" + swag.actorX + " EnemyY: " + swag.actorY );
                     isDead = true;
                 }
             }

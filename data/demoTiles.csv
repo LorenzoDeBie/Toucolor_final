@@ -11,7 +11,7 @@ id,filename,collision,name,brokkelt,death,ice,water,enemy
 9,Net.png,TRUE,Net,FALSE,TRUE,FALSE,FALSE,FALSE
 10,shit.png,TRUE,Schildpad,FALSE,FALSE,FALSE,FALSE,FALSE
 11,Ground.png,TRUE,Grond,FALSE,FALSE,FALSE,FALSE,FALSE
-12,Hunter.png,TRUE,Hunter,FALSE,TRUE,FALSE,FALSE,TRUE
+12,Hunter.png,TRUE,Hunter,FALSE,FALSE,FALSE,FALSE,TRUE
 13,TikiMask.png,TRUE,Tiki Masker,FALSE,TRUE,FALSE,FALSE,TRUE
 14,Snake.png,FALSE,Slang,FALSE,FALSE,FALSE,FALSE,TRUE
 15,Leprechaun0.png,TRUE,Leprechaun,FALSE,TRUE,FALSE,FALSE,FALSE
