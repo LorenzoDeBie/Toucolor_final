@@ -15,8 +15,9 @@ class Enemy extends Actor {
     float valSpeed = 8;
     private PImage img;
     private Toucolor applet;
+    private String filename;
 
-    Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY, PImage imgFileName, Toucolor applet){
+    Enemy(int movePath, int range, float moveSpeed, float spawnPosX, float spawnPosY, PImage image, Toucolor applet){
         moveP = movePath;
         bereik = range;
         moveSnelh = moveSpeed;
@@ -24,7 +25,7 @@ class Enemy extends Actor {
         //Uiteindelijke positie van de speler
         actorX = spawnPosX;
         actorY = spawnPosY;
-        img = imgFileName;
+        img = image;
         this.applet = applet;
     }
 

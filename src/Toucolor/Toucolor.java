@@ -345,9 +345,11 @@ public class Toucolor extends PApplet {
         //Update movement van alle enemies
         if(enemies != null) {
             for (Enemy swag : enemies) {
-                swag.Move();
-                int drawX = -(((((int) speler.actorX - 600) < 0) ? 0 : ((int) speler.actorX - 600)));
+                int drawX = -(((((int)speler.actorX - 600) < 0) ? 0 : ((int)speler.actorX - 600)));
                 if(drawX < swag.actorX && swag.actorX < -drawX + Toucolor.WORLDWIDTH) {
+                    if(!isDead) {
+                        swag.Move();
+                    }
                     //calc where to draw  the block
                     int drawEnemyX = (int) swag.actorX + drawX;
                     swag.renderEnemy(drawEnemyX, (int) swag.actorY);

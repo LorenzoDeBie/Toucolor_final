@@ -116,6 +116,7 @@ class Level {
     /**
      * Laad de csv file die de map van het Level beschrijft
      * slaat het Level op in een array
+     * maakt nieuw PGraphics element aant die 1 grote foto is van het level
      */
     private void loadlevel() {
         //load the file which holds the Level
@@ -154,16 +155,22 @@ class Level {
 
         //list to add mangos
         List<Mango> listMangos = new ArrayList<Mango>();
+        //list for all the temp mango's
         tempBlocks = new ArrayList<TempBlock>();
+        //loop through each block
         for (int i = 0; i < columns; i++) {
             for (int u = 0; u < rows; u++) {
+                //get the current block
                 Block currentBlock = tileBlocks[levelMap[i][u]];
+                //temp block
                 if(currentBlock.getName().equals("Tijdelijke blok")) {
                     tempBlocks.add(new TempBlock(i * 80, u * 80, 5000, currentBlock.killsPlayer, applet));
                 }
+                //enmey
                 else if(currentBlock.getEnemy()) {
-                    applet.enemies.add(new Enemy(4, 0, 0.03f, i * 80, u * 80, currentBlock.img, applet));
+                    applet.enemies.add(new Enemy(4, 1, 0.03f, i * Toucolor.BLOCKSIZE, u * Toucolor.BLOCKSIZE, currentBlock.img, applet));
                 }
+                //normal block
                 if(currentBlock.drawBlock()) {
                     level.image(currentBlock.renderblock(),(i *80), u * 80, Toucolor.BLOCKSIZE, Toucolor.BLOCKSIZE);
                     if(currentBlock.getName().equals("Mango")) {
@@ -173,7 +180,7 @@ class Level {
             }
         }
         level.endDraw();
-
+        //mango's work based on arrays --> put the list into an array
         mangos = new Mango[listMangos.size()];
         listMangos.toArray(mangos);
 
