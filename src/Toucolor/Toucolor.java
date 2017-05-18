@@ -44,9 +44,6 @@ public class Toucolor extends PApplet {
     static int BLOCKSIZE = 80;
     //temp actorX --> goes into object later
     private int actorX;
-    //array of the world which stores the Level
-
-    //levelmanager functions
 
     private Level currentLevel;
     private Startscreen menu;
@@ -194,13 +191,9 @@ public class Toucolor extends PApplet {
                 switch (status) {
                     case "scoreboard":
                         soundManager.play("select2");
-                        if(isDead){
-                            this.status = "coin";
-                            soundManager.stopMuziek();
-                            isDead = false;
-                        } else {
-                            this.status = "startscreen";
-                        }
+                        this.status = "coin";
+                        soundManager.stopMuziek();
+                        isDead = false;
                         break;
                     case "coin":
                         this.status = "coin";
@@ -444,7 +437,7 @@ public class Toucolor extends PApplet {
                         loadScreen.setText("YOU DID IT! YOU BEAT THE GAME!");
                         scoreb = new ScoreBoard(SCOREFILE, this);
                         this.status = "beatgame";
-                        this.framesleft = 3000;
+                        this.framesleft = 1000;
                         return;
                     }
                     fill(0, this.lastOpacity);
