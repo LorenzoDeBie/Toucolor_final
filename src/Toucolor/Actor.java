@@ -94,13 +94,17 @@ class Actor {
                     if (canCollide && playerX.intersects(currblock)) {
                         if (!lastplayer.intersects(currblock)) {
                             fullUpdateX = actorX;
+                            horizontaleCollision = true;
                         } else {
                             if (updateL + updateR > 0 && !propterties[2][0] && propterties[4][0] && !isInAir) {
                                 fullUpdateX = fullCoords[4][0] - blockSize;
+                                horizontaleCollision = true;
                             } else if(updateL + updateR > 0 && propterties[2][0] && propterties[4][0] && propterties[7][0]){
                                 fullUpdateX = fullCoords[4][0] - blockSize;
+                                horizontaleCollision = true;
                             } else {
                                 fullUpdateX = actorX;
+                                horizontaleCollision = true;
                             }
                         }
                     }
