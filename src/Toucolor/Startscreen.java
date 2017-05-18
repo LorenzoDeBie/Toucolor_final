@@ -18,7 +18,6 @@ class Startscreen {
     private static int SPACEBETWOONBUTTONS = 40;
 
     //PROPERTIES
-    protected PImage bImage; //background image
     menuButton[] menuItems; //all the items in the menu
     PImage logo;
     Toucolor applet;
@@ -33,7 +32,8 @@ class Startscreen {
     2) for a level selection screen
         takes the number of levels as param
      */
-    Startscreen(){}
+    Startscreen(){
+    }
 
     //used in scoreboard
     void changeNames(String[] names){
